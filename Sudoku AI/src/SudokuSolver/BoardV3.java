@@ -413,9 +413,34 @@ public class BoardV3 {
 				}
 			}
 		}
-		
+
 		indecies = new int[9];
 		log = new String[9][9];
+	}
+
+	public String[] getRowAble(int r){
+		return able[r];
+	}
+
+	public String[] getColAble(int c){
+		String[] temp = new String[9];
+		for(int r = 0; r<9; r++)
+			temp[r] = able[r][c];
+		return temp;
+	}
+
+	public void removeFromRowExcept(int r, int c1, int c2, String nums){
+		for(int i = 0; i<9; i++)
+			if(i!=c1 && i!=c2)
+				for(int s = 0; s<nums.length(); s++)
+					able[r][i] = able[r][i].replaceAll(""+nums.charAt(s),"");
+	}
+	
+	public void removeFromColExcept(int c, int r1, int r2, String nums){
+		for(int i = 0; i<9; i++)
+			if(i!=r1 && i!=r2)
+				for(int s = 0; s<nums.length(); s++)
+					able[i][c] = able[i][c].replaceAll(""+nums.charAt(s),"");
 	}
 }
 

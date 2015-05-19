@@ -13,7 +13,7 @@ package SudokuSolver;
 public class MainV3 {
 	public static void main(String[] args){
 		System.out.println("Running test2!");
-		
+
 		boolean print = true, goSlow = false;
 		BoardV3 b = new BoardV3(print);
 		boolean notComplete = false;
@@ -102,15 +102,36 @@ public class MainV3 {
 					}
 			b.logCheck();
 			
+			//here
+			for(int rc = 0; rc<9; rc++){
+				String[] able = b.getRowAble(rc);
+				for(int i = 0; i<9; i++)
+					for(int s = i+1; s<9; s++)
+						if(!able[i].equals("") && able[i].equals(able[s])){
+							b.removeFromRowExcept(rc, i, s, able[i]);
+							if(print)System.out.println("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[i]);
+						}
+				able = b.getColAble(rc);
+				for(int i = 0; i<9; i++)
+					for(int s = i+1; s<9; s++)
+						if(!able[i].equals("") && able[i].equals(able[s])){
+							b.removeFromColExcept(rc, i, s, able[i]);
+							if(print)System.out.println("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[i]);
+						}
+			}
+
+			
+			
+			
 			if(!b.changed()){
 				notComplete = true;
 				break;
 			}
-			
+
 			steps++;
 			if(print)b.printBoard(steps);
 		}//end while loop
-		
+
 		b.printBoard(steps);
 		if(notComplete)System.out.println("WASNT ABLE TO COMPLETE SUDOKU");
 		System.out.println("Total steps: "+steps+"\nTotal numbers added: "+numsAdded);
