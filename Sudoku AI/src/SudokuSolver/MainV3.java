@@ -1,13 +1,14 @@
 package SudokuSolver;
 
 //000007390200900001006010000900005010400000007030400002000020500600004009017500000
-
-//not yet passed
-//500000000000008207140000056800460000900020008000037005610000032208700000000000009
-//1561998370
-//070120600000006800900000000020050906310000078806090040000000001007400000001075020
 //5192436215
 //058600000900003000024000000703060050500010004010040906000000420000800009000009370
+//500000000000008207140000056800460000900020008000037005610000032208700000000000009
+
+//not yet passed
+//1561998370
+//070120600000006800900000000020050906310000078806090040000000001007400000001075020
+
 
 //hardest in the world gg 800000000003600000070090200050007000000045700000100030001000068008500010090000400
 
@@ -108,14 +109,14 @@ public class MainV3 {
 				String[] able = b.getRowAble(rc);
 				for(int i = 0; i<9; i++)
 					for(int s = i+1; s<9; s++)
-						if(!able[i].equals("") && able[i].equals(able[s])){
+						if(able[i].length()==2 && able[i].equals(able[s])){
 							b.removeFromRowExcept(rc, i, s, able[i]);
 							if(print)System.out.println("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[i]);
 						}
 				able = b.getColAble(rc);
 				for(int i = 0; i<9; i++)
 					for(int s = i+1; s<9; s++)
-						if(!able[i].equals("") && able[i].equals(able[s])){
+						if(able[i].length()==2 && able[i].equals(able[s])){
 							b.removeFromColExcept(rc, i, s, able[i]);
 							if(print)System.out.println("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[i]);
 						}
