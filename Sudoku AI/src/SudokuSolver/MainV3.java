@@ -104,7 +104,6 @@ public class MainV3 {
 					}
 			b.logCheck();
 			
-			//here
 			for(int rc = 0; rc<9; rc++){
 				String[] able = b.getRowAble(rc);
 				for(int i = 0; i<9; i++)

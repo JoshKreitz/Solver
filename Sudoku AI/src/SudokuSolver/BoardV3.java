@@ -380,6 +380,8 @@ public class BoardV3 {
 		//System.out.println("reached testing "+t+":"+cube+":"+indecies);
 		log[cube][this.indecies[cube]] = t+indecies;
 		this.indecies[cube]++;
+		
+		if(t == 3 || t == 9)System.out.println(t+indecies);
 	}
 
 	//12345
@@ -390,8 +392,7 @@ public class BoardV3 {
 				if(log[cube][i]==null)break;
 				for(int s = i+1; s<9; s++){
 					if(log[cube][s]==null)break;
-					//System.out.println(log[cube][i]+","+log[cube][s]);
-					if(log[cube][i].substring(1,3).equals(log[cube][s].substring(1,3)) && log[cube][i].substring(1,3).equals(log[cube][s].substring(3))){
+					if(log[cube][i].substring(1,3).equals(log[cube][s].substring(1,3)) && log[cube][i].substring(3).equals(log[cube][s].substring(3))){
 						int combination = Integer.parseInt(log[cube][i]);
 						int r1 = (combination/1000)%10, c1 = (combination/100)%10;
 						int r2 = (combination/10)%10, c2 = combination%10;
