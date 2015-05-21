@@ -299,7 +299,6 @@ public class BoardV3 {
 				continue;
 			}
 			able[r][x] = able[r][x].replaceAll(""+t,"");
-
 		}
 	}
 
@@ -360,7 +359,6 @@ public class BoardV3 {
 				continue;
 			}
 			able[x][c] = able[x][c].replaceAll(""+t,"");
-
 		}
 	}
 
@@ -392,7 +390,8 @@ public class BoardV3 {
 				if(log[cube][i]==null)break;
 				for(int s = i+1; s<9; s++){
 					if(log[cube][s]==null)break;
-					if(log[cube][i].contains(log[cube][s].substring(1,3)) && log[cube][i].contains(log[cube][s].substring(3))){
+					//System.out.println(log[cube][i]+","+log[cube][s]);
+					if(log[cube][i].substring(1,3).equals(log[cube][s].substring(1,3)) && log[cube][i].substring(1,3).equals(log[cube][s].substring(3))){
 						int combination = Integer.parseInt(log[cube][i]);
 						int r1 = (combination/1000)%10, c1 = (combination/100)%10;
 						int r2 = (combination/10)%10, c2 = combination%10;
@@ -412,6 +411,7 @@ public class BoardV3 {
 					}
 				}
 			}
+			//System.out.println(able[2][1]);
 		}
 
 		indecies = new int[9];
