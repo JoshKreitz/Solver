@@ -380,8 +380,6 @@ public class BoardV3 {
 		//System.out.println("reached testing "+t+":"+cube+":"+indecies);
 		log[cube][this.indecies[cube]] = t+indecies;
 		this.indecies[cube]++;
-		
-		if(t == 3 || t == 9)System.out.println(t+indecies);
 	}
 
 	//12345
