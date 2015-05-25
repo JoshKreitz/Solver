@@ -5,10 +5,10 @@ package SudokuSolver;
 //058600000900003000024000000703060050500010004010040906000000420000800009000009370
 //500000000000008207140000056800460000900020008000037005610000032208700000000000009
 //020000670000090008000006019605020080000805000070030501580600000200040000039000050
+//830000400002100009000080070093004000000896000000300950020040000600007300001000082
 
 //not yet passed
 //000100047094600000000080900040005008900060002700200030003010000000006120520009000
-//830000400002100009000080070093004000000896000000300950020040000600007300001000082
 
 //hardest in the world gg 800000000003600000070090200050007000000045700000100030001000068008500010090000400
 
@@ -70,11 +70,30 @@ public class MainV3 {
 							if(good.length()==1){
 								int temp = Integer.parseInt(good);
 								b.set(r,c,temp);
-								if(print)System.out.println("COLUMN ELIMINATION PLACED A "+temp+" AT PLACE ("+r+","+c+")");
+								if(print)System.out.println("COL ELIMINATION PLACED A "+temp+" AT PLACE ("+r+","+c+")");
 								numsAdded++;
 							}
 						}
 				}
+			
+			for(int rc = 0; rc<9; rc++){
+				String[] able = b.getRowAble(rc);
+				for(int i = 0; i<9; i++)
+					for(int s = i+1; s<9; s++)
+						if(able[i].length()==2 && able[i].equals(able[s]) && b.isEligibleInference(rc,i,Integer.parseInt(able[i]))){
+							b.removeFromRowExcept(rc, i, s, able[i]);
+							b.addInference(rc,i,Integer.parseInt(able[i]));
+							if(print)System.out.println("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[i]);
+						}
+				able = b.getColAble(rc);
+				for(int i = 0; i<9; i++)
+					for(int s = i+1; s<9; s++)
+						if(able[i].length()==2 && able[i].equals(able[s]) && b.isEligibleInference(rc,i,Integer.parseInt(able[i]))){
+							b.removeFromColExcept(rc, i, s, able[i]);
+							b.addInference(rc,i,Integer.parseInt(able[i]));
+							if(print)System.out.println("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[i]);
+						}
+			}
 
 			for(int test = 1; test<=9; test++)
 				for(int rowRotor = 0; rowRotor<3; rowRotor++)
@@ -102,27 +121,42 @@ public class MainV3 {
 							b.threeInLine(eligibleIndecies,test);
 						}
 					}
-			b.logCheck();
-			
-			for(int rc = 0; rc<9; rc++){
-				String[] able = b.getRowAble(rc);
-				for(int i = 0; i<9; i++)
-					for(int s = i+1; s<9; s++)
-						if(able[i].length()==2 && able[i].equals(able[s])){
-							b.removeFromRowExcept(rc, i, s, able[i]);
-							if(print)System.out.println("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[i]);
-						}
-				able = b.getColAble(rc);
-				for(int i = 0; i<9; i++)
-					for(int s = i+1; s<9; s++)
-						if(able[i].length()==2 && able[i].equals(able[s])){
-							b.removeFromColExcept(rc, i, s, able[i]);
-							if(print)System.out.println("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[i]);
-						}
-			}
 
+			for(int test = 1; test<=9; test++){
+				for(int r = 0; r<9; r++){
+					String[] rowAble = b.getRowAble(r);
+					String eligibleIndecies = "";
+					for(int c = 0; c<rowAble.length; c++)
+						if(rowAble[c].contains(""+test))
+							eligibleIndecies += ""+r+c;
+					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+					}
+					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+					}
+				}
+				
+				for(int c = 0; c<9; c++){
+					String[] colAble = b.getColAble(c);
+					String eligibleIndecies = "";
+					for(int r = 0; r<colAble.length; r++)
+						if(colAble[r].contains(""+test))
+							eligibleIndecies += ""+r+c;
+					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+					}
+					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+					}
+				}
+			}
 			
-			
+			b.logCheck();
 			
 			if(!b.changed()){
 				notComplete = true;
