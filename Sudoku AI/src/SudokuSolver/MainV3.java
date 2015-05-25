@@ -8,7 +8,7 @@ package SudokuSolver;
 
 //not yet passed
 //000100047094600000000080900040005008900060002700200030003010000000006120520009000
-//it works?
+//830000400002100009000080070063004000000896000000300950020040000600007300001000082
 
 //hardest in the world gg 800000000003600000070090200050007000000045700000100030001000068008500010090000400
 
@@ -16,7 +16,7 @@ public class MainV3 {
 	public static void main(String[] args){
 		System.out.println("Running test2!");
 
-		boolean print = false, goSlow = false;
+		boolean print = true, goSlow = false;
 		BoardV3 b = new BoardV3(print);
 		boolean notComplete = false;
 		int steps = 0, numsAdded = 0;
