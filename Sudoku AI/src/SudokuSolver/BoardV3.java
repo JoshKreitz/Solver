@@ -10,7 +10,7 @@ public class BoardV3 {
 
 	private String[][] able;
 	private boolean print;
-	
+
 	String[] madeInferences = new String[200];
 	int madeInferencesIndex = 0;
 
@@ -409,7 +409,7 @@ public class BoardV3 {
 						int combination = Integer.parseInt(log[cube][i]);
 						int r1 = (combination/1000)%10, c1 = (combination/100)%10;
 						int r2 = (combination/10)%10, c2 = combination%10;
-						
+
 						addInference(log[cube][s]+log[cube][s],0);
 
 						char char1 = log[cube][i].charAt(0), char2 = log[cube][s].charAt(0);
@@ -451,20 +451,20 @@ public class BoardV3 {
 				for(int s = 0; s<nums.length(); s++)
 					able[r][i] = able[r][i].replaceAll(""+nums.charAt(s),"");
 	}
-	
+
 	public void removeFromColExcept(int c, int r1, int r2, String nums){
 		for(int i = 0; i<9; i++)
 			if(i!=r1 && i!=r2)
 				for(int s = 0; s<nums.length(); s++)
 					able[i][c] = able[i][c].replaceAll(""+nums.charAt(s),"");
 	}
-	
+
 	public boolean inTheSameCube(String rc1, String rc2){
 		int rc = Integer.parseInt(rc1);
 		int r1 = rc/10, c1 = rc%10;
 		rc = Integer.parseInt(rc2);
 		int r2 = rc/10, c2 = rc%10;
-		
+
 		int cube1 = 0;
 		if(r1<=2 && c1<=2)cube1 = 0;
 		else if(r1<=2 && c1>=3 && c1<=5)cube1 = 1;
@@ -485,10 +485,10 @@ public class BoardV3 {
 		else if(r2>=6 && c2<=2)cube2 = 6;
 		else if(r2>=6 && c2>=3 && c2<=5)cube2 = 7;
 		else if(r2>=6 && c2>=6)cube2 = 8;
-		
+
 		return cube1 == cube2;
 	}
-	
+
 	public boolean inTheSameCube(String rc1, String rc2, String rc3){
 		int rc = Integer.parseInt(rc1);
 		int r1 = rc/10, c1 = rc%10;
@@ -496,7 +496,7 @@ public class BoardV3 {
 		int r2 = rc/10, c2 = rc%10;
 		rc = Integer.parseInt(rc3);
 		int r3 = rc/10, c3 = rc%10;
-		
+
 		int cube1 = 0;
 		if(r1<=2 && c1<=2)cube1 = 0;
 		else if(r1<=2 && c1>=3 && c1<=5)cube1 = 1;
@@ -527,14 +527,14 @@ public class BoardV3 {
 		else if(r3>=6 && c3<=2)cube3 = 6;
 		else if(r3>=6 && c3>=3 && c3<=5)cube3 = 7;
 		else if(r3>=6 && c3>=6)cube3 = 8;
-		
+
 		return cube1 == cube2 && cube2 == cube3;
 	}
-	
+
 	public void removeFromCubeExceptRow(String rc, int num){
 		int i_rc = Integer.parseInt(rc);
 		int r = i_rc/10, c = i_rc%10, targetRow = r;
-		
+
 		int cube = 0;
 		if(r<=2 && c<=2)cube = 1;
 		else if(r<=2 && c>=3 && c<=5)cube = 2;
@@ -584,7 +584,7 @@ public class BoardV3 {
 			c = 6;
 			break;
 		}
-		
+
 		for(int r1 = r; r1<r+3; r1++){
 			if(r1 == targetRow)continue;
 			for(int c1 = c; c1<c+3; c1++)
@@ -592,11 +592,11 @@ public class BoardV3 {
 		}
 		if(print)System.out.println("MADE A CUBE INFERENCE OF A "+num+" AT ROW "+targetRow+" AND CUBE "+cube);
 	}
-	
+
 	public void removeFromCubeExceptCol(String rc, int num){
 		int i_rc = Integer.parseInt(rc);
 		int r = i_rc/10, c = i_rc%10, targetCol = c;
-		
+
 		int cube = 0;
 		if(r<=2 && c<=2)cube = 1;
 		else if(r<=2 && c>=3 && c<=5)cube = 2;
@@ -646,7 +646,7 @@ public class BoardV3 {
 			c = 6;
 			break;
 		}
-		
+
 		for(int c1 = c; c1<c+3; c1++){
 			if(c1 == targetCol)continue;
 			for(int r1 = r; r1<r+3; r1++)
@@ -654,17 +654,17 @@ public class BoardV3 {
 		}
 		if(print)System.out.println("MADE A CUBE INFERENCE OF A "+num+" AT COL "+targetCol+" AND CUBE "+cube);
 	}
-	
+
 	public void addInference(int r, int c, int num){
 		madeInferences[madeInferencesIndex] = ""+num+r+c;
 		madeInferencesIndex++;
 	}
-	
+
 	public void addInference(String indecies, int num){
 		madeInferences[madeInferencesIndex] = ""+num+indecies;
 		madeInferencesIndex++;
 	}
-	
+
 	public boolean isEligibleInference(int r, int c, int num){
 		String inference = ""+num+r+c;
 		for(String x: madeInferences){
@@ -673,7 +673,7 @@ public class BoardV3 {
 		}
 		return true;
 	}
-	
+
 	public boolean isEligibleInference(String indecies, int num){
 		String inference = ""+num+indecies;
 		for(String x: madeInferences){

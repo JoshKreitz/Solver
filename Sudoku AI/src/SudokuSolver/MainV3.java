@@ -9,6 +9,7 @@ package SudokuSolver;
 
 //not yet passed
 //000100047094600000000080900040005008900060002700200030003010000000006120520009000
+//000982001040000098000000000000695030090000020080723000000000000620000010700834000
 
 //hardest in the world gg 800000000003600000070090200050007000000045700000100030001000068008500010090000400
 
@@ -42,40 +43,39 @@ public class MainV3 {
 						}
 					}
 
-			for(int r = 0; r<9; r++)
-				if(!b.rowFull(r)){
-					int[] needed = b.getNeededRowNumbers(r);
+			for(int rc = 0; rc<9; rc++){
+				if(!b.rowFull(rc)){
+					int[] needed = b.getNeededRowNumbers(rc);
 					for(int c = 0; c<9; c++)
-						if(b.get(r,c)==0){
+						if(b.get(rc,c)==0){
 							String good = "";
 							for(int x: needed)
-								if(b.isEligible(r,c,x))good+=x;
+								if(b.isEligible(rc,c,x))good+=x;
 							if(good.length()==1){
 								int temp = Integer.parseInt(good);
-								b.set(r,c,temp);
-								if(print)System.out.println("ROW ELIMINATION PLACED A "+temp+" AT PLACE ("+r+","+c+")");
+								b.set(rc,c,temp);
+								if(print)System.out.println("ROW ELIMINATION PLACED A "+temp+" AT PLACE ("+rc+","+c+")");
 								numsAdded++;
 							}
 						}
 				}
-
-			for(int c = 0; c<9; c++)
-				if(!b.colFull(c)){
-					int[] needed = b.getNeededColNumbers(c);
+				if(!b.colFull(rc)){
+					int[] needed = b.getNeededColNumbers(rc);
 					for(int r = 0; r<9; r++)
-						if(b.get(r,c)==0){
+						if(b.get(r,rc)==0){
 							String good = "";
 							for(int x: needed)
-								if(b.isEligible(r,c,x))good+=x;
+								if(b.isEligible(r,rc,x))good+=x;
 							if(good.length()==1){
 								int temp = Integer.parseInt(good);
-								b.set(r,c,temp);
-								if(print)System.out.println("COL ELIMINATION PLACED A "+temp+" AT PLACE ("+r+","+c+")");
+								b.set(r,rc,temp);
+								if(print)System.out.println("COL ELIMINATION PLACED A "+temp+" AT PLACE ("+r+","+rc+")");
 								numsAdded++;
 							}
 						}
 				}
-			
+			}
+
 			for(int rc = 0; rc<9; rc++){
 				String[] able = b.getRowAble(rc);
 				for(int i = 0; i<9; i++)
@@ -138,7 +138,7 @@ public class MainV3 {
 						b.addInference(eligibleIndecies.substring(0,2),test);
 					}
 				}
-				
+
 				for(int c = 0; c<9; c++){
 					String[] colAble = b.getColAble(c);
 					String eligibleIndecies = "";
@@ -155,9 +155,9 @@ public class MainV3 {
 					}
 				}
 			}
-			
+
 			b.logCheck();
-			
+
 			if(!b.changed()){
 				notComplete = true;
 				break;
@@ -170,6 +170,6 @@ public class MainV3 {
 		b.printBoard(steps);
 		if(notComplete)System.out.println("WASNT ABLE TO COMPLETE SUDOKU");
 		System.out.println("Total steps: "+steps+"\nTotal numbers added: "+numsAdded);
-		b.verify();
+		if(!notComplete)b.verify();
 	}
 }
