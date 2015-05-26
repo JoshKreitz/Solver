@@ -14,6 +14,8 @@ package SudokuSolver;
 
 //hardest in the world gg 800000000003600000070090200050007000000045700000100030001000068008500010090000400
 
+//TODO: HIDDEN TRIPLES AND QUADS
+
 public class MainV3 {
 	public static void main(String[] args){
 		System.out.println("Running test2!");

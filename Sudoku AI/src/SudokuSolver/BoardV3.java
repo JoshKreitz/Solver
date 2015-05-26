@@ -52,7 +52,7 @@ public class BoardV3 {
 	public int get(int r, int c){
 		return board[r][c];
 	}
-
+/*
 	public int[] getNeededRowNumbers(int r){
 		String possible = "123456789";
 		for(int x: board[r])
@@ -72,7 +72,7 @@ public class BoardV3 {
 			done[i] = Integer.parseInt(""+possible.charAt(i));
 		return done;
 	}
-
+*/
 	public void makeBackup(){
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++){
@@ -214,7 +214,7 @@ public class BoardV3 {
 	public String getAble(int r, int c){
 		return able[r][c];
 	}
-
+/*
 	public boolean rowFull(int r){
 		for(int x: board[r])
 			if(x==0)return false;
@@ -226,7 +226,7 @@ public class BoardV3 {
 			if(x[c]==0)return false;
 		return true;
 	}
-
+*/
 	public void twoInLine(String indecies, int t){
 		int combined = Integer.parseInt(indecies);
 		int r1 = combined/1000, c1 = (combined/100)%10;
