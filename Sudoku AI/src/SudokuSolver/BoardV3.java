@@ -433,8 +433,19 @@ public class BoardV3 {
 		indecies = new int[9];
 		log = new String[9][9];
 	}
-
+	
 	public String[] getRowAble(int r){
+		return able[r];
+	}
+	
+	public String[] getColAble(int c){
+		String[] temp = new String[9];
+		for(int r = 0; r<9; r++)
+			temp[r] = able[r][c];
+		return temp;
+	}
+
+	public String[] getRowAbleWithoutEmpty(int r){
 		String[] tempWithNull = new String[9];
 		int index = 0;
 		for(String x: able[r])
@@ -453,7 +464,7 @@ public class BoardV3 {
 		return tempWithoutNull;
 	}
 
-	public String[] getColAble(int c){
+	public String[] getColAbleWithoutEmpty(int c){
 		String[] tempWithNull = new String[9];
 		int index = 0;
 		for(int r = 0; r<9; r++)
@@ -722,6 +733,19 @@ public class BoardV3 {
 			if(x.equals(inference))return false;
 		}
 		return true;
+	}
+	
+	public boolean notInSameCube(int c1, int c2){
+		int cube1, cube2;
+		if(c1>=6)cube1 = 3;
+		else if(c1>=3)cube1 = 2;
+		else cube1 = 1;
+		
+		if(c2>=6)cube2 = 3;
+		else if(c2>=3)cube2 = 2;
+		else cube2 = 1;
+		
+		return cube1!=cube2;
 	}
 }
 

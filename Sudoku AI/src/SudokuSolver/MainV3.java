@@ -18,9 +18,9 @@ package SudokuSolver;
 
 public class MainV3 {
 	public static void main(String[] args){
-		System.out.println("Running test2!");
+		System.out.println("000020470070000036500080000007500009051000640900004200000030001790000060032090000");
 
-		boolean print = false, goSlow = false;
+		boolean print = true, goSlow = false;
 		BoardV3 b = new BoardV3(print);
 		boolean notComplete = false;
 		int steps = 0, numsAdded = 0;
@@ -34,6 +34,7 @@ public class MainV3 {
 			}
 			b.makeBackup();
 
+			//if only one number possible
 			for(int r = 0; r<9; r++)
 				for(int c = 0; c<9; c++)
 					if(b.get(r,c)==0){
@@ -79,22 +80,24 @@ public class MainV3 {
 				}
 			}
 			 */
+			
+			//if two numbers are only possible in a space and a different space in the same row
 			for(int rc = 0; rc<9; rc++){
 				String[] able = b.getRowAble(rc);
-				for(int i = 0; i<able.length; i++)
-					for(int s = i+1; s<able.length; s++)
-						if(able[i].length()==2 && able[i].equals(able[s]) && b.isEligibleInference(rc,i,Integer.parseInt(able[i]))){
-							b.removeFromRowExcept(rc, i, s, able[i]);
-							b.addInference(rc,i,Integer.parseInt(able[i]));
-							if(print)System.out.println("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[i]);
+				for(int c1 = 0; c1<9; c1++)
+					for(int c2 = c1+1; c2<9; c2++)
+						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
+							b.removeFromRowExcept(rc, c1, c2, able[c1]);
+							b.addInference(rc,c1,Integer.parseInt(able[c1]));
+							if(print)System.out.println("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[c1]);
 						}
 				able = b.getColAble(rc);
-				for(int i = 0; i<able.length; i++)
-					for(int s = i+1; s<9; s++)
-						if(able[i].length()==2 && able[i].equals(able[s]) && b.isEligibleInference(rc,i,Integer.parseInt(able[i]))){
-							b.removeFromColExcept(rc, i, s, able[i]);
-							b.addInference(rc,i,Integer.parseInt(able[i]));
-							if(print)System.out.println("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[i]);
+				for(int c1 = 0; c1<9; c1++)
+					for(int c2 = c1+1; c2<9; c2++)
+						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
+							b.removeFromColExcept(rc, c1, c2, able[c1]);
+							b.addInference(rc,c1,Integer.parseInt(able[c1]));
+							if(print)System.out.println("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[c1]);
 						}
 			}
 
@@ -125,11 +128,12 @@ public class MainV3 {
 						}
 					}
 
+			//if only eligible in two places in the same row, and both in the same cube, remove from rest of cube
 			for(int test = 1; test<=9; test++){
 				for(int r = 0; r<9; r++){
 					String[] rowAble = b.getRowAble(r);
 					String eligibleIndecies = "";
-					for(int c = 0; c<rowAble.length; c++)
+					for(int c = 0; c<9; c++)
 						if(rowAble[c].contains(""+test))
 							eligibleIndecies += ""+r+c;
 					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
@@ -145,7 +149,7 @@ public class MainV3 {
 				for(int c = 0; c<9; c++){
 					String[] colAble = b.getColAble(c);
 					String eligibleIndecies = "";
-					for(int r = 0; r<colAble.length; r++)
+					for(int r = 0; r<9; r++)
 						if(colAble[r].contains(""+test))
 							eligibleIndecies += ""+r+c;
 					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
@@ -160,17 +164,17 @@ public class MainV3 {
 			}
 
 			b.logCheck();
-
+///*
 			for(int rc = 0; rc<9; rc++){
-				String[] rowAble = b.getRowAble(rc);
+				String[] rowAble = b.getRowAbleWithoutEmpty(rc);
 				int rowAbleLen = rowAble.length;
 				String threeTargetNumbers = "";
 				if(rowAble.length>3)
 					for(int c1 = 0; c1<rowAbleLen; c1++){
-						if(rowAble[c1].length()>3)continue;
+						if(rowAble[c1].length()>3 || rowAble[c1].length()<2)continue;
 						threeTargetNumbers = rowAble[c1];
 						for(int c2 = c1+1; c2<rowAbleLen; c2++){
-							if(rowAble[c2].length()>3)continue;
+							if(rowAble[c2].length()>3 || rowAble[c2].length()<2)continue;
 							boolean good = true;
 							for(int charIndex = 0; charIndex<rowAble[c2].length(); charIndex++){
 								if(threeTargetNumbers.contains(""+rowAble[c2].charAt(charIndex)))continue;
@@ -179,7 +183,7 @@ public class MainV3 {
 							}
 							if(!good)continue;
 							for(int c3 = c2+1; c3<rowAbleLen; c3++){
-								if(rowAble[c3].length()>3)continue;
+								if(rowAble[c3].length()>3 || rowAble[c3].length()<2)continue;
 								for(int charIndex = 0; charIndex<rowAble[c3].length(); charIndex++){
 									if(threeTargetNumbers.contains(""+rowAble[c3].charAt(charIndex)))continue;
 									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c3].charAt(charIndex);
@@ -188,7 +192,7 @@ public class MainV3 {
 								if(!good || !b.isEligibleInference(""+c1+c2+c3, Integer.parseInt(threeTargetNumbers)))continue;
 								b.addInference(""+c1+c2+c3, Integer.parseInt(threeTargetNumbers));
 								b.removeFromRowExcept(rc,c1,c2,c3,threeTargetNumbers);
-								if(print)System.out.println("MADE A HIDDEN TRIPPLET INFERENCE AT ROW "+rc+" AND COLS "+c1+", "+c2+", and "+c3+" WITH THE NUMBERS "+threeTargetNumbers);
+								if(print)System.out.println("MADE A HIDDEN TRIPPLET INFERENCE AT ROW "+rc+" AND ABLES "+rowAble[c1]+", "+rowAble[c2]+", and "+rowAble[c3]+" WITH THE NUMBERS "+threeTargetNumbers);
 							}
 						}
 					}
