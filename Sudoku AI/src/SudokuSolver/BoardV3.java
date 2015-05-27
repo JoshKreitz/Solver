@@ -435,28 +435,69 @@ public class BoardV3 {
 	}
 
 	public String[] getRowAble(int r){
-		return able[r];
+		String[] tempWithNull = new String[9];
+		int index = 0;
+		for(String x: able[r])
+			if(!x.equals("")){
+				tempWithNull[index] = x;
+				index++;
+			}
+		String[] tempWithoutNull = new String[index];
+		index = 0;
+		for(String x: tempWithNull)
+			if(x==null)break;
+			else{
+				tempWithoutNull[index] = x;
+				index++;
+			}
+		return tempWithoutNull;
 	}
 
 	public String[] getColAble(int c){
-		String[] temp = new String[9];
+		String[] tempWithNull = new String[9];
+		int index = 0;
 		for(int r = 0; r<9; r++)
-			temp[r] = able[r][c];
-		return temp;
+			if(!able[r][c].equals("")){
+				tempWithNull[index] = able[r][c];
+				index ++;
+			}
+		String[] tempWithoutNull = new String[index];
+		index = 0;
+		for(String x: tempWithNull)
+			if(x==null)break;
+			else{
+				tempWithoutNull[index] = x;
+				index++;
+			}
+		return tempWithoutNull;
 	}
 
 	public void removeFromRowExcept(int r, int c1, int c2, String nums){
-		for(int i = 0; i<9; i++)
-			if(i!=c1 && i!=c2)
+		for(int c= 0; c<9; c++)
+			if(c!=c1 && c!=c2)
 				for(int s = 0; s<nums.length(); s++)
-					able[r][i] = able[r][i].replaceAll(""+nums.charAt(s),"");
+					able[r][c] = able[r][c].replaceAll(""+nums.charAt(s),"");
+	}
+	
+	public void removeFromRowExcept(int r, int c1, int c2, int c3, String nums){
+		for(int c = 0; c<9; c++)
+			if(c!=c1 && c!=c2 && c!=c3)
+				for(int s = 0; s<nums.length(); s++)
+					able[r][c] = able[r][c].replaceAll(""+nums.charAt(s),"");
 	}
 
 	public void removeFromColExcept(int c, int r1, int r2, String nums){
-		for(int i = 0; i<9; i++)
-			if(i!=r1 && i!=r2)
+		for(int r = 0; r<9; r++)
+			if(r!=r1 && r!=r2)
 				for(int s = 0; s<nums.length(); s++)
-					able[i][c] = able[i][c].replaceAll(""+nums.charAt(s),"");
+					able[r][c] = able[r][c].replaceAll(""+nums.charAt(s),"");
+	}
+	
+	public void removeFromColExcept(int c, int r1, int r2, int r3, String nums){
+		for(int r = 0; r<9; r++)
+			if(c!=r1 && r!=r2 && r!=r3)
+				for(int s = 0; s<nums.length(); s++)
+					able[r][c] = able[r][c].replaceAll(""+nums.charAt(s),"");
 	}
 
 	public boolean inTheSameCube(String rc1, String rc2){

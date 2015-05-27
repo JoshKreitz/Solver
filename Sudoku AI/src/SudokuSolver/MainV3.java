@@ -20,7 +20,7 @@ public class MainV3 {
 	public static void main(String[] args){
 		System.out.println("Running test2!");
 
-		boolean print = true, goSlow = false;
+		boolean print = false, goSlow = false;
 		BoardV3 b = new BoardV3(print);
 		boolean notComplete = false;
 		int steps = 0, numsAdded = 0;
@@ -45,7 +45,7 @@ public class MainV3 {
 							numsAdded++;
 						}
 					}
-/*
+			/*
 			for(int rc = 0; rc<9; rc++){
 				if(!b.rowFull(rc)){
 					int[] needed = b.getNeededRowNumbers(rc);
@@ -78,18 +78,18 @@ public class MainV3 {
 						}
 				}
 			}
-*/
+			 */
 			for(int rc = 0; rc<9; rc++){
 				String[] able = b.getRowAble(rc);
-				for(int i = 0; i<9; i++)
-					for(int s = i+1; s<9; s++)
+				for(int i = 0; i<able.length; i++)
+					for(int s = i+1; s<able.length; s++)
 						if(able[i].length()==2 && able[i].equals(able[s]) && b.isEligibleInference(rc,i,Integer.parseInt(able[i]))){
 							b.removeFromRowExcept(rc, i, s, able[i]);
 							b.addInference(rc,i,Integer.parseInt(able[i]));
 							if(print)System.out.println("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[i]);
 						}
 				able = b.getColAble(rc);
-				for(int i = 0; i<9; i++)
+				for(int i = 0; i<able.length; i++)
 					for(int s = i+1; s<9; s++)
 						if(able[i].length()==2 && able[i].equals(able[s]) && b.isEligibleInference(rc,i,Integer.parseInt(able[i]))){
 							b.removeFromColExcept(rc, i, s, able[i]);
@@ -160,6 +160,47 @@ public class MainV3 {
 			}
 
 			b.logCheck();
+
+			for(int rc = 0; rc<9; rc++){
+				String[] rowAble = b.getRowAble(rc);
+				int rowAbleLen = rowAble.length;
+				String threeTargetNumbers = "";
+				if(rowAble.length>3)
+					for(int c1 = 0; c1<rowAbleLen; c1++){
+						if(rowAble[c1].length()>3)continue;
+						threeTargetNumbers = rowAble[c1];
+						for(int c2 = c1+1; c2<rowAbleLen; c2++){
+							if(rowAble[c2].length()>3)continue;
+							boolean good = true;
+							for(int charIndex = 0; charIndex<rowAble[c2].length(); charIndex++){
+								if(threeTargetNumbers.contains(""+rowAble[c2].charAt(charIndex)))continue;
+								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c2].charAt(charIndex);
+								else{ good = false; break; }
+							}
+							if(!good)continue;
+							for(int c3 = c2+1; c3<rowAbleLen; c3++){
+								if(rowAble[c3].length()>3)continue;
+								for(int charIndex = 0; charIndex<rowAble[c3].length(); charIndex++){
+									if(threeTargetNumbers.contains(""+rowAble[c3].charAt(charIndex)))continue;
+									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c3].charAt(charIndex);
+									else{ good = false; break; }
+								}
+								if(!good || !b.isEligibleInference(""+c1+c2+c3, Integer.parseInt(threeTargetNumbers)))continue;
+								b.addInference(""+c1+c2+c3, Integer.parseInt(threeTargetNumbers));
+								b.removeFromRowExcept(rc,c1,c2,c3,threeTargetNumbers);
+								if(print)System.out.println("MADE A HIDDEN TRIPPLET INFERENCE AT ROW "+rc+" AND COLS "+c1+", "+c2+", and "+c3+" WITH THE NUMBERS "+threeTargetNumbers);
+							}
+						}
+					}
+
+				/*
+				String[] colAble = b.getColAble(rc);
+				threeTargetNumbers = "";
+				if(colAble.length>3)
+					for(int r = 0; r<9; r++){
+
+					}*/
+			}
 
 			if(!b.changed()){
 				notComplete = true;
