@@ -445,44 +445,6 @@ public class BoardV3 {
 		return temp;
 	}
 
-	public String[] getRowAbleWithoutEmpty(int r){
-		String[] tempWithNull = new String[9];
-		int index = 0;
-		for(String x: able[r])
-			if(!x.equals("")){
-				tempWithNull[index] = x;
-				index++;
-			}
-		String[] tempWithoutNull = new String[index];
-		index = 0;
-		for(String x: tempWithNull)
-			if(x==null)break;
-			else{
-				tempWithoutNull[index] = x;
-				index++;
-			}
-		return tempWithoutNull;
-	}
-
-	public String[] getColAbleWithoutEmpty(int c){
-		String[] tempWithNull = new String[9];
-		int index = 0;
-		for(int r = 0; r<9; r++)
-			if(!able[r][c].equals("")){
-				tempWithNull[index] = able[r][c];
-				index ++;
-			}
-		String[] tempWithoutNull = new String[index];
-		index = 0;
-		for(String x: tempWithNull)
-			if(x==null)break;
-			else{
-				tempWithoutNull[index] = x;
-				index++;
-			}
-		return tempWithoutNull;
-	}
-
 	public void removeFromRowExcept(int r, int c1, int c2, String nums){
 		for(int c= 0; c<9; c++)
 			if(c!=c1 && c!=c2)

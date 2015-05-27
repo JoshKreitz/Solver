@@ -6,19 +6,19 @@ package SudokuSolver;
 //500000000000008207140000056800460000900020008000037005610000032208700000000000009
 //020000670000090008000006019605020080000805000070030501580600000200040000039000050
 //830000400002100009000080070093004000000896000000300950020040000600007300001000082
+//000020470070000036500080000007500009051000640900004200000030001790000060032090000
+//000982001040000098000000000000695030090000020080723000000000000620000010700834000
 
 //not yet passed
 //000100047094600000000080900040005008900060002700200030003010000000006120520009000
-//000982001040000098000000000000695030090000020080723000000000000620000010700834000
-//000020470070000036500080000007500009051000640900004200000030001790000060032090000
 
 //hardest in the world gg 800000000003600000070090200050007000000045700000100030001000068008500010090000400
 
-//TODO: HIDDEN TRIPLES AND QUADS
+//TODO: HIDDEN TRIPLES IN CUBES
 
 public class MainV3 {
 	public static void main(String[] args){
-		System.out.println("000020470070000036500080000007500009051000640900004200000030001790000060032090000");
+		System.out.println("");
 
 		boolean print = true, goSlow = false;
 		BoardV3 b = new BoardV3(print);
@@ -101,6 +101,8 @@ public class MainV3 {
 						}
 			}
 
+			//tests a number at every spot in a cube, to see if it can only go in one spot.
+			//also deals with row/col inferences
 			for(int test = 1; test<=9; test++)
 				for(int rowRotor = 0; rowRotor<3; rowRotor++)
 					for(int colRotor = 0; colRotor<3; colRotor++){
@@ -163,47 +165,87 @@ public class MainV3 {
 				}
 			}
 
+			//does the inference stuffs
 			b.logCheck();
-///*
+
+			//looks for and finds hidden triples
 			for(int rc = 0; rc<9; rc++){
-				String[] rowAble = b.getRowAbleWithoutEmpty(rc);
-				int rowAbleLen = rowAble.length;
+				String[] rowAble = b.getRowAble(rc);
 				String threeTargetNumbers = "";
 				if(rowAble.length>3)
-					for(int c1 = 0; c1<rowAbleLen; c1++){
+					for(int c1 = 0; c1<9; c1++){
 						if(rowAble[c1].length()>3 || rowAble[c1].length()<2)continue;
 						threeTargetNumbers = rowAble[c1];
-						for(int c2 = c1+1; c2<rowAbleLen; c2++){
+						for(int c2 = c1+1; c2<9; c2++){
 							if(rowAble[c2].length()>3 || rowAble[c2].length()<2)continue;
 							boolean good = true;
+							String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
 							for(int charIndex = 0; charIndex<rowAble[c2].length(); charIndex++){
 								if(threeTargetNumbers.contains(""+rowAble[c2].charAt(charIndex)))continue;
 								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c2].charAt(charIndex);
 								else{ good = false; break; }
 							}
-							if(!good)continue;
-							for(int c3 = c2+1; c3<rowAbleLen; c3++){
+							if(!good){
+								threeTargetNumbers = threeTargetNumbersBeforeLoop2;
+								continue;
+							}
+							for(int c3 = c2+1; c3<9; c3++){
 								if(rowAble[c3].length()>3 || rowAble[c3].length()<2)continue;
+								String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
 								for(int charIndex = 0; charIndex<rowAble[c3].length(); charIndex++){
 									if(threeTargetNumbers.contains(""+rowAble[c3].charAt(charIndex)))continue;
 									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c3].charAt(charIndex);
 									else{ good = false; break; }
 								}
-								if(!good || !b.isEligibleInference(""+c1+c2+c3, Integer.parseInt(threeTargetNumbers)))continue;
-								b.addInference(""+c1+c2+c3, Integer.parseInt(threeTargetNumbers));
+								if(!good || !b.isEligibleInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers))){
+									threeTargetNumbers = threeTargetNumbersBeforeLoop3;
+									continue;
+								}
+								b.addInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers));
 								b.removeFromRowExcept(rc,c1,c2,c3,threeTargetNumbers);
-								if(print)System.out.println("MADE A HIDDEN TRIPPLET INFERENCE AT ROW "+rc+" AND ABLES "+rowAble[c1]+", "+rowAble[c2]+", and "+rowAble[c3]+" WITH THE NUMBERS "+threeTargetNumbers);
+								if(print)System.out.println("MADE A HIDDEN TRIPLE INFERENCE AT ROW "+rc+" AND COLS "+c1+", "+c2+", and "+c3+" WITH THE NUMBERS "+threeTargetNumbers);
 							}
 						}
 					}
-
-				/*
+				
 				String[] colAble = b.getColAble(rc);
 				threeTargetNumbers = "";
 				if(colAble.length>3)
-					for(int r = 0; r<9; r++){
-
-					}*/
+					for(int r1 = 0; r1<9; r1++){
+						if(rowAble[r1].length()>3 || rowAble[r1].length()<2)continue;
+						threeTargetNumbers = rowAble[r1];
+						for(int r2 = r1+1; r2<9; r2++){
+							if(rowAble[r2].length()>3 || rowAble[r2].length()<2)continue;
+							boolean good = true;
+							String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
+							for(int charIndex = 0; charIndex<rowAble[r2].length(); charIndex++){
+								if(threeTargetNumbers.contains(""+rowAble[r2].charAt(charIndex)))continue;
+								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r2].charAt(charIndex);
+								else{ good = false; break; }
+							}
+							if(!good){
+								threeTargetNumbers = threeTargetNumbersBeforeLoop2;
+								continue;
+							}
+							for(int r3 = r2+1; r3<9; r3++){
+								if(rowAble[r3].length()>3 || rowAble[r3].length()<2)continue;
+								String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
+								for(int charIndex = 0; charIndex<rowAble[r3].length(); charIndex++){
+									if(threeTargetNumbers.contains(""+rowAble[r3].charAt(charIndex)))continue;
+									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r3].charAt(charIndex);
+									else{ good = false; break; }
+								}
+								if(!good || !b.isEligibleInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers))){
+									threeTargetNumbers = threeTargetNumbersBeforeLoop3;
+									continue;
+								}
+								b.addInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers));
+								b.removeFromRowExcept(rc,r1,r2,r3,threeTargetNumbers);
+								if(print)System.out.println("MADE A HIDDEN TRIPLE INFERENCE AT COL "+rc+" AND ROWS "+r1+", "+r2+", and "+r3+" WITH THE NUMBERS "+threeTargetNumbers);
+							}
+						}
+					}
+				
 			}
 
 			if(!b.changed()){
