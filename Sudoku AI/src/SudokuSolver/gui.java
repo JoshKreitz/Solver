@@ -1310,7 +1310,6 @@ public class gui {
 		cbEnterByCube.setBounds(478, 82, 156, 23);
 		frmSudokuSolverSwag.getContentPane().add(cbEnterByCube);
 
-		//TODO
 		JCheckBox cbSolve = new JCheckBox("Just solve it already!");
 		JCheckBox cbTakeSteps = new JCheckBox("Show me the steps!");
 		cbSolve.addActionListener(new ActionListener() {
@@ -1355,7 +1354,7 @@ public class gui {
 		frmSudokuSolverSwag.getContentPane().add(bNextStep);
 		
 		bClearBoard = new JButton("Clear Board");
-		bClearBoard.setBounds(488, 133, 132, 20);
+		bClearBoard.setBounds(488, 134, 132, 20);
 		bClearBoard.setFocusable(false);
 		frmSudokuSolverSwag.getContentPane().add(bClearBoard);
 		
