@@ -970,15 +970,15 @@ public class gui {
 		switch(letter){
 		case 'A':
 			switch(number){
-			case 1:A2.requestFocus(true);break;
-			case 2:A3.requestFocus(true);break;
-			case 3:A4.requestFocus(true);break;
-			case 4:A5.requestFocus(true);break;
-			case 5:A6.requestFocus(true);break;
-			case 6:A7.requestFocus(true);break;
-			case 7:A8.requestFocus(true);break;
-			case 8:A9.requestFocus(true);break;
-			case 9:B1.requestFocus(true);break;
+			case '1':A2.requestFocus(true);break;
+			case '2':A3.requestFocus(true);break;
+			case '3':A4.requestFocus(true);break;
+			case '4':A5.requestFocus(true);break;
+			case '5':A6.requestFocus(true);break;
+			case '6':A7.requestFocus(true);break;
+			case '7':A8.requestFocus(true);break;
+			case '8':A9.requestFocus(true);break;
+			case '9':B1.requestFocus(true);break;
 			}
 			break;
 		case 'B':
