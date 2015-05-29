@@ -2,26 +2,23 @@ package SudokuSolver;
 
 import java.util.Scanner;
 
-public class iBoard {
+public class guiBoard {
 	private int[][] board;
+	//private String newScr = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 	private int[][] backup = new int[9][9];
 	private String[][] ableBackup = new String[9][9];
 
 	private String[][] able;
-	private boolean print;
 
 	String[] madeInferences = new String[200];
 	int madeInferencesIndex = 0;
 
-	public iBoard(boolean print){
+	public guiBoard(){
 		board = new int[9][9];
 		able = new String[9][9];
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++)
 				able[r][c] = "123456789";
-		this.print = print;
-
-		inputBoard();
 	}
 
 	public void printBoard(int step){
@@ -31,17 +28,8 @@ public class iBoard {
 				System.out.print(board[a][b] + " ");
 				if(b == 2 || b == 5)System.out.print("  |  ");
 			}
-			if(print){
-				System.out.print("      ");
-				for(int b = 0; b<9; b++){
-					if(able[a][b].length() == 0)System.out.print("00 ");
-					else System.out.print(able[a][b] + " ");
-					if(b == 2 || b == 5)System.out.print("  |  ");
-				}
-			}
 			if(a == 2 || a == 5){
 				System.out.print("\n---------------------------");
-				if(print)System.out.print("      ---------------------------");
 			}
 			System.out.println();
 		}
@@ -124,10 +112,7 @@ public class iBoard {
 		return true;
 	}
 
-	public void inputBoard(){
-		Scanner kb = new Scanner(System.in);
-		System.out.println("Enter a string of all the numbers: ");
-		String temp = kb.nextLine();
+	public void inputBoard(String temp){
 		int index = 0;
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++){
@@ -139,7 +124,6 @@ public class iBoard {
 
 				index++;
 			}
-		kb.close();
 	}
 
 	public void remove(int r, int c, int t){
@@ -226,7 +210,7 @@ public class iBoard {
 		return true;
 	}
 */
-	public void twoInLine(String indecies, int t){
+	public boolean twoInLine(String indecies, int t){
 		int combined = Integer.parseInt(indecies);
 		int r1 = combined/1000, c1 = (combined/100)%10;
 		int r2 = (combined/10)%10, c2 = combined%10;
@@ -234,14 +218,17 @@ public class iBoard {
 		if(r1 == r2 && isEligibleInference(indecies,t)){
 			removeFromRowExceptCube(r1,c1,t);
 			addInference(indecies,t);
+			return true;
 		}
 		else if(c1 == c2 && isEligibleInference(indecies,t)){
 			removeFromColExceptCube(r1,c1,t);
 			addInference(indecies,t);
+			return true;
 		}
+		return false;
 	}
 
-	public void threeInLine(String indecies, int t){
+	public boolean threeInLine(String indecies, int t){
 		int combined = Integer.parseInt(indecies);
 		int r1 = combined/100000, c1 = (combined/10000)%10;
 		int r2 = (combined/1000)%10, c2 = (combined/100)%10;
@@ -250,15 +237,18 @@ public class iBoard {
 		if(r1 == r2 && r2 == r3 && isEligibleInference(indecies,t)){
 			removeFromRowExceptCube(r1,c1,t);
 			addInference(indecies,t);
+			return true;
 		}
 		else if(c1 == c2 && c2 == c3 && isEligibleInference(indecies,t)){
 			removeFromColExceptCube(r1,c1,t);
 			addInference(indecies,t);
+			return true;
 		}
+		return false;
 	}
 
 	public void removeFromRowExceptCube(int r, int c, int t){
-		if(print)System.out.println("MADE A ROW INFERENCE OF A "+t+" AT ROW "+r);
+		gui.append("MADE A ROW INFERENCE OF A "+t+" AT ROW "+r+"\n");
 		int cube = 0;
 		if(r<=2 && c<=2)cube = 1;
 		else if(r<=2 && c>=3 && c<=5)cube = 2;
@@ -317,7 +307,7 @@ public class iBoard {
 	}
 
 	public void removeFromColExceptCube(int r, int c, int t){
-		if(print)System.out.println("MADE A COL INFERENCE OF A "+t+" AT COL "+c);
+		gui.append("MADE A COL INFERENCE OF A "+t+" AT COL "+c+"\n");
 		int cube = 0;
 		if(r<=2 && c<=2)cube = 1;
 		else if(r<=2 && c>=3 && c<=5)cube = 2;
@@ -422,7 +412,7 @@ public class iBoard {
 							if(temp != char1 && temp != char2)
 								able[r2][c2] = able[r2][c2].replaceAll(""+temp,"");
 						}
-						if(print)System.out.println("MADE A RESTRICTION INFERENCE WITH THE NUMBERS "+char1+","+char2+" AT ("+r1+","+c1+")("+r2+","+c2+")");
+						gui.append("MADE A RESTRICTION INFERENCE WITH THE NUMBERS "+char1+","+char2+" AT ("+r1+","+c1+")("+r2+","+c2+")\n");
 					}
 				}
 			}
@@ -603,7 +593,7 @@ public class iBoard {
 			for(int c1 = c; c1<c+3; c1++)
 				able[r1][c1] = able[r1][c1].replaceAll(""+num, "");
 		}
-		if(print)System.out.println("MADE A CUBE INFERENCE OF A "+num+" AT ROW "+targetRow+" AND CUBE "+cube);
+		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT ROW "+targetRow+" AND CUBE "+cube+"\n");
 	}
 
 	public void removeFromCubeExceptCol(String rc, int num){
@@ -665,7 +655,7 @@ public class iBoard {
 			for(int r1 = r; r1<r+3; r1++)
 				able[r1][c1] = able[r1][c1].replaceAll(""+num, "");
 		}
-		if(print)System.out.println("MADE A CUBE INFERENCE OF A "+num+" AT COL "+targetCol+" AND CUBE "+cube);
+		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT COL "+targetCol+" AND CUBE "+cube+"\n");
 	}
 
 	public void addInference(int r, int c, int num){
@@ -707,6 +697,12 @@ public class iBoard {
 		else cube2 = 1;
 		
 		return cube1!=cube2;
+	}
+	
+	//TODO
+	public String[][] getBoardWithoutZeros(){
+		String[][] temp = new String[9][9];
+		for(int )
 	}
 }
 
