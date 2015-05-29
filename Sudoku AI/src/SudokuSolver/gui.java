@@ -1366,7 +1366,7 @@ public class gui {
 
 		console = new JTextArea();
 		console.setEditable(false);
-		console.setBounds(478, 367, 156, 118);
+		console.setBounds(482, 367, 152, 118);
 		frmSudokuSolverSwag.getContentPane().add(console);
 
 		String txtText = "Paste row by row here";

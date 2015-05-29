@@ -16,12 +16,12 @@ package SudokuSolver;
 
 //TODO: HIDDEN TRIPLES IN CUBES
 
-public class MainV3 {
+public class iMain {
 	public static void main(String[] args){
 		System.out.println("");
 
 		boolean print = true, goSlow = false;
-		BoardV3 b = new BoardV3(print);
+		iBoard b = new iBoard(print);
 		boolean notComplete = false;
 		int steps = 0, numsAdded = 0;
 

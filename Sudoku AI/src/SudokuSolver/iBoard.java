@@ -2,7 +2,7 @@ package SudokuSolver;
 
 import java.util.Scanner;
 
-public class BoardV3 {
+public class iBoard {
 	private int[][] board;
 	//private String newScr = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 	private int[][] backup = new int[9][9];
@@ -14,7 +14,7 @@ public class BoardV3 {
 	String[] madeInferences = new String[200];
 	int madeInferencesIndex = 0;
 
-	public BoardV3(boolean print){
+	public iBoard(boolean print){
 		board = new int[9][9];
 		able = new String[9][9];
 		for(int r = 0; r<9; r++)
