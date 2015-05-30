@@ -3,8 +3,10 @@ package SudokuSolver;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import java.awt.event.ActionListener;
@@ -23,6 +25,8 @@ import javax.swing.JTextArea;
 import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+
+import javax.swing.JScrollBar;
 
 public class gui {
 
@@ -121,6 +125,7 @@ public class gui {
 	private JButton bTakeStep = new JButton("Take Step");
 	private JButton bPreviousStep = new JButton("<<");
 	private JButton bNextStep = new JButton(">>");
+	private JScrollPane scrollBar;
 
 	//TODO variables
 	private boolean enterByRow = true, enterByCol = false, enterByCube = false;
@@ -1350,6 +1355,13 @@ public class gui {
 		cbTakeSteps.setFocusable(false);
 		cbTakeSteps.setBounds(478, 247, 156, 23);
 		frmSudokuSolverSwag.getContentPane().add(cbTakeSteps);
+		bTakeStep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				takeStep();
+				updateBoard();
+				b.clearLog();
+			}
+		});
 
 		bTakeStep.setBounds(488, 277, 136, 23);
 		bTakeStep.setFocusable(false);
@@ -1369,6 +1381,12 @@ public class gui {
 		frmSudokuSolverSwag.getContentPane().add(bClearBoard);
 
 		bSolve = new JButton("Solve");
+		bSolve.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				takeStep();
+				updateBoard();
+			}
+		});
 		bSolve.setBounds(488, 224, 136, 20);
 		bSolve.setEnabled(false);
 		bSolve.setFocusable(false);
@@ -1376,7 +1394,7 @@ public class gui {
 
 		console = new JTextArea();
 		console.setEditable(false);
-		console.setBounds(482, 367, 152, 118);
+		console.setBounds(482, 367, 136, 118);
 		frmSudokuSolverSwag.getContentPane().add(console);
 
 		txtPasteRowBy = new JTextField();
@@ -1385,6 +1403,7 @@ public class gui {
 				if(!txtPasteRowBy.getText().equals(""))txtText = txtPasteRowBy.getText();
 				txtPasteRowBy.setText(txtText);
 				b.inputBoard(txtText);
+				updateBoard();
 			}
 		});
 		txtPasteRowBy.addFocusListener(new FocusAdapter() {
@@ -1402,6 +1421,11 @@ public class gui {
 		txtPasteRowBy.setBounds(482, 110, 152, 16);
 		frmSudokuSolverSwag.getContentPane().add(txtPasteRowBy);
 		txtPasteRowBy.setColumns(10);
+
+		scrollBar = new JScrollPane(console);
+		scrollBar.setBounds(482, 367, 152, 118);
+		scrollBar.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED );
+		frmSudokuSolverSwag.getContentPane().add(scrollBar);
 	}
 
 	private void nextFocus(String token){
@@ -1776,229 +1800,459 @@ public class gui {
 	}
 
 	private void takeStep(){
-		//if only one number possible
-		for(int r = 0; r<9; r++)
-			for(int c = 0; c<9; c++)
-				if(b.get(r,c)==0){
-					String temp = b.getAble(r,c);
-					if(temp.length()==1){
-						int temp2 = Integer.parseInt(temp);
-						b.set(r,c,temp2);
-						console.append("ABLE ELIMINATION PLACED A "+temp+" AT PLACE ("+r+","+c+")\n");
-						numsAdded++;
-						return;
-					}
-				}
-		//if two numbers are only possible in a space and a different space in the same row
-		for(int rc = 0; rc<9; rc++){
-			String[] able = b.getRowAble(rc);
-			for(int c1 = 0; c1<9; c1++)
-				for(int c2 = c1+1; c2<9; c2++)
-					if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
-						b.removeFromRowExcept(rc, c1, c2, able[c1]);
-						b.addInference(rc,c1,Integer.parseInt(able[c1]));
-						console.append("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[c1]+"\n");
-						return;
-					}
-			able = b.getColAble(rc);
-			for(int c1 = 0; c1<9; c1++)
-				for(int c2 = c1+1; c2<9; c2++)
-					if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
-						b.removeFromColExcept(rc, c1, c2, able[c1]);
-						b.addInference(rc,c1,Integer.parseInt(able[c1]));
-						console.append("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[c1]+"\n");
-						return;
-					}
-		}
-
-		//tests a number at every spot in a cube, to see if it can only go in one spot.
-		//also deals with row/col inferences
-		for(int test = 1; test<=9; test++)
-			for(int rowRotor = 0; rowRotor<3; rowRotor++)
-				for(int colRotor = 0; colRotor<3; colRotor++){
-					String eligibleIndecies = "";
-					boolean numberIsGood = true;
-					for(int r = rowRotor*3; numberIsGood && r<rowRotor*3+3; r++)
-						for(int c = colRotor*3; numberIsGood && c<colRotor*3+3; c++)
-							if(b.isEligible(r,c,test)){
-								eligibleIndecies += "" + r + c;
-								if(eligibleIndecies.length()>6)numberIsGood = false;
-							}
-					int len = eligibleIndecies.length();
-					if(numberIsGood && len == 2){
-						int indecies = Integer.parseInt(eligibleIndecies);
-						b.set(indecies/10, indecies%10, test);
-						console.append("POSITIONAL ELIMINATION PLACED A "+test+" AT PLACE ("+(indecies/10)+","+(indecies%10)+")\n");
-						numsAdded++;
-						return;
-					}
-					else if(numberIsGood && len == 4){
-						b.log(rowRotor*3,colRotor*3,test,eligibleIndecies);
-						if(b.twoInLine(eligibleIndecies,test))return;
-					}
-					else if(numberIsGood && len == 6){
-						if(b.threeInLine(eligibleIndecies,test))return;
-					}
-				}
-
-		//if only eligible in two places in the same row, and both in the same cube, remove from rest of cube
-		for(int test = 1; test<=9; test++){
-			for(int r = 0; r<9; r++){
-				String[] rowAble = b.getRowAble(r);
-				String eligibleIndecies = "";
+		do{
+			//if only one number possible
+			for(int r = 0; r<9; r++)
 				for(int c = 0; c<9; c++)
-					if(rowAble[c].contains(""+test))
-						eligibleIndecies += ""+r+c;
-				if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
-					b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
-					b.addInference(eligibleIndecies.substring(0,2),test);
-					return;
-				}
-				else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
-					b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
-					b.addInference(eligibleIndecies.substring(0,2),test);
-					return;
-				}
+					if(b.get(r,c)==0){
+						String temp = b.getAble(r,c);
+						if(temp.length()==1){
+							int temp2 = Integer.parseInt(temp);
+							b.set(r,c,temp2);
+							console.append("ABLE ELIMINATION PLACED A "+temp+" AT PLACE ("+r+","+c+")\n");
+							numsAdded++;
+							if(showSteps)return;
+						}
+					}
+			//if two numbers are only possible in a space and a different space in the same row
+			for(int rc = 0; rc<9; rc++){
+				String[] able = b.getRowAble(rc);
+				for(int c1 = 0; c1<9; c1++)
+					for(int c2 = c1+1; c2<9; c2++)
+						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
+							b.removeFromRowExcept(rc, c1, c2, able[c1]);
+							b.addInference(rc,c1,Integer.parseInt(able[c1]));
+							console.append("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[c1]+"\n");
+							if(showSteps)return;
+						}
+				able = b.getColAble(rc);
+				for(int c1 = 0; c1<9; c1++)
+					for(int c2 = c1+1; c2<9; c2++)
+						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
+							b.removeFromColExcept(rc, c1, c2, able[c1]);
+							b.addInference(rc,c1,Integer.parseInt(able[c1]));
+							console.append("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[c1]+"\n");
+							if(showSteps)return;
+						}
 			}
 
-			for(int c = 0; c<9; c++){
-				String[] colAble = b.getColAble(c);
-				String eligibleIndecies = "";
-				for(int r = 0; r<9; r++)
-					if(colAble[r].contains(""+test))
-						eligibleIndecies += ""+r+c;
-				if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
-					b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
-					b.addInference(eligibleIndecies.substring(0,2),test);
-					return;
-				}
-				else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
-					b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
-					b.addInference(eligibleIndecies.substring(0,2),test);
-					return;
-				}
-			}
-		}
+			//tests a number at every spot in a cube, to see if it can only go in one spot.
+			//also deals with row/col inferences
+			for(int test = 1; test<=9; test++)
+				for(int rowRotor = 0; rowRotor<3; rowRotor++)
+					for(int colRotor = 0; colRotor<3; colRotor++){
+						String eligibleIndecies = "";
+						boolean numberIsGood = true;
+						for(int r = rowRotor*3; numberIsGood && r<rowRotor*3+3; r++)
+							for(int c = colRotor*3; numberIsGood && c<colRotor*3+3; c++)
+								if(b.isEligible(r,c,test)){
+									eligibleIndecies += "" + r + c;
+									if(eligibleIndecies.length()>6)numberIsGood = false;
+								}
+						int len = eligibleIndecies.length();
+						if(numberIsGood && len == 2){
+							int indecies = Integer.parseInt(eligibleIndecies);
+							b.set(indecies/10, indecies%10, test);
+							console.append("POSITIONAL ELIMINATION PLACED A "+test+" AT PLACE ("+(indecies/10)+","+(indecies%10)+")\n");
+							numsAdded++;
+							if(showSteps)return;
+						}
+						else if(numberIsGood && len == 4){
+							b.log(rowRotor*3,colRotor*3,test,eligibleIndecies);
+							if(b.twoInLine(eligibleIndecies,test) && showSteps)return;
+						}
+						else if(numberIsGood && len == 6){
+							if(b.threeInLine(eligibleIndecies,test) && showSteps)return;
+						}
+					}
 
-		//does the inference stuffs
-		b.logCheck();
-
-		//looks for and finds hidden triples
-		for(int rc = 0; rc<9; rc++){
-			String[] rowAble = b.getRowAble(rc);
-			String threeTargetNumbers = "";
-			if(rowAble.length>3)
-				for(int c1 = 0; c1<9; c1++){
-					if(rowAble[c1].length()>3 || rowAble[c1].length()<2)continue;
-					threeTargetNumbers = rowAble[c1];
-					for(int c2 = c1+1; c2<9; c2++){
-						if(rowAble[c2].length()>3 || rowAble[c2].length()<2)continue;
-						boolean good = true;
-						String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
-						for(int charIndex = 0; charIndex<rowAble[c2].length(); charIndex++){
-							if(threeTargetNumbers.contains(""+rowAble[c2].charAt(charIndex)))continue;
-							if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c2].charAt(charIndex);
-							else{ good = false; break; }
-						}
-						if(!good){
-							threeTargetNumbers = threeTargetNumbersBeforeLoop2;
-							continue;
-						}
-						for(int c3 = c2+1; c3<9; c3++){
-							if(rowAble[c3].length()>3 || rowAble[c3].length()<2)continue;
-							String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
-							for(int charIndex = 0; charIndex<rowAble[c3].length(); charIndex++){
-								if(threeTargetNumbers.contains(""+rowAble[c3].charAt(charIndex)))continue;
-								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c3].charAt(charIndex);
-								else{ good = false; break; }
-							}
-							if(!good || !b.isEligibleInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers))){
-								threeTargetNumbers = threeTargetNumbersBeforeLoop3;
-								continue;
-							}
-							b.addInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers));
-							b.removeFromRowExcept(rc,c1,c2,c3,threeTargetNumbers);
-							console.append("MADE A HIDDEN TRIPLE INFERENCE AT ROW "+rc+" AND COLS "+c1+", "+c2+", and "+c3+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
-							return;
-						}
+			//if only eligible in two places in the same row, and both in the same cube, remove from rest of cube
+			for(int test = 1; test<=9; test++){
+				for(int r = 0; r<9; r++){
+					String[] rowAble = b.getRowAble(r);
+					String eligibleIndecies = "";
+					for(int c = 0; c<9; c++)
+						if(rowAble[c].contains(""+test))
+							eligibleIndecies += ""+r+c;
+					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+						if(showSteps)return;
+					}
+					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+						if(showSteps)return;
 					}
 				}
 
-			String[] colAble = b.getColAble(rc);
-			threeTargetNumbers = "";
-			if(colAble.length>3)
-				for(int r1 = 0; r1<9; r1++){
-					if(rowAble[r1].length()>3 || rowAble[r1].length()<2)continue;
-					threeTargetNumbers = rowAble[r1];
-					for(int r2 = r1+1; r2<9; r2++){
-						if(rowAble[r2].length()>3 || rowAble[r2].length()<2)continue;
-						boolean good = true;
-						String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
-						for(int charIndex = 0; charIndex<rowAble[r2].length(); charIndex++){
-							if(threeTargetNumbers.contains(""+rowAble[r2].charAt(charIndex)))continue;
-							if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r2].charAt(charIndex);
-							else{ good = false; break; }
-						}
-						if(!good){
-							threeTargetNumbers = threeTargetNumbersBeforeLoop2;
-							continue;
-						}
-						for(int r3 = r2+1; r3<9; r3++){
-							if(rowAble[r3].length()>3 || rowAble[r3].length()<2)continue;
-							String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
-							for(int charIndex = 0; charIndex<rowAble[r3].length(); charIndex++){
-								if(threeTargetNumbers.contains(""+rowAble[r3].charAt(charIndex)))continue;
-								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r3].charAt(charIndex);
-								else{ good = false; break; }
-							}
-							if(!good || !b.isEligibleInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers))){
-								threeTargetNumbers = threeTargetNumbersBeforeLoop3;
-								continue;
-							}
-							b.addInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers));
-							b.removeFromRowExcept(rc,r1,r2,r3,threeTargetNumbers);
-							console.append("MADE A HIDDEN TRIPLE INFERENCE AT COL "+rc+" AND ROWS "+r1+", "+r2+", and "+r3+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
-							return;
-						}
+				for(int c = 0; c<9; c++){
+					String[] colAble = b.getColAble(c);
+					String eligibleIndecies = "";
+					for(int r = 0; r<9; r++)
+						if(colAble[r].contains(""+test))
+							eligibleIndecies += ""+r+c;
+					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+						if(showSteps)return;
+					}
+					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+						if(showSteps)return;
 					}
 				}
+			}
 
-		}
-		
+			//does the inference stuffs
+			b.logCheck();
+
+			//looks for and finds hidden triples
+			for(int rc = 0; rc<9; rc++){
+				String[] rowAble = b.getRowAble(rc);
+				String threeTargetNumbers = "";
+				if(rowAble.length>3)
+					for(int c1 = 0; c1<9; c1++){
+						if(rowAble[c1].length()>3 || rowAble[c1].length()<2)continue;
+						threeTargetNumbers = rowAble[c1];
+						for(int c2 = c1+1; c2<9; c2++){
+							if(rowAble[c2].length()>3 || rowAble[c2].length()<2)continue;
+							boolean good = true;
+							String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
+							for(int charIndex = 0; charIndex<rowAble[c2].length(); charIndex++){
+								if(threeTargetNumbers.contains(""+rowAble[c2].charAt(charIndex)))continue;
+								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c2].charAt(charIndex);
+								else{ good = false; break; }
+							}
+							if(!good){
+								threeTargetNumbers = threeTargetNumbersBeforeLoop2;
+								continue;
+							}
+							for(int c3 = c2+1; c3<9; c3++){
+								if(rowAble[c3].length()>3 || rowAble[c3].length()<2)continue;
+								String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
+								for(int charIndex = 0; charIndex<rowAble[c3].length(); charIndex++){
+									if(threeTargetNumbers.contains(""+rowAble[c3].charAt(charIndex)))continue;
+									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c3].charAt(charIndex);
+									else{ good = false; break; }
+								}
+								if(!good || !b.isEligibleInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers))){
+									threeTargetNumbers = threeTargetNumbersBeforeLoop3;
+									continue;
+								}
+								b.addInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers));
+								b.removeFromRowExcept(rc,c1,c2,c3,threeTargetNumbers);
+								console.append("MADE A HIDDEN TRIPLE INFERENCE AT ROW "+rc+" AND COLS "+c1+", "+c2+", and "+c3+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
+								if(showSteps)return;
+							}
+						}
+					}
+
+				String[] colAble = b.getColAble(rc);
+				threeTargetNumbers = "";
+				if(colAble.length>3)
+					for(int r1 = 0; r1<9; r1++){
+						if(rowAble[r1].length()>3 || rowAble[r1].length()<2)continue;
+						threeTargetNumbers = rowAble[r1];
+						for(int r2 = r1+1; r2<9; r2++){
+							if(rowAble[r2].length()>3 || rowAble[r2].length()<2)continue;
+							boolean good = true;
+							String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
+							for(int charIndex = 0; charIndex<rowAble[r2].length(); charIndex++){
+								if(threeTargetNumbers.contains(""+rowAble[r2].charAt(charIndex)))continue;
+								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r2].charAt(charIndex);
+								else{ good = false; break; }
+							}
+							if(!good){
+								threeTargetNumbers = threeTargetNumbersBeforeLoop2;
+								continue;
+							}
+							for(int r3 = r2+1; r3<9; r3++){
+								if(rowAble[r3].length()>3 || rowAble[r3].length()<2)continue;
+								String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
+								for(int charIndex = 0; charIndex<rowAble[r3].length(); charIndex++){
+									if(threeTargetNumbers.contains(""+rowAble[r3].charAt(charIndex)))continue;
+									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r3].charAt(charIndex);
+									else{ good = false; break; }
+								}
+								if(!good || !b.isEligibleInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers))){
+									threeTargetNumbers = threeTargetNumbersBeforeLoop3;
+									continue;
+								}
+								b.addInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers));
+								b.removeFromRowExcept(rc,r1,r2,r3,threeTargetNumbers);
+								console.append("MADE A HIDDEN TRIPLE INFERENCE AT COL "+rc+" AND ROWS "+r1+", "+r2+", and "+r3+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
+								if(showSteps)return;
+							}
+						}
+					}
+
+			}
+		} while(!showSteps && !b.gameDone());
+
 		//TODO bruteforce
 	}
-	
+
 	public static void append(String x){
-		console.append(x+"\n");
+		console.append(x);
 	}
-	
+
 	//TODO
 	public void updateBoard(){
-		String[] board = b.getBoardWithoutZeros();
+		String[][] board = b.getBoardWithoutZeros();
+		A1.setText(board[0][0]);
+		A2.setText(board[0][1]);
+		A3.setText(board[0][2]);
+		A4.setText(board[0][3]);
+		A5.setText(board[0][4]);
+		A6.setText(board[0][5]);
+		A7.setText(board[0][6]);
+		A8.setText(board[0][7]);
+		A9.setText(board[0][8]);
+		B1.setText(board[1][0]);
+		B2.setText(board[1][1]);
+		B3.setText(board[1][2]);
+		B4.setText(board[1][3]);
+		B5.setText(board[1][4]);
+		B6.setText(board[1][5]);
+		B7.setText(board[1][6]);
+		B8.setText(board[1][7]);
+		B9.setText(board[1][8]);
+		C1.setText(board[2][0]);
+		C2.setText(board[2][1]);
+		C3.setText(board[2][2]);
+		C4.setText(board[2][3]);
+		C5.setText(board[2][4]);
+		C6.setText(board[2][5]);
+		C7.setText(board[2][6]);
+		C8.setText(board[2][7]);
+		C9.setText(board[2][8]);
+		D1.setText(board[3][0]);
+		D2.setText(board[3][1]);
+		D3.setText(board[3][2]);
+		D4.setText(board[3][3]);
+		D5.setText(board[3][4]);
+		D6.setText(board[3][5]);
+		D7.setText(board[3][6]);
+		D8.setText(board[3][7]);
+		D9.setText(board[3][8]);
+		E1.setText(board[4][0]);
+		E2.setText(board[4][1]);
+		E3.setText(board[4][2]);
+		E4.setText(board[4][3]);
+		E5.setText(board[4][4]);
+		E6.setText(board[4][5]);
+		E7.setText(board[4][6]);
+		E8.setText(board[4][7]);
+		E9.setText(board[4][8]);
+		F1.setText(board[5][0]);
+		F2.setText(board[5][1]);
+		F3.setText(board[5][2]);
+		F4.setText(board[5][3]);
+		F5.setText(board[5][4]);
+		F6.setText(board[5][5]);
+		F7.setText(board[5][6]);
+		F8.setText(board[5][7]);
+		F9.setText(board[5][8]);
+		G1.setText(board[6][0]);
+		G2.setText(board[6][1]);
+		G3.setText(board[6][2]);
+		G4.setText(board[6][3]);
+		G5.setText(board[6][4]);
+		G6.setText(board[6][5]);
+		G7.setText(board[6][6]);
+		G8.setText(board[6][7]);
+		G9.setText(board[6][8]);
+		H1.setText(board[7][0]);
+		H2.setText(board[7][1]);
+		H3.setText(board[7][2]);
+		H4.setText(board[7][3]);
+		H5.setText(board[7][4]);
+		H6.setText(board[7][5]);
+		H7.setText(board[7][6]);
+		H8.setText(board[7][7]);
+		H9.setText(board[7][8]);
+		I1.setText(board[8][0]);
+		I2.setText(board[8][1]);
+		I3.setText(board[8][2]);
+		I4.setText(board[8][3]);
+		I5.setText(board[8][4]);
+		I6.setText(board[8][5]);
+		I7.setText(board[8][6]);
+		I8.setText(board[8][7]);
+		I9.setText(board[8][8]);
+
+		if(board[0][0].length()>1)A1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else A1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[0][1].length()>1)A2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else A2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[0][2].length()>1)A3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else A3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[0][3].length()>1)A4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else A4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[0][4].length()>1)A5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else A5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[0][5].length()>1)A6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else A6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[0][6].length()>1)A7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else A7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[0][7].length()>1)A8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else A8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[0][8].length()>1)A9.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else A9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		if(board[1][0].length()>1)B1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else B1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[1][1].length()>1)B2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else B2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[1][2].length()>1)B3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else B3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[1][3].length()>1)B4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else B4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[1][4].length()>1)B5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else B5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[1][5].length()>1)B6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else B6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[1][6].length()>1)B7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else B7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[1][7].length()>1)B8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else B8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[1][8].length()>1)B9.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else B9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		if(board[2][0].length()>1)C1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else C1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[2][1].length()>1)C2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else C2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[2][2].length()>1)C3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else C3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[2][3].length()>1)C4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else C4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[2][4].length()>1)C5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else C5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[2][5].length()>1)C6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else C6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[2][6].length()>1)C7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else C7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[2][7].length()>1)C8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else C8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[2][8].length()>1)C9.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else C9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		if(board[3][0].length()>1)D1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else D1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[3][1].length()>1)D2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else D2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[3][2].length()>1)D3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else D3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[3][3].length()>1)D4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else D4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[3][4].length()>1)D5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else D5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[3][5].length()>1)D6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else D6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[3][6].length()>1)D7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else D7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[3][7].length()>1)D8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else D8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[3][8].length()>1)D9.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else D9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		if(board[4][0].length()>1)E1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else E1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[4][1].length()>1)E2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else E2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[4][2].length()>1)E3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else E3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[4][3].length()>1)E4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else E4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[4][4].length()>1)E5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else E5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[4][5].length()>1)E6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else E6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[4][6].length()>1)E7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else E7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[4][7].length()>1)E8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else E8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[4][8].length()>1)E9.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else E9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		if(board[5][0].length()>1)F1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else F1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[5][1].length()>1)F2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else F2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[5][2].length()>1)F3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else F3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[5][3].length()>1)F4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else F4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[5][4].length()>1)F5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else F5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[5][5].length()>1)F6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else F6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[5][6].length()>1)F7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else F7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[5][7].length()>1)F8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else F8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[5][8].length()>1)F9.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else F9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		if(board[6][0].length()>1)G1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else G1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[6][1].length()>1)G2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else G2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[6][2].length()>1)G3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else G3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[6][3].length()>1)G4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else G4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[6][4].length()>1)G5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else G5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[6][5].length()>1)G6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else G6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[6][6].length()>1)G7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else G7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[6][7].length()>1)G8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else G8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[6][8].length()>1)G9.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else G9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		if(board[7][0].length()>1)H1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else H1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[7][1].length()>1)H2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else H2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[7][2].length()>1)H3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else H3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[7][3].length()>1)H4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else H4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[7][4].length()>1)H5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else H5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[7][5].length()>1)H6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else H6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[7][6].length()>1)H7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else H7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[7][7].length()>1)H8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else H8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[7][8].length()>1)H9.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else H9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		if(board[8][0].length()>1)I1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else I1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[8][1].length()>1)I2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else I2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[8][2].length()>1)I3.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else I3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[8][3].length()>1)I4.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else I4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[8][4].length()>1)I5.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else I5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[8][5].length()>1)I6.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else I6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[8][6].length()>1)I7.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else I7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[8][7].length()>1)I8.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else I8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		if(board[8][8].length()>1)I9.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		else I9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

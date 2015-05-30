@@ -423,6 +423,11 @@ public class guiBoard {
 		log = new String[9][9];
 	}
 	
+	public void clearLog(){
+		indecies = new int[9];
+		log = new String[9][9];
+	}
+	
 	public String[] getRowAble(int r){
 		return able[r];
 	}
@@ -702,7 +707,12 @@ public class guiBoard {
 	//TODO
 	public String[][] getBoardWithoutZeros(){
 		String[][] temp = new String[9][9];
-		for(int )
+		for(int r = 0; r<9; r++)
+			for(int c = 0; c<9; c++){
+				if(board[r][c]!=0)temp[r][c] = ""+board[r][c];
+				else temp[r][c] = able[r][c];
+			}
+		return temp;
 	}
 }
 
