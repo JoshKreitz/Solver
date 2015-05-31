@@ -1,7 +1,9 @@
 package SudokuSolver;
 
 import java.awt.EventQueue;
+import java.awt.Insets;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -25,8 +27,13 @@ import javax.swing.JTextArea;
 import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-
-import javax.swing.JScrollBar;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class gui {
 
@@ -40,7 +47,6 @@ public class gui {
 	private JTextField C1;
 	private JTextField C2;
 	private JTextField C3;
-	private JSeparator separator;
 	private JTextField A4;
 	private JTextField A5;
 	private JTextField A6;
@@ -50,7 +56,6 @@ public class gui {
 	private JTextField C4;
 	private JTextField C5;
 	private JTextField C6;
-	private JSeparator separator_1;
 	private JTextField A7;
 	private JTextField A8;
 	private JTextField A9;
@@ -60,7 +65,6 @@ public class gui {
 	private JTextField C7;
 	private JTextField C8;
 	private JTextField C9;
-	private JSeparator separator_2;
 	private JTextField D1;
 	private JTextField D2;
 	private JTextField D3;
@@ -88,7 +92,6 @@ public class gui {
 	private JTextField F7;
 	private JTextField F8;
 	private JTextField F9;
-	private JSeparator separator_3;
 	private JTextField G1;
 	private JTextField G2;
 	private JTextField G3;
@@ -116,7 +119,12 @@ public class gui {
 	private JTextField I7;
 	private JTextField I8;
 	private JTextField I9;
+	private JSeparator separator;
+	private JSeparator separator_1;
+	private JSeparator separator_2;
+	private JSeparator separator_3;
 	private JSeparator separator_5;
+	private JScrollPane scrollBar;
 	private JLabel lblTextConsole;
 	private static JTextArea console;
 	private JTextField txtPasteRowBy;
@@ -124,8 +132,8 @@ public class gui {
 	private JButton bSolve;
 	private JButton bTakeStep = new JButton("Take Step");
 	private JButton bPreviousStep = new JButton("<<");
-	private JButton bNextStep = new JButton(">>");
-	private JScrollPane scrollBar;
+	private JButton bSave;
+	private JButton bLoad;
 
 	//TODO variables
 	private boolean enterByRow = true, enterByCol = false, enterByCube = false;
@@ -133,8 +141,7 @@ public class gui {
 	private String txtText = "Paste row by row here";
 
 	private guiBoard b = new guiBoard();
-	boolean notComplete = false;
-	int steps = 0, numsAdded = 0;
+	int numberOfStepsToGoBack = 0;
 
 	/**
 	 * Launch the application.
@@ -1247,12 +1254,12 @@ public class gui {
 
 		JSeparator separator_4 = new JSeparator();
 		separator_4.setForeground(Color.DARK_GRAY);
-		separator_4.setBounds(482, 164, 152, 2);
+		separator_4.setBounds(482, 189, 152, 2);
 		frmSudokuSolverSwag.getContentPane().add(separator_4);
 
 		separator_5 = new JSeparator();
 		separator_5.setForeground(Color.DARK_GRAY);
-		separator_5.setBounds(482, 338, 152, 2);
+		separator_5.setBounds(482, 323, 152, 2);
 		frmSudokuSolverSwag.getContentPane().add(separator_5);
 
 		JLabel lblEnteringTheSudoku = new JLabel("Entering the Sudoku");
@@ -1262,12 +1269,12 @@ public class gui {
 
 		JLabel lblUsingTheSolver = new JLabel("Using the Solver");
 		lblUsingTheSolver.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblUsingTheSolver.setBounds(482, 175, 152, 16);
+		lblUsingTheSolver.setBounds(482, 195, 152, 16);
 		frmSudokuSolverSwag.getContentPane().add(lblUsingTheSolver);
 
 		lblTextConsole = new JLabel("Text Console");
 		lblTextConsole.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblTextConsole.setBounds(482, 346, 152, 16);
+		lblTextConsole.setBounds(482, 329, 152, 16);
 		frmSudokuSolverSwag.getContentPane().add(lblTextConsole);
 
 		final JCheckBox cbEnterByRow = new JCheckBox("Enter by row");
@@ -1334,11 +1341,10 @@ public class gui {
 				bSolve.setEnabled(true);
 				bTakeStep.setEnabled(false);
 				bPreviousStep.setEnabled(false);
-				bNextStep.setEnabled(false);
 			}
 		});
 		cbSolve.setFocusable(false);
-		cbSolve.setBounds(478, 198, 156, 23);
+		cbSolve.setBounds(478, 217, 156, 23);
 		frmSudokuSolverSwag.getContentPane().add(cbSolve);
 
 		cbTakeSteps.addActionListener(new ActionListener() {
@@ -1347,35 +1353,58 @@ public class gui {
 				cbSolve.setSelected(false);
 				bSolve.setEnabled(false);
 				bTakeStep.setEnabled(true);
-				bPreviousStep.setEnabled(true);
-				bNextStep.setEnabled(true);
+				if(numberOfStepsToGoBack!=0)bPreviousStep.setEnabled(true);
 			}
 		});
 		cbTakeSteps.setSelected(true);
 		cbTakeSteps.setFocusable(false);
-		cbTakeSteps.setBounds(478, 247, 156, 23);
+		cbTakeSteps.setBounds(478, 267, 156, 23);
 		frmSudokuSolverSwag.getContentPane().add(cbTakeSteps);
 		bTakeStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				takeStep();
+				b.logMove();
+				b.makeBackup();
+				
+				while(!b.changed() && takeStep())
+					b.clearLog();
+				
 				updateBoard();
-				b.clearLog();
+				if(numberOfStepsToGoBack!=3){
+					numberOfStepsToGoBack++;
+					bPreviousStep.setEnabled(true);
+				}
+				
+				
+				if(b.gameDone())bTakeStep.setEnabled(false);
 			}
 		});
 
-		bTakeStep.setBounds(488, 277, 136, 23);
+		bTakeStep.setMargin(new Insets(0,0,0,0));
+		bTakeStep.setBounds(488, 292, 91, 23);
 		bTakeStep.setFocusable(false);
 		frmSudokuSolverSwag.getContentPane().add(bTakeStep);
+		bPreviousStep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				b.goBackAStep();
+				numberOfStepsToGoBack--;
+				if(numberOfStepsToGoBack == 0)bPreviousStep.setEnabled(false);
+				updateBoard();
+			}
+		});
 
-		bPreviousStep.setBounds(488, 304, 65, 23);
+		bPreviousStep.setMargin(new Insets(0,0,0,0));
+		bPreviousStep.setEnabled(false);
+		bPreviousStep.setBounds(583, 292, 41, 23);
 		bPreviousStep.setFocusable(false);
 		frmSudokuSolverSwag.getContentPane().add(bPreviousStep);
 
-		bNextStep.setBounds(559, 304, 65, 23);
-		bNextStep.setFocusable(false);
-		frmSudokuSolverSwag.getContentPane().add(bNextStep);
-
 		bClearBoard = new JButton("Clear Board");
+		bClearBoard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				b = new guiBoard();
+				resetGui();
+			}
+		});
 		bClearBoard.setBounds(488, 134, 132, 20);
 		bClearBoard.setFocusable(false);
 		frmSudokuSolverSwag.getContentPane().add(bClearBoard);
@@ -1387,11 +1416,12 @@ public class gui {
 				updateBoard();
 			}
 		});
-		bSolve.setBounds(488, 224, 136, 20);
+		bSolve.setBounds(488, 244, 136, 20);
 		bSolve.setEnabled(false);
 		bSolve.setFocusable(false);
 		frmSudokuSolverSwag.getContentPane().add(bSolve);
 
+		//TODO fix the console outputs and change to letter-number format
 		console = new JTextArea();
 		console.setEditable(false);
 		console.setBounds(482, 367, 136, 118);
@@ -1400,6 +1430,7 @@ public class gui {
 		txtPasteRowBy = new JTextField();
 		txtPasteRowBy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				b = new guiBoard();
 				if(!txtPasteRowBy.getText().equals(""))txtText = txtPasteRowBy.getText();
 				txtPasteRowBy.setText(txtText);
 				b.inputBoard(txtText);
@@ -1421,11 +1452,45 @@ public class gui {
 		txtPasteRowBy.setBounds(482, 110, 152, 16);
 		frmSudokuSolverSwag.getContentPane().add(txtPasteRowBy);
 		txtPasteRowBy.setColumns(10);
+		
+		bSave = new JButton("Save");
+		bSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					PrintWriter out = new PrintWriter("src/SudokuSolver/res/savefile.txt");
+					out.println(b.getBoardString());
+					out.close();
+				} catch(FileNotFoundException e1){ System.out.println("FILE NOT FOUND!"); }
+			}
+		});
+		bSave.setFocusable(false);
+		bSave.setBounds(488, 161, 64, 20);
+		frmSudokuSolverSwag.getContentPane().add(bSave);
+		
+		bLoad = new JButton("Load");
+		bLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Scanner in = new Scanner(new FileReader("src/SudokuSolver/res/savefile.txt"));
+					b = new guiBoard();
+					b.inputBoard(in.nextLine());
+					updateBoard();
+					in.close();
+				} catch(IOException e2){ System.out.println("HIT IOEXCEPTION AT LINE 1476"); }
+			}
+		});
+		bLoad.setFocusable(false);
+		bLoad.setBounds(556, 161, 64, 20);
+		frmSudokuSolverSwag.getContentPane().add(bLoad);
 
 		scrollBar = new JScrollPane(console);
-		scrollBar.setBounds(482, 367, 152, 118);
+		scrollBar.setBounds(482, 350, 152, 135);
 		scrollBar.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED );
 		frmSudokuSolverSwag.getContentPane().add(scrollBar);
+		
+		try {
+			frmSudokuSolverSwag.setIconImage(ImageIO.read(new File("src/SudokuSolver/res/icon.png")));
+		} catch (IOException e1) { System.out.println("COULDNT LOCATE IMAGE FILE AT LINE 1493!"); }
 	}
 
 	private void nextFocus(String token){
@@ -1799,7 +1864,7 @@ public class gui {
 		else console.append("Enter a valid input method!\n");
 	}
 
-	private void takeStep(){
+	private boolean takeStep(){
 		do{
 			//if only one number possible
 			for(int r = 0; r<9; r++)
@@ -1810,8 +1875,7 @@ public class gui {
 							int temp2 = Integer.parseInt(temp);
 							b.set(r,c,temp2);
 							console.append("ABLE ELIMINATION PLACED A "+temp+" AT PLACE ("+r+","+c+")\n");
-							numsAdded++;
-							if(showSteps)return;
+							if(showSteps)return true;
 						}
 					}
 			//if two numbers are only possible in a space and a different space in the same row
@@ -1823,7 +1887,7 @@ public class gui {
 							b.removeFromRowExcept(rc, c1, c2, able[c1]);
 							b.addInference(rc,c1,Integer.parseInt(able[c1]));
 							console.append("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[c1]+"\n");
-							if(showSteps)return;
+							if(showSteps)return true;
 						}
 				able = b.getColAble(rc);
 				for(int c1 = 0; c1<9; c1++)
@@ -1832,7 +1896,7 @@ public class gui {
 							b.removeFromColExcept(rc, c1, c2, able[c1]);
 							b.addInference(rc,c1,Integer.parseInt(able[c1]));
 							console.append("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[c1]+"\n");
-							if(showSteps)return;
+							if(showSteps)return true;
 						}
 			}
 
@@ -1854,15 +1918,14 @@ public class gui {
 							int indecies = Integer.parseInt(eligibleIndecies);
 							b.set(indecies/10, indecies%10, test);
 							console.append("POSITIONAL ELIMINATION PLACED A "+test+" AT PLACE ("+(indecies/10)+","+(indecies%10)+")\n");
-							numsAdded++;
-							if(showSteps)return;
+							if(showSteps)return true;
 						}
 						else if(numberIsGood && len == 4){
 							b.log(rowRotor*3,colRotor*3,test,eligibleIndecies);
-							if(b.twoInLine(eligibleIndecies,test) && showSteps)return;
+							if(b.twoInLine(eligibleIndecies,test) && showSteps)return true;
 						}
 						else if(numberIsGood && len == 6){
-							if(b.threeInLine(eligibleIndecies,test) && showSteps)return;
+							if(b.threeInLine(eligibleIndecies,test) && showSteps)return true;
 						}
 					}
 
@@ -1877,12 +1940,12 @@ public class gui {
 					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
 						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
 						b.addInference(eligibleIndecies.substring(0,2),test);
-						if(showSteps)return;
+						if(showSteps)return true;
 					}
 					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
 						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
 						b.addInference(eligibleIndecies.substring(0,2),test);
-						if(showSteps)return;
+						if(showSteps)return true;
 					}
 				}
 
@@ -1895,12 +1958,12 @@ public class gui {
 					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
 						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
 						b.addInference(eligibleIndecies.substring(0,2),test);
-						if(showSteps)return;
+						if(showSteps)return true;
 					}
 					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
 						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
 						b.addInference(eligibleIndecies.substring(0,2),test);
-						if(showSteps)return;
+						if(showSteps)return true;
 					}
 				}
 			}
@@ -1944,7 +2007,7 @@ public class gui {
 								b.addInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers));
 								b.removeFromRowExcept(rc,c1,c2,c3,threeTargetNumbers);
 								console.append("MADE A HIDDEN TRIPLE INFERENCE AT ROW "+rc+" AND COLS "+c1+", "+c2+", and "+c3+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
-								if(showSteps)return;
+								if(showSteps)return true;
 							}
 						}
 					}
@@ -1983,7 +2046,7 @@ public class gui {
 								b.addInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers));
 								b.removeFromRowExcept(rc,r1,r2,r3,threeTargetNumbers);
 								console.append("MADE A HIDDEN TRIPLE INFERENCE AT COL "+rc+" AND ROWS "+r1+", "+r2+", and "+r3+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
-								if(showSteps)return;
+								if(showSteps)return true;
 							}
 						}
 					}
@@ -1991,6 +2054,7 @@ public class gui {
 			}
 		} while(!showSteps && !b.gameDone());
 
+		return false;
 		//TODO bruteforce
 	}
 
@@ -1998,7 +2062,7 @@ public class gui {
 		console.append(x);
 	}
 
-	//TODO
+	//TODO fix this
 	public void updateBoard(){
 		String[][] board = b.getBoardWithoutZeros();
 		A1.setText(board[0][0]);
@@ -2253,6 +2317,191 @@ public class gui {
 		else I8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		if(board[8][8].length()>1)I9.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		else I9.setFont(new Font("Tahoma", Font.BOLD, 18));
+	}
+	
+	public void resetGui(){
+		console.setText("");
+		
+		A1.setText("");
+		A2.setText("");
+		A3.setText("");
+		A4.setText("");
+		A5.setText("");
+		A6.setText("");
+		A7.setText("");
+		A8.setText("");
+		A9.setText("");
 
+		B1.setText("");
+		B2.setText("");
+		B3.setText("");
+		B4.setText("");
+		B5.setText("");
+		B6.setText("");
+		B7.setText("");
+		B8.setText("");
+		B9.setText("");
+
+		C1.setText("");
+		C2.setText("");
+		C3.setText("");
+		C4.setText("");
+		C5.setText("");
+		C6.setText("");
+		C7.setText("");
+		C8.setText("");
+		C9.setText("");
+
+		D1.setText("");
+		D2.setText("");
+		D3.setText("");
+		D4.setText("");
+		D5.setText("");
+		D6.setText("");
+		D7.setText("");
+		D8.setText("");
+		D9.setText("");
+
+		E1.setText("");
+		E2.setText("");
+		E3.setText("");
+		E4.setText("");
+		E5.setText("");
+		E6.setText("");
+		E7.setText("");
+		E8.setText("");
+		E9.setText("");
+
+		F1.setText("");
+		F2.setText("");
+		F3.setText("");
+		F4.setText("");
+		F5.setText("");
+		F6.setText("");
+		F7.setText("");
+		F8.setText("");
+		F9.setText("");
+
+		G1.setText("");
+		G2.setText("");
+		G3.setText("");
+		G4.setText("");
+		G5.setText("");
+		G6.setText("");
+		G7.setText("");
+		G8.setText("");
+		G9.setText("");
+
+		H1.setText("");
+		H2.setText("");
+		H3.setText("");
+		H4.setText("");
+		H5.setText("");
+		H6.setText("");
+		H7.setText("");
+		H8.setText("");
+		H9.setText("");
+
+		I1.setText("");
+		I2.setText("");
+		I3.setText("");
+		I4.setText("");
+		I5.setText("");
+		I6.setText("");
+		I7.setText("");
+		I8.setText("");
+		I9.setText("");
+
+		A1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		A2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		A3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		A4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		A5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		A6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		A7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		A8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		A9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		B1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		B2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		B3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		B4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		B5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		B6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		B7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		B8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		B9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		C1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		C2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		C3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		C4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		C5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		C6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		C7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		C8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		C9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		D1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		D2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		D3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		D4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		D5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		D6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		D7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		D8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		D9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		E1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		E2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		E3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		E4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		E5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		E6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		E7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		E8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		E9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		F1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		F2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		F3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		F4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		F5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		F6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		F7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		F8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		F9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		G1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		G2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		G3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		G4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		G5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		G6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		G7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		G8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		G9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		H1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		H2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		H3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		H4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		H5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		H6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		H7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		H8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		H9.setFont(new Font("Tahoma", Font.BOLD, 18));
+
+		I1.setFont(new Font("Tahoma", Font.BOLD, 18));
+		I2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		I3.setFont(new Font("Tahoma", Font.BOLD, 18));
+		I4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		I5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		I6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		I7.setFont(new Font("Tahoma", Font.BOLD, 18));
+		I8.setFont(new Font("Tahoma", Font.BOLD, 18));
+		I9.setFont(new Font("Tahoma", Font.BOLD, 18));
+		
+		
 	}
 }

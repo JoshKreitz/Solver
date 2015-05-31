@@ -1,9 +1,7 @@
 package SudokuSolver;
 
-import java.util.Scanner;
-
 public class guiBoard {
-	private int[][] board;
+	public int[][] board;
 	//private String newScr = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 	private int[][] backup = new int[9][9];
 	private String[][] ableBackup = new String[9][9];
@@ -39,27 +37,7 @@ public class guiBoard {
 	public int get(int r, int c){
 		return board[r][c];
 	}
-/*
-	public int[] getNeededRowNumbers(int r){
-		String possible = "123456789";
-		for(int x: board[r])
-			if(x != 0)possible.replaceAll(""+x,"");
-		int[] done = new int[possible.length()];
-		for(int i = 0; i<done.length; i++)
-			done[i] = Integer.parseInt(""+possible.charAt(i));
-		return done;
-	}
-
-	public int[] getNeededColNumbers(int c){
-		String possible = "123456789";
-		for(int[] x: board)
-			if(x[c] != 0)possible.replaceAll(""+x[c],"");
-		int[] done = new int[possible.length()];
-		for(int i = 0; i<done.length; i++)
-			done[i] = Integer.parseInt(""+possible.charAt(i));
-		return done;
-	}
-*/
+	
 	public void makeBackup(){
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++){
@@ -113,17 +91,19 @@ public class guiBoard {
 	}
 
 	public void inputBoard(String temp){
+		try{
 		int index = 0;
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++){
-				board[r][c] = Integer.parseInt(""+temp.charAt(index));
+				board[r][c] = Character.getNumericValue(temp.charAt(index));
 				if(board[r][c]!=0){
 					able[r][c] = "";
 					remove(r,c,board[r][c]);
 				}
-
 				index++;
 			}
+		}
+		catch(StringIndexOutOfBoundsException e){ gui.append("The string you entered isn't long enough to fill the board completely!"); }
 	}
 
 	public void remove(int r, int c, int t){
@@ -197,7 +177,7 @@ public class guiBoard {
 	public String getAble(int r, int c){
 		return able[r][c];
 	}
-/*
+	/*
 	public boolean rowFull(int r){
 		for(int x: board[r])
 			if(x==0)return false;
@@ -209,7 +189,7 @@ public class guiBoard {
 			if(x[c]==0)return false;
 		return true;
 	}
-*/
+	 */
 	public boolean twoInLine(String indecies, int t){
 		int combined = Integer.parseInt(indecies);
 		int r1 = combined/1000, c1 = (combined/100)%10;
@@ -422,16 +402,16 @@ public class guiBoard {
 		indecies = new int[9];
 		log = new String[9][9];
 	}
-	
+
 	public void clearLog(){
 		indecies = new int[9];
 		log = new String[9][9];
 	}
-	
+
 	public String[] getRowAble(int r){
 		return able[r];
 	}
-	
+
 	public String[] getColAble(int c){
 		String[] temp = new String[9];
 		for(int r = 0; r<9; r++)
@@ -445,7 +425,7 @@ public class guiBoard {
 				for(int s = 0; s<nums.length(); s++)
 					able[r][c] = able[r][c].replaceAll(""+nums.charAt(s),"");
 	}
-	
+
 	public void removeFromRowExcept(int r, int c1, int c2, int c3, String nums){
 		for(int c = 0; c<9; c++)
 			if(c!=c1 && c!=c2 && c!=c3)
@@ -459,7 +439,7 @@ public class guiBoard {
 				for(int s = 0; s<nums.length(); s++)
 					able[r][c] = able[r][c].replaceAll(""+nums.charAt(s),"");
 	}
-	
+
 	public void removeFromColExcept(int c, int r1, int r2, int r3, String nums){
 		for(int r = 0; r<9; r++)
 			if(c!=r1 && r!=r2 && r!=r3)
@@ -690,21 +670,20 @@ public class guiBoard {
 		}
 		return true;
 	}
-	
+
 	public boolean notInSameCube(int c1, int c2){
 		int cube1, cube2;
 		if(c1>=6)cube1 = 3;
 		else if(c1>=3)cube1 = 2;
 		else cube1 = 1;
-		
+
 		if(c2>=6)cube2 = 3;
 		else if(c2>=3)cube2 = 2;
 		else cube2 = 1;
-		
+
 		return cube1!=cube2;
 	}
-	
-	//TODO
+
 	public String[][] getBoardWithoutZeros(){
 		String[][] temp = new String[9][9];
 		for(int r = 0; r<9; r++)
@@ -714,28 +693,51 @@ public class guiBoard {
 			}
 		return temp;
 	}
+
+	private int[][][] previousBoards = new int[3][][];
+	private String[][][] previousAbles = new String[3][][];
+	private int move = 0;
+
+	public void logMove(){
+		if(move == 3){
+			for(int r = 0; r<9; r++)
+				for(int c = 0; c<9; c++){
+					previousBoards[0][r][c] = previousBoards[1][r][c];
+					previousAbles[0][r][c] = previousAbles[1][r][c];
+					previousBoards[1][r][c] = previousBoards[2][r][c];
+					previousAbles[1][r][c] = previousAbles[2][r][c];
+					previousBoards[2][r][c] = board[r][c];
+					previousAbles[2][r][c] = able[r][c];
+				}
+		}
+		else{
+			previousBoards[move] = new int[9][9];
+			previousAbles[move] = new String[9][9];
+			for(int r = 0; r<9; r++)
+				for(int c = 0; c<9; c++){
+					previousBoards[move][r][c] = board[r][c];
+					previousAbles[move][r][c] = able[r][c];
+				}
+			move++;
+		}
+	}
+	
+	public void goBackAStep(){
+		move--;
+		for(int r = 0; r<9; r++)
+			for(int c = 0; c<9; c++){
+				board[r][c] = previousBoards[move][r][c];
+				able[r][c] = previousAbles[move][r][c];
+			}
+	}
+	
+	public String getBoardString(){
+		String temp = "";
+		for(int r = 0; r<9; r++)
+			for(int c = 0; c<9; c++)
+				if(board[r][c]!=0)
+					temp += board[r][c];
+				else temp += 0;
+		return temp;
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
