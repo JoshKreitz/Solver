@@ -2,7 +2,6 @@ package SudokuSolver;
 
 public class guiBoard {
 	public int[][] board;
-	//private String newScr = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 	private int[][] backup = new int[9][9];
 	private String[][] ableBackup = new String[9][9];
 
@@ -17,21 +16,6 @@ public class guiBoard {
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++)
 				able[r][c] = "123456789";
-	}
-
-	public void printBoard(int step){
-		System.out.println("==============================================================STEP "+step+"=======================");
-		for(int a = 0; a<9; a++){
-			for(int b = 0; b<9; b++){
-				System.out.print(board[a][b] + " ");
-				if(b == 2 || b == 5)System.out.print("  |  ");
-			}
-			if(a == 2 || a == 5){
-				System.out.print("\n---------------------------");
-			}
-			System.out.println();
-		}
-		System.out.println();
 	}
 
 	public int get(int r, int c){
@@ -51,32 +35,6 @@ public class guiBoard {
 			for(int c = 0; c<9; c++)
 				if(board[r][c]!=backup[r][c] || !able[r][c].equals(ableBackup[r][c]))return true;
 		return false;
-	}
-
-	public void verify(){
-		for(int r = 0; r<9; r++){
-			String needed = "123456789";
-			for(int c = 0; c<9; c++){
-				needed = needed.replaceAll(""+board[r][c], "");
-			}
-			if(!(needed.length()==0)){
-				System.out.println("NOT VALID IN ROW "+r+"\nLEFT OVER: "+needed);
-				return;
-			}
-		}
-
-		for(int c = 0; c<9; c++){
-			String needed = "123456789";
-			for(int r = 0; r<9; r++){
-				needed = needed.replaceAll(""+board[r][c], "");
-			}
-			if(!(needed.length()==0)){
-				System.out.println("NOT VALID IN COL "+c+"\nLEFT OVER: "+needed);
-				return;
-			}
-		}
-
-		System.out.println("VALID");
 	}
 
 	public boolean isEligible(int r, int c, int t){
@@ -177,19 +135,7 @@ public class guiBoard {
 	public String getAble(int r, int c){
 		return able[r][c];
 	}
-	/*
-	public boolean rowFull(int r){
-		for(int x: board[r])
-			if(x==0)return false;
-		return true;
-	}
 
-	public boolean colFull(int c){
-		for(int[] x: board)
-			if(x[c]==0)return false;
-		return true;
-	}
-	 */
 	public boolean twoInLine(String indecies, int t){
 		int combined = Integer.parseInt(indecies);
 		int r1 = combined/1000, c1 = (combined/100)%10;
@@ -299,7 +245,6 @@ public class guiBoard {
 		else if(r>=6 && c>=3 && c<=5)cube = 8;
 		else if(r>=6 && c>=6)cube = 9;
 
-		//r = ((cube-1)%3)*3;
 		switch(cube){
 		case 1:
 			r = 0;
@@ -361,12 +306,10 @@ public class guiBoard {
 		else if(r>=6 && c>=3 && c<=5)cube = 7;
 		else if(r>=6 && c>=6)cube = 8;
 
-		//System.out.println("reached testing "+t+":"+cube+":"+indecies);
 		log[cube][this.indecies[cube]] = t+indecies;
 		this.indecies[cube]++;
 	}
 
-	//12345
 	public void logCheck(){
 		for(int cube = 0; cube<9; cube++){
 			if(indecies[cube] == 0)continue;
@@ -396,7 +339,6 @@ public class guiBoard {
 					}
 				}
 			}
-			//System.out.println(able[2][1]);
 		}
 
 		indecies = new int[9];

@@ -27,7 +27,6 @@ import javax.swing.JTextArea;
 import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -1496,7 +1495,6 @@ public class gui {
 	private void nextFocus(String token){
 		char letter = token.charAt(0);
 		char number = token.charAt(1);
-		//System.out.println(token+"   "+letter+"   "+number);
 
 		if(enterByRow){
 			switch(letter){
