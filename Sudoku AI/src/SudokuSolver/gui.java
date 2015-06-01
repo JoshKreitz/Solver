@@ -1,3 +1,4 @@
+//2/31/2015
 package SudokuSolver;
 
 import java.awt.EventQueue;
@@ -36,7 +37,7 @@ import java.util.Scanner;
 
 public class gui {
 
-	private JFrame frmSudokuSolverSwag;
+	private JFrame frame;
 	private JTextField A1;
 	private JTextField A2;
 	private JTextField A3;
@@ -138,6 +139,7 @@ public class gui {
 	private boolean enterByRow = true, enterByCol = false, enterByCube = false;
 	private boolean showSteps = true;
 	private String txtText = "Paste row by row here";
+	boolean firstStep = true;
 
 	private guiBoard b = new guiBoard();
 	int numberOfStepsToGoBack = 0;
@@ -150,7 +152,7 @@ public class gui {
 			public void run() {
 				try {
 					gui window = new gui();
-					window.frmSudokuSolverSwag.setVisible(true);
+					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -169,1063 +171,1144 @@ public class gui {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmSudokuSolverSwag = new JFrame();
-		frmSudokuSolverSwag.setTitle("Sudoku Solver");
-		frmSudokuSolverSwag.setResizable(false);
-		frmSudokuSolverSwag.setBounds(100, 100, 650, 522);
-		frmSudokuSolverSwag.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmSudokuSolverSwag.getContentPane().setLayout(null);
+		frame = new JFrame();
+		frame.setTitle("Josh's Sudoku Solver");
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 650, 522);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 
 		A1 = new JTextField();
+		A1.setToolTipText("A1");
 		A1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		A1.setHorizontalAlignment(SwingConstants.CENTER);
 		A1.setBounds(10, 11, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(A1);
+		frame.getContentPane().add(A1);
 		A1.setColumns(10);
 		A1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("A1");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("A1");
 			}
 		});
 
 		A2 = new JTextField();
+		A2.setToolTipText("A2");
 		A2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		A2.setHorizontalAlignment(SwingConstants.CENTER);
 		A2.setColumns(10);
 		A2.setBounds(60, 11, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(A2);
+		frame.getContentPane().add(A2);
 		A2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("A2");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("A2");
 			}
 		});
 
 		A3 = new JTextField();
+		A3.setToolTipText("A3");
 		A3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		A3.setHorizontalAlignment(SwingConstants.CENTER);
 		A3.setColumns(10);
 		A3.setBounds(110, 11, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(A3);
+		frame.getContentPane().add(A3);
 		A3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("A3");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("A3");
 			}
 		});
 
 		A4 = new JTextField();
+		A4.setToolTipText("A4");
 		A4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		A4.setHorizontalAlignment(SwingConstants.CENTER);
 		A4.setColumns(10);
 		A4.setBounds(171, 11, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(A4);
+		frame.getContentPane().add(A4);
 		A4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("A4");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("A4");
 			}
 		});
 
 		A5 = new JTextField();
+		A5.setToolTipText("A5");
 		A5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		A5.setHorizontalAlignment(SwingConstants.CENTER);
 		A5.setColumns(10);
 		A5.setBounds(221, 11, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(A5);
+		frame.getContentPane().add(A5);
 		A5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("A5");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("A5");
 			}
 		});
 
 		A6 = new JTextField();
+		A6.setToolTipText("A6");
 		A6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		A6.setHorizontalAlignment(SwingConstants.CENTER);
 		A6.setColumns(10);
 		A6.setBounds(271, 11, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(A6);
+		frame.getContentPane().add(A6);
 		A6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("A6");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("A6");
 			}
 		});
 
 		A7 = new JTextField();
+		A7.setToolTipText("A7");
 		A7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		A7.setHorizontalAlignment(SwingConstants.CENTER);
 		A7.setColumns(10);
 		A7.setBounds(332, 11, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(A7);
+		frame.getContentPane().add(A7);
 		A7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("A7");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("A7");
 			}
 		});
 
 		A8 = new JTextField();
+		A8.setToolTipText("A8");
 		A8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		A8.setHorizontalAlignment(SwingConstants.CENTER);
 		A8.setColumns(10);
 		A8.setBounds(382, 11, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(A8);
+		frame.getContentPane().add(A8);
 		A8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("A8");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("A8");
 			}
 		});
 
 		A9 = new JTextField();
+		A9.setToolTipText("A9");
 		A9.setFont(new Font("Tahoma", Font.BOLD, 18));
 		A9.setHorizontalAlignment(SwingConstants.CENTER);
 		A9.setColumns(10);
 		A9.setBounds(432, 11, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(A9);
+		frame.getContentPane().add(A9);
 		A9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("A9");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("A9");
 			}
 		});
 
 		B1 = new JTextField();
+		B1.setToolTipText("B1");
 		B1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		B1.setHorizontalAlignment(SwingConstants.CENTER);
 		B1.setColumns(10);
 		B1.setBounds(10, 62, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(B1);
+		frame.getContentPane().add(B1);
 		B1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("B1");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("B1");
 			}
 		});
 
 		B2 = new JTextField();
+		B2.setToolTipText("B2");
 		B2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		B2.setHorizontalAlignment(SwingConstants.CENTER);
 		B2.setColumns(10);
 		B2.setBounds(60, 62, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(B2);
+		frame.getContentPane().add(B2);
 		B2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("B2");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("B2");
 			}
 		});
 
 		B3 = new JTextField();
+		B3.setToolTipText("B3");
 		B3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		B3.setHorizontalAlignment(SwingConstants.CENTER);
 		B3.setColumns(10);
 		B3.setBounds(110, 62, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(B3);
+		frame.getContentPane().add(B3);
 		B3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("B3");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("B3");
 			}
 		});
 
 		B4 = new JTextField();
+		B4.setToolTipText("B4");
 		B4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		B4.setHorizontalAlignment(SwingConstants.CENTER);
 		B4.setColumns(10);
 		B4.setBounds(171, 62, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(B4);
+		frame.getContentPane().add(B4);
 		B4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("B4");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("B4");
 			}
 		});
 
 		B5 = new JTextField();
+		B5.setToolTipText("B5");
 		B5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		B5.setHorizontalAlignment(SwingConstants.CENTER);
 		B5.setColumns(10);
 		B5.setBounds(221, 62, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(B5);
+		frame.getContentPane().add(B5);
 		B5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("B5");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("B5");
 			}
 		});
 
 		B6 = new JTextField();
+		B6.setToolTipText("B6");
 		B6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		B6.setHorizontalAlignment(SwingConstants.CENTER);
 		B6.setColumns(10);
 		B6.setBounds(271, 62, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(B6);
+		frame.getContentPane().add(B6);
 		B6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("B6");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("B6");
 			}
 		});
 
 		B7 = new JTextField();
+		B7.setToolTipText("B7");
 		B7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		B7.setHorizontalAlignment(SwingConstants.CENTER);
 		B7.setColumns(10);
 		B7.setBounds(332, 62, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(B7);
+		frame.getContentPane().add(B7);
 		B7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("B7");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("B7");
 			}
 		});
 
 		B8 = new JTextField();
+		B8.setToolTipText("BB8");
 		B8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		B8.setHorizontalAlignment(SwingConstants.CENTER);
 		B8.setColumns(10);
 		B8.setBounds(382, 62, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(B8);
+		frame.getContentPane().add(B8);
 		B8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("B8");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("B8");
 			}
 		});
 
 		B9 = new JTextField();
+		B9.setToolTipText("B9");
 		B9.setFont(new Font("Tahoma", Font.BOLD, 18));
 		B9.setHorizontalAlignment(SwingConstants.CENTER);
 		B9.setColumns(10);
 		B9.setBounds(432, 62, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(B9);
+		frame.getContentPane().add(B9);
 		B9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("B9");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("B9");
 			}
 		});
 
 		C1 = new JTextField();
+		C1.setToolTipText("C1");
 		C1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		C1.setHorizontalAlignment(SwingConstants.CENTER);
 		C1.setColumns(10);
 		C1.setBounds(10, 113, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(C1);
+		frame.getContentPane().add(C1);
 		C1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("C1");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("C1");
 			}
 		});
 
 		C2 = new JTextField();
+		C2.setToolTipText("C2");
 		C2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		C2.setHorizontalAlignment(SwingConstants.CENTER);
 		C2.setColumns(10);
 		C2.setBounds(60, 113, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(C2);
+		frame.getContentPane().add(C2);
 		C2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("C2");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("C2");
 			}
 		});
 
 		C3 = new JTextField();
+		C3.setToolTipText("C3");
 		C3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		C3.setHorizontalAlignment(SwingConstants.CENTER);
 		C3.setColumns(10);
 		C3.setBounds(110, 113, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(C3);
+		frame.getContentPane().add(C3);
 		C3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("C3");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("C3");
 			}
 		});
 
 		C4 = new JTextField();
+		C4.setToolTipText("C4 *boom*");
 		C4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		C4.setHorizontalAlignment(SwingConstants.CENTER);
 		C4.setColumns(10);
 		C4.setBounds(171, 113, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(C4);
+		frame.getContentPane().add(C4);
 		C4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("C4");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("C4");
 			}
 		});
 
 		C5 = new JTextField();
+		C5.setToolTipText("C5");
 		C5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		C5.setHorizontalAlignment(SwingConstants.CENTER);
 		C5.setColumns(10);
 		C5.setBounds(221, 113, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(C5);
+		frame.getContentPane().add(C5);
 		C5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("C5");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("C5");
 			}
 		});
 
 		C6 = new JTextField();
+		C6.setToolTipText("C6");
 		C6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		C6.setHorizontalAlignment(SwingConstants.CENTER);
 		C6.setColumns(10);
 		C6.setBounds(271, 113, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(C6);
+		frame.getContentPane().add(C6);
 		C6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("C6");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("C6");
 			}
 		});
 
 		C7 = new JTextField();
+		C7.setToolTipText("C7");
 		C7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		C7.setHorizontalAlignment(SwingConstants.CENTER);
 		C7.setColumns(10);
 		C7.setBounds(332, 113, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(C7);
+		frame.getContentPane().add(C7);
 		C7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("C7");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("C7");
 			}
 		});
 
 		C8 = new JTextField();
+		C8.setToolTipText("C8");
 		C8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		C8.setHorizontalAlignment(SwingConstants.CENTER);
 		C8.setColumns(10);
 		C8.setBounds(382, 113, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(C8);
+		frame.getContentPane().add(C8);
 		C8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("C8");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("C8");
 			}
 		});
 
 		C9 = new JTextField();
+		C9.setToolTipText("C9");
 		C9.setFont(new Font("Tahoma", Font.BOLD, 18));
 		C9.setHorizontalAlignment(SwingConstants.CENTER);
 		C9.setColumns(10);
 		C9.setBounds(432, 113, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(C9);
+		frame.getContentPane().add(C9);
 		C9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("C9");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("C9");
 			}
 		});
 
 		D1 = new JTextField();
+		D1.setToolTipText("D1");
 		D1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		D1.setHorizontalAlignment(SwingConstants.CENTER);
 		D1.setColumns(10);
 		D1.setBounds(10, 177, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(D1);
+		frame.getContentPane().add(D1);
 		D1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("D1");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("D1");
 			}
 		});
 
 		D2 = new JTextField();
+		D2.setToolTipText("D2");
 		D2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		D2.setHorizontalAlignment(SwingConstants.CENTER);
 		D2.setColumns(10);
 		D2.setBounds(60, 177, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(D2);
+		frame.getContentPane().add(D2);
 		D2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("D2");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("D2");
 			}
 		});
 
 		D3 = new JTextField();
+		D3.setToolTipText("D3");
 		D3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		D3.setHorizontalAlignment(SwingConstants.CENTER);
 		D3.setColumns(10);
 		D3.setBounds(110, 177, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(D3);
+		frame.getContentPane().add(D3);
 		D3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("D3");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("D3");
 			}
 		});
 
 		D4 = new JTextField();
+		D4.setToolTipText("D4");
 		D4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		D4.setHorizontalAlignment(SwingConstants.CENTER);
 		D4.setColumns(10);
 		D4.setBounds(171, 177, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(D4);
+		frame.getContentPane().add(D4);
 		D4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("D4");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("D4");
 			}
 		});
 
 		D5 = new JTextField();
+		D5.setToolTipText("D5");
 		D5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		D5.setHorizontalAlignment(SwingConstants.CENTER);
 		D5.setColumns(10);
 		D5.setBounds(221, 177, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(D5);
+		frame.getContentPane().add(D5);
 		D5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("D5");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("D5");
 			}
 		});
 
 		D6 = new JTextField();
+		D6.setToolTipText("D6");
 		D6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		D6.setHorizontalAlignment(SwingConstants.CENTER);
 		D6.setColumns(10);
 		D6.setBounds(271, 177, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(D6);
+		frame.getContentPane().add(D6);
 		D6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("D6");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("D6");
 			}
 		});
 
 		D7 = new JTextField();
+		D7.setToolTipText("D7");
 		D7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		D7.setHorizontalAlignment(SwingConstants.CENTER);
 		D7.setColumns(10);
 		D7.setBounds(332, 177, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(D7);
+		frame.getContentPane().add(D7);
 		D7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("D7");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("D7");
 			}
 		});
 
 		D8 = new JTextField();
+		D8.setToolTipText("D8");
 		D8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		D8.setHorizontalAlignment(SwingConstants.CENTER);
 		D8.setColumns(10);
 		D8.setBounds(382, 177, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(D8);
+		frame.getContentPane().add(D8);
 		D8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("D8");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("D8");
 			}
 		});
 
 		D9 = new JTextField();
+		D9.setToolTipText("D9");
 		D9.setFont(new Font("Tahoma", Font.BOLD, 18));
 		D9.setHorizontalAlignment(SwingConstants.CENTER);
 		D9.setColumns(10);
 		D9.setBounds(432, 177, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(D9);
+		frame.getContentPane().add(D9);
 		D9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("D9");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("D9");
 			}
 		});
 
 		E1 = new JTextField();
+		E1.setToolTipText("E1");
 		E1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		E1.setHorizontalAlignment(SwingConstants.CENTER);
 		E1.setColumns(10);
 		E1.setBounds(10, 228, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(E1);
+		frame.getContentPane().add(E1);
 		E1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("E1");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("E1");
 			}
 		});
 
 		E2 = new JTextField();
+		E2.setToolTipText("E2");
 		E2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		E2.setHorizontalAlignment(SwingConstants.CENTER);
 		E2.setColumns(10);
 		E2.setBounds(60, 228, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(E2);
+		frame.getContentPane().add(E2);
 		E2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("E2");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("E2");
 			}
 		});
 
 		E3 = new JTextField();
+		E3.setToolTipText("E3");
 		E3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		E3.setHorizontalAlignment(SwingConstants.CENTER);
 		E3.setColumns(10);
 		E3.setBounds(110, 228, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(E3);
+		frame.getContentPane().add(E3);
 		E3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("E3");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("E3");
 			}
 		});
 
 		E4 = new JTextField();
+		E4.setToolTipText("E4");
 		E4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		E4.setHorizontalAlignment(SwingConstants.CENTER);
 		E4.setColumns(10);
 		E4.setBounds(171, 228, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(E4);
+		frame.getContentPane().add(E4);
 		E4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("E4");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("E4");
 			}
 		});
 
 		E5 = new JTextField();
+		E5.setToolTipText("E5");
 		E5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		E5.setHorizontalAlignment(SwingConstants.CENTER);
 		E5.setColumns(10);
 		E5.setBounds(221, 228, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(E5);
+		frame.getContentPane().add(E5);
 		E5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("E5");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("E5");
 			}
 		});
 
 		E6 = new JTextField();
+		E6.setToolTipText("E6");
 		E6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		E6.setHorizontalAlignment(SwingConstants.CENTER);
 		E6.setColumns(10);
 		E6.setBounds(271, 228, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(E6);
+		frame.getContentPane().add(E6);
 		E6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("E6");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("E6");
 			}
 		});
 
 		E7 = new JTextField();
+		E7.setToolTipText("E7");
 		E7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		E7.setHorizontalAlignment(SwingConstants.CENTER);
 		E7.setColumns(10);
 		E7.setBounds(332, 228, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(E7);
+		frame.getContentPane().add(E7);
 		E7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("E7");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("E7");
 			}
 		});
 
 		E8 = new JTextField();
+		E8.setToolTipText("E8");
 		E8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		E8.setHorizontalAlignment(SwingConstants.CENTER);
 		E8.setColumns(10);
 		E8.setBounds(382, 228, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(E8);
+		frame.getContentPane().add(E8);
 		E8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("E8");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("E8");
 			}
 		});
 
 		E9 = new JTextField();
+		E9.setToolTipText("E9");
 		E9.setFont(new Font("Tahoma", Font.BOLD, 18));
 		E9.setHorizontalAlignment(SwingConstants.CENTER);
 		E9.setColumns(10);
 		E9.setBounds(432, 228, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(E9);
+		frame.getContentPane().add(E9);
 		E9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("E9");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("E9");
 			}
 		});
 
 		F1 = new JTextField();
+		F1.setToolTipText("F1");
 		F1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		F1.setHorizontalAlignment(SwingConstants.CENTER);
 		F1.setColumns(10);
 		F1.setBounds(10, 279, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(F1);
+		frame.getContentPane().add(F1);
 		F1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("F1");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("F1");
 			}
 		});
 
 		F2 = new JTextField();
+		F2.setToolTipText("F2");
 		F2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		F2.setHorizontalAlignment(SwingConstants.CENTER);
 		F2.setColumns(10);
 		F2.setBounds(60, 279, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(F2);
+		frame.getContentPane().add(F2);
 		F2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("F2");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("F2");
 			}
 		});
 
 		F3 = new JTextField();
+		F3.setToolTipText("F3");
 		F3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		F3.setHorizontalAlignment(SwingConstants.CENTER);
 		F3.setColumns(10);
 		F3.setBounds(110, 279, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(F3);
+		frame.getContentPane().add(F3);
 		F3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("F3");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("F3");
 			}
 		});
 
 		F4 = new JTextField();
+		F4.setToolTipText("F4");
 		F4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		F4.setHorizontalAlignment(SwingConstants.CENTER);
 		F4.setColumns(10);
 		F4.setBounds(171, 279, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(F4);
+		frame.getContentPane().add(F4);
 		F4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("F4");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("F4");
 			}
 		});
 
 		F5 = new JTextField();
+		F5.setToolTipText("F5");
 		F5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		F5.setHorizontalAlignment(SwingConstants.CENTER);
 		F5.setColumns(10);
 		F5.setBounds(221, 279, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(F5);
+		frame.getContentPane().add(F5);
 		F5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("F5");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("F5");
 			}
 		});
 
 		F6 = new JTextField();
+		F6.setToolTipText("F6");
 		F6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		F6.setHorizontalAlignment(SwingConstants.CENTER);
 		F6.setColumns(10);
 		F6.setBounds(271, 279, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(F6);
+		frame.getContentPane().add(F6);
 		F6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("F6");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("F6");
 			}
 		});
 
 		F7 = new JTextField();
+		F7.setToolTipText("F7");
 		F7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		F7.setHorizontalAlignment(SwingConstants.CENTER);
 		F7.setColumns(10);
 		F7.setBounds(332, 279, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(F7);
+		frame.getContentPane().add(F7);
 		F7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("F7");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("F7");
 			}
 		});
 
 		F8 = new JTextField();
+		F8.setToolTipText("F8");
 		F8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		F8.setHorizontalAlignment(SwingConstants.CENTER);
 		F8.setColumns(10);
 		F8.setBounds(382, 279, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(F8);
+		frame.getContentPane().add(F8);
 		F8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("F8");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("F8");
 			}
 		});
 
 		F9 = new JTextField();
+		F9.setToolTipText("F9");
 		F9.setFont(new Font("Tahoma", Font.BOLD, 18));
 		F9.setHorizontalAlignment(SwingConstants.CENTER);
 		F9.setColumns(10);
 		F9.setBounds(432, 279, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(F9);
+		frame.getContentPane().add(F9);
 		F9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("F9");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("F9");
 			}
 		});
 
 		G1 = new JTextField();
+		G1.setToolTipText("G1");
 		G1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		G1.setHorizontalAlignment(SwingConstants.CENTER);
 		G1.setColumns(10);
 		G1.setBounds(10, 343, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(G1);
+		frame.getContentPane().add(G1);
 		G1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("G1");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("G1");
 			}
 		});
 
 		G2 = new JTextField();
+		G2.setToolTipText("G2");
 		G2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		G2.setHorizontalAlignment(SwingConstants.CENTER);
 		G2.setColumns(10);
 		G2.setBounds(60, 343, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(G2);
+		frame.getContentPane().add(G2);
 		G2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("G2");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("G2");
 			}
 		});
 
 		G3 = new JTextField();
+		G3.setToolTipText("G3");
 		G3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		G3.setHorizontalAlignment(SwingConstants.CENTER);
 		G3.setColumns(10);
 		G3.setBounds(110, 343, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(G3);
+		frame.getContentPane().add(G3);
 		G3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("G3");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("G3");
 			}
 		});
 
 		G4 = new JTextField();
+		G4.setToolTipText("G4");
 		G4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		G4.setHorizontalAlignment(SwingConstants.CENTER);
 		G4.setColumns(10);
 		G4.setBounds(171, 343, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(G4);
+		frame.getContentPane().add(G4);
 		G4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("G4");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("G4");
 			}
 		});
 
 		G5 = new JTextField();
+		G5.setToolTipText("G5");
 		G5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		G5.setHorizontalAlignment(SwingConstants.CENTER);
 		G5.setColumns(10);
 		G5.setBounds(221, 343, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(G5);
+		frame.getContentPane().add(G5);
 		G5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("G5");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("G5");
 			}
 		});
 
 		G6 = new JTextField();
+		G6.setToolTipText("fly like a G6");
 		G6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		G6.setHorizontalAlignment(SwingConstants.CENTER);
 		G6.setColumns(10);
 		G6.setBounds(271, 343, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(G6);
+		frame.getContentPane().add(G6);
 		G6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("G6");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("G6");
 			}
 		});
 
 		G7 = new JTextField();
+		G7.setToolTipText("G7");
 		G7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		G7.setHorizontalAlignment(SwingConstants.CENTER);
 		G7.setColumns(10);
 		G7.setBounds(332, 343, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(G7);
+		frame.getContentPane().add(G7);
 		G7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("G7");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("G7");
 			}
 		});
 
 		G8 = new JTextField();
+		G8.setToolTipText("G8");
 		G8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		G8.setHorizontalAlignment(SwingConstants.CENTER);
 		G8.setColumns(10);
 		G8.setBounds(382, 343, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(G8);
+		frame.getContentPane().add(G8);
 		G8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("G8");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("G8");
 			}
 		});
 
 		G9 = new JTextField();
+		G9.setToolTipText("G9");
 		G9.setFont(new Font("Tahoma", Font.BOLD, 18));
 		G9.setHorizontalAlignment(SwingConstants.CENTER);
 		G9.setColumns(10);
 		G9.setBounds(432, 343, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(G9);
+		frame.getContentPane().add(G9);
 		G9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("G9");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("G9");
 			}
 		});
 
 		H1 = new JTextField();
+		H1.setToolTipText("H1");
 		H1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		H1.setHorizontalAlignment(SwingConstants.CENTER);
 		H1.setColumns(10);
 		H1.setBounds(10, 394, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(H1);
+		frame.getContentPane().add(H1);
 		H1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("H1");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("H1");
 			}
 		});
 
 		H2 = new JTextField();
+		H2.setToolTipText("H2");
 		H2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		H2.setHorizontalAlignment(SwingConstants.CENTER);
 		H2.setColumns(10);
 		H2.setBounds(60, 394, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(H2);
+		frame.getContentPane().add(H2);
 		H2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("H2");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("H2");
 			}
 		});
 
 		H3 = new JTextField();
+		H3.setToolTipText("H3");
 		H3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		H3.setHorizontalAlignment(SwingConstants.CENTER);
 		H3.setColumns(10);
 		H3.setBounds(110, 394, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(H3);
+		frame.getContentPane().add(H3);
 		H3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("H3");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("H3");
 			}
 		});
 
 		H4 = new JTextField();
+		H4.setToolTipText("H4");
 		H4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		H4.setHorizontalAlignment(SwingConstants.CENTER);
 		H4.setColumns(10);
 		H4.setBounds(171, 394, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(H4);
+		frame.getContentPane().add(H4);
 		H4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("H4");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("H4");
 			}
 		});
 
 		H5 = new JTextField();
+		H5.setToolTipText("H5");
 		H5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		H5.setHorizontalAlignment(SwingConstants.CENTER);
 		H5.setColumns(10);
 		H5.setBounds(221, 394, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(H5);
+		frame.getContentPane().add(H5);
 		H5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("H5");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("H5");
 			}
 		});
 
 		H6 = new JTextField();
+		H6.setToolTipText("H6");
 		H6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		H6.setHorizontalAlignment(SwingConstants.CENTER);
 		H6.setColumns(10);
 		H6.setBounds(271, 394, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(H6);
+		frame.getContentPane().add(H6);
 		H6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("H6");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("H6");
 			}
 		});
 
 		H7 = new JTextField();
+		H7.setToolTipText("H7");
 		H7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		H7.setHorizontalAlignment(SwingConstants.CENTER);
 		H7.setColumns(10);
 		H7.setBounds(332, 394, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(H7);
+		frame.getContentPane().add(H7);
 		H7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("H7");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("H7");
 			}
 		});
 
 		H8 = new JTextField();
+		H8.setToolTipText("H8");
 		H8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		H8.setHorizontalAlignment(SwingConstants.CENTER);
 		H8.setColumns(10);
 		H8.setBounds(382, 394, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(H8);
+		frame.getContentPane().add(H8);
 		H8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("H8");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("H8");
 			}
 		});
 
 		H9 = new JTextField();
+		H9.setToolTipText("H9");
 		H9.setFont(new Font("Tahoma", Font.BOLD, 18));
 		H9.setHorizontalAlignment(SwingConstants.CENTER);
 		H9.setColumns(10);
 		H9.setBounds(432, 394, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(H9);
+		frame.getContentPane().add(H9);
 		H9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("H9");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("H9");
 			}
 		});
 
 		I1 = new JTextField();
+		I1.setToolTipText("I1");
 		I1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I1.setHorizontalAlignment(SwingConstants.CENTER);
 		I1.setColumns(10);
 		I1.setBounds(10, 445, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(I1);
+		frame.getContentPane().add(I1);
 		I1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("I1");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("I1");
 			}
 		});
 
 		I2 = new JTextField();
+		I2.setToolTipText("I2");
 		I2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I2.setHorizontalAlignment(SwingConstants.CENTER);
 		I2.setColumns(10);
 		I2.setBounds(60, 445, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(I2);
+		frame.getContentPane().add(I2);
 		I2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("I2");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("I2");
 			}
 		});
 
 		I3 = new JTextField();
+		I3.setToolTipText("I3");
 		I3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I3.setHorizontalAlignment(SwingConstants.CENTER);
 		I3.setColumns(10);
 		I3.setBounds(110, 445, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(I3);
+		frame.getContentPane().add(I3);
 		I3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("I3");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("I3");
 			}
 		});
 
 		I4 = new JTextField();
+		I4.setToolTipText("I4");
 		I4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I4.setHorizontalAlignment(SwingConstants.CENTER);
 		I4.setColumns(10);
 		I4.setBounds(171, 445, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(I4);
+		frame.getContentPane().add(I4);
 		I4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("I4");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("I4");
 			}
 		});
 
 		I5 = new JTextField();
+		I5.setToolTipText("I5");
 		I5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I5.setHorizontalAlignment(SwingConstants.CENTER);
 		I5.setColumns(10);
 		I5.setBounds(221, 445, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(I5);
+		frame.getContentPane().add(I5);
 		I5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("I5");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("I5");
 			}
 		});
 
 		I6 = new JTextField();
+		I6.setToolTipText("I6");
 		I6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I6.setHorizontalAlignment(SwingConstants.CENTER);
 		I6.setColumns(10);
 		I6.setBounds(271, 445, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(I6);
+		frame.getContentPane().add(I6);
 		I6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("I6");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("I6");
 			}
 		});
 
 		I7 = new JTextField();
+		I7.setToolTipText("I7");
 		I7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I7.setHorizontalAlignment(SwingConstants.CENTER);
 		I7.setColumns(10);
 		I7.setBounds(332, 445, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(I7);
+		frame.getContentPane().add(I7);
 		I7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("I7");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("I7");
 			}
 		});
 
 		I8 = new JTextField();
+		I8.setToolTipText("I8");
 		I8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I8.setHorizontalAlignment(SwingConstants.CENTER);
 		I8.setColumns(10);
 		I8.setBounds(382, 445, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(I8);
+		frame.getContentPane().add(I8);
 		I8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("I8");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("I8");
 			}
 		});
 
 		I9 = new JTextField();
+		I9.setToolTipText("I9");
 		I9.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I9.setHorizontalAlignment(SwingConstants.CENTER);
 		I9.setColumns(10);
 		I9.setBounds(432, 445, 40, 40);
-		frmSudokuSolverSwag.getContentPane().add(I9);
+		frame.getContentPane().add(I9);
 		I9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				nextFocus("I9");
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()!=8)nextFocus("I9");
 			}
 		});
 
@@ -1233,61 +1316,66 @@ public class gui {
 		separator.setForeground(Color.DARK_GRAY);
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setBounds(160, 11, 1, 474);
-		frmSudokuSolverSwag.getContentPane().add(separator);
+		frame.getContentPane().add(separator);
 
 		separator_1 = new JSeparator();
 		separator_1.setForeground(Color.DARK_GRAY);
 		separator_1.setOrientation(SwingConstants.VERTICAL);
 		separator_1.setBounds(321, 11, 1, 474);
-		frmSudokuSolverSwag.getContentPane().add(separator_1);
+		frame.getContentPane().add(separator_1);
 
 		separator_2 = new JSeparator();
 		separator_2.setForeground(Color.DARK_GRAY);
 		separator_2.setBounds(10, 164, 462, 2);
-		frmSudokuSolverSwag.getContentPane().add(separator_2);
+		frame.getContentPane().add(separator_2);
 
 		separator_3 = new JSeparator();
 		separator_3.setForeground(Color.DARK_GRAY);
 		separator_3.setBounds(10, 330, 462, 2);
-		frmSudokuSolverSwag.getContentPane().add(separator_3);
+		frame.getContentPane().add(separator_3);
 
 		JSeparator separator_4 = new JSeparator();
 		separator_4.setForeground(Color.DARK_GRAY);
 		separator_4.setBounds(482, 189, 152, 2);
-		frmSudokuSolverSwag.getContentPane().add(separator_4);
+		frame.getContentPane().add(separator_4);
 
 		separator_5 = new JSeparator();
 		separator_5.setForeground(Color.DARK_GRAY);
 		separator_5.setBounds(482, 323, 152, 2);
-		frmSudokuSolverSwag.getContentPane().add(separator_5);
+		frame.getContentPane().add(separator_5);
 
 		JLabel lblEnteringTheSudoku = new JLabel("Entering the Sudoku");
+		lblEnteringTheSudoku.setToolTipText("<html><p width=\"250\">Options for entering the sudoku puzzle.</p></html>");
 		lblEnteringTheSudoku.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblEnteringTheSudoku.setBounds(482, 11, 152, 16);
-		frmSudokuSolverSwag.getContentPane().add(lblEnteringTheSudoku);
+		frame.getContentPane().add(lblEnteringTheSudoku);
 
 		JLabel lblUsingTheSolver = new JLabel("Using the Solver");
 		lblUsingTheSolver.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblUsingTheSolver.setBounds(482, 195, 152, 16);
-		frmSudokuSolverSwag.getContentPane().add(lblUsingTheSolver);
+		frame.getContentPane().add(lblUsingTheSolver);
 
 		lblTextConsole = new JLabel("Text Console");
+		lblTextConsole.setToolTipText("<html><p width=\"250\">This shows a text representation of the moves the computer is making. If multiple moves appear at only one click of the \"Take Step\" button, it just means several moves didn't actually accomplish anything on the board.</p></html>");
 		lblTextConsole.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblTextConsole.setBounds(482, 329, 152, 16);
-		frmSudokuSolverSwag.getContentPane().add(lblTextConsole);
+		frame.getContentPane().add(lblTextConsole);
 
 		final JCheckBox cbEnterByRow = new JCheckBox("Enter by row");
+		cbEnterByRow.setToolTipText("<html><p width=\"250\">When entering a board manually (to the left), it will automatically move focus to the next box row by row.</p></html>");
 		final JCheckBox cbEnterByCol = new JCheckBox("Enter by column");
+		cbEnterByCol.setToolTipText("<html><p width=\"250\">When entering a board manually (to the left), it will automatically move focus to the next box column by column.</p></html>");
 		final JCheckBox cbEnterByCube = new JCheckBox("Enter by cube");
+		cbEnterByCube.setToolTipText("<html><p width=\"250\">When entering a board manually (to the left), it will automatically move focus to the next box row by row, moving from one cube to the next.</p></html>");
 		cbEnterByRow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (enterByRow)
-					enterByRow = false;
-				else {
-					enterByRow = true;
-					enterByCol = false;
-					enterByCube = false;
+				if(enterByRow){
+					cbEnterByRow.setSelected(true);
+					return;
 				}
+				enterByRow = true;
+				enterByCol = false;
+				enterByCube = false;
 				cbEnterByCol.setSelected(false);
 				cbEnterByCube.setSelected(false);
 			}
@@ -1295,41 +1383,41 @@ public class gui {
 		cbEnterByRow.setFocusable(false);
 		cbEnterByRow.setSelected(true);
 		cbEnterByRow.setBounds(478, 34, 156, 23);
-		frmSudokuSolverSwag.getContentPane().add(cbEnterByRow);
+		frame.getContentPane().add(cbEnterByRow);
 
 		cbEnterByCol.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (enterByCol)
-					enterByCol = false;
-				else {
-					enterByRow = false;
-					enterByCol = true;
-					enterByCube = false;
+				if(enterByCol){
+					cbEnterByCol.setSelected(true);
+					return;
 				}
+				enterByRow = false;
+				enterByCol = true;
+				enterByCube = false;
 				cbEnterByRow.setSelected(false);
 				cbEnterByCube.setSelected(false);
 			}
 		});
 		cbEnterByCol.setFocusable(false);
 		cbEnterByCol.setBounds(478, 58, 156, 23);
-		frmSudokuSolverSwag.getContentPane().add(cbEnterByCol);
+		frame.getContentPane().add(cbEnterByCol);
 
 		cbEnterByCube.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (enterByCube)
-					enterByCube = false;
-				else {
-					enterByRow = false;
-					enterByCol = false;
-					enterByCube = true;
+				if(enterByCube){
+					cbEnterByCube.setSelected(true);
+					return;
 				}
+				enterByRow = false;
+				enterByCol = false;
+				enterByCube = true;
 				cbEnterByCol.setSelected(false);
 				cbEnterByRow.setSelected(false);
 			}
 		});
 		cbEnterByCube.setFocusable(false);
 		cbEnterByCube.setBounds(478, 82, 156, 23);
-		frmSudokuSolverSwag.getContentPane().add(cbEnterByCube);
+		frame.getContentPane().add(cbEnterByCube);
 
 		final JCheckBox cbSolve = new JCheckBox("Just solve it already!");
 		final JCheckBox cbTakeSteps = new JCheckBox("Show me the steps!");
@@ -1344,7 +1432,7 @@ public class gui {
 		});
 		cbSolve.setFocusable(false);
 		cbSolve.setBounds(478, 217, 156, 23);
-		frmSudokuSolverSwag.getContentPane().add(cbSolve);
+		frame.getContentPane().add(cbSolve);
 
 		cbTakeSteps.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1358,22 +1446,27 @@ public class gui {
 		cbTakeSteps.setSelected(true);
 		cbTakeSteps.setFocusable(false);
 		cbTakeSteps.setBounds(478, 267, 156, 23);
-		frmSudokuSolverSwag.getContentPane().add(cbTakeSteps);
+		frame.getContentPane().add(cbTakeSteps);
+		bTakeStep.setToolTipText("<html><p width=\"250\">Will take exactly one step on the sudoku puzzle. Whether this is actually placing a number or just removing several possible numbers via inference, only one step is taken.</p></html>");
 		bTakeStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(firstStep){
+					firstStep = false;
+					inputBoard();
+				}
+				
 				b.logMove();
 				b.makeBackup();
-				
+
 				while(!b.changed() && takeStep())
 					b.clearLog();
-				
+
 				updateBoard();
 				if(numberOfStepsToGoBack!=3){
 					numberOfStepsToGoBack++;
 					bPreviousStep.setEnabled(true);
 				}
-				
-				
+
 				if(b.gameDone())bTakeStep.setEnabled(false);
 			}
 		});
@@ -1381,7 +1474,8 @@ public class gui {
 		bTakeStep.setMargin(new Insets(0,0,0,0));
 		bTakeStep.setBounds(488, 292, 91, 23);
 		bTakeStep.setFocusable(false);
-		frmSudokuSolverSwag.getContentPane().add(bTakeStep);
+		frame.getContentPane().add(bTakeStep);
+		bPreviousStep.setToolTipText("<html><p width=\"250\">This will revert the previous step, to a maximum of three steps.</p></html>");
 		bPreviousStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				b.goBackAStep();
@@ -1395,20 +1489,23 @@ public class gui {
 		bPreviousStep.setEnabled(false);
 		bPreviousStep.setBounds(583, 292, 41, 23);
 		bPreviousStep.setFocusable(false);
-		frmSudokuSolverSwag.getContentPane().add(bPreviousStep);
+		frame.getContentPane().add(bPreviousStep);
 
 		bClearBoard = new JButton("Clear Board");
+		bClearBoard.setToolTipText("<html><p width=\"250\">This button will completely reset the board.</p></html>");
 		bClearBoard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				b = new guiBoard();
+				firstStep = true;
 				resetGui();
 			}
 		});
 		bClearBoard.setBounds(488, 134, 132, 20);
 		bClearBoard.setFocusable(false);
-		frmSudokuSolverSwag.getContentPane().add(bClearBoard);
+		frame.getContentPane().add(bClearBoard);
 
 		bSolve = new JButton("Solve");
+		bSolve.setToolTipText("<html><p width=\"250\">Will solve the puzzle instantly, without showing any of the steps. These steps will still print in the console.</p></html>");
 		bSolve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				takeStep();
@@ -1418,21 +1515,24 @@ public class gui {
 		bSolve.setBounds(488, 244, 136, 20);
 		bSolve.setEnabled(false);
 		bSolve.setFocusable(false);
-		frmSudokuSolverSwag.getContentPane().add(bSolve);
+		frame.getContentPane().add(bSolve);
 
 		//TODO fix the console outputs and change to letter-number format
 		console = new JTextArea();
 		console.setEditable(false);
-		console.setBounds(482, 367, 136, 118);
-		frmSudokuSolverSwag.getContentPane().add(console);
+		console.setBounds(482, 350, 152, 135);
+		frame.getContentPane().add(console);
 
 		txtPasteRowBy = new JTextField();
+		txtPasteRowBy.setToolTipText("<html><p width=\"250\">Paste a super long string here, representing a sudoku puzzle. Use zeros to indicate blank spaces on the board.</p></html>");
 		txtPasteRowBy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				b = new guiBoard();
+				firstStep = true;
 				if(!txtPasteRowBy.getText().equals(""))txtText = txtPasteRowBy.getText();
 				txtPasteRowBy.setText(txtText);
 				b.inputBoard(txtText);
+				console.setText("");
 				updateBoard();
 			}
 		});
@@ -1449,10 +1549,11 @@ public class gui {
 		txtPasteRowBy.setText(txtText);
 		txtPasteRowBy.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		txtPasteRowBy.setBounds(482, 110, 152, 16);
-		frmSudokuSolverSwag.getContentPane().add(txtPasteRowBy);
+		frame.getContentPane().add(txtPasteRowBy);
 		txtPasteRowBy.setColumns(10);
-		
+
 		bSave = new JButton("Save");
+		bSave.setToolTipText("<html><p width=\"250\">This button will save the current board. Only one puzzle may be saved at a time.</p></html>");
 		bSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -1460,19 +1561,24 @@ public class gui {
 					out.println(b.getBoardString());
 					out.close();
 				} catch(FileNotFoundException e1){ System.out.println("FILE NOT FOUND!"); }
+
+				console.append("This puzzle's string: "+b.getBoardString());
 			}
 		});
 		bSave.setFocusable(false);
 		bSave.setBounds(488, 161, 64, 20);
-		frmSudokuSolverSwag.getContentPane().add(bSave);
-		
+		frame.getContentPane().add(bSave);
+
 		bLoad = new JButton("Load");
+		bLoad.setToolTipText("<html><p width=\"250\">This button loads a saved board, if there is one.</p></html>");
 		bLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Scanner in = new Scanner(new FileReader("src/SudokuSolver/res/savefile.txt"));
 					b = new guiBoard();
+					firstStep = true;
 					b.inputBoard(in.nextLine());
+					console.setText("");
 					updateBoard();
 					in.close();
 				} catch(IOException e2){ System.out.println("HIT IOEXCEPTION AT LINE 1476"); }
@@ -1480,15 +1586,15 @@ public class gui {
 		});
 		bLoad.setFocusable(false);
 		bLoad.setBounds(556, 161, 64, 20);
-		frmSudokuSolverSwag.getContentPane().add(bLoad);
+		frame.getContentPane().add(bLoad);
 
 		scrollBar = new JScrollPane(console);
 		scrollBar.setBounds(482, 350, 152, 135);
 		scrollBar.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED );
-		frmSudokuSolverSwag.getContentPane().add(scrollBar);
-		
+		frame.getContentPane().add(scrollBar);
+
 		try {
-			frmSudokuSolverSwag.setIconImage(ImageIO.read(new File("src/SudokuSolver/res/icon.png")));
+			frame.setIconImage(ImageIO.read(new File("src/SudokuSolver/res/icon.png")));
 		} catch (IOException e1) { System.out.println("COULDNT LOCATE IMAGE FILE AT LINE 1493!"); }
 	}
 
@@ -1864,6 +1970,8 @@ public class gui {
 
 	private boolean takeStep(){
 		do{
+			if(!showSteps)b.makeBackup();
+
 			//if only one number possible
 			for(int r = 0; r<9; r++)
 				for(int c = 0; c<9; c++)
@@ -2050,8 +2158,8 @@ public class gui {
 					}
 
 			}
-		} while(!showSteps && !b.gameDone());
-
+		} while(!showSteps && !b.gameDone() && b.changed());
+		console.append("***WASN'T ABLE TO COMPLETE THE SUDOKU USING LOGIC!\n");
 		return false;
 		//TODO bruteforce
 	}
@@ -2316,10 +2424,10 @@ public class gui {
 		if(board[8][8].length()>1)I9.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		else I9.setFont(new Font("Tahoma", Font.BOLD, 18));
 	}
-	
+
 	public void resetGui(){
 		console.setText("");
-		
+
 		A1.setText("");
 		A2.setText("");
 		A3.setText("");
@@ -2499,7 +2607,126 @@ public class gui {
 		I7.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I9.setFont(new Font("Tahoma", Font.BOLD, 18));
-		
-		
 	}
+	
+	public void inputBoard(){
+		String board = "";
+
+		if(!A1.getText().equals(""))board+=A1.getText();else board+="0";
+		if(!A2.getText().equals(""))board+=A2.getText();else board+="0";
+		if(!A3.getText().equals(""))board+=A3.getText();else board+="0";
+		if(!A4.getText().equals(""))board+=A4.getText();else board+="0";
+		if(!A5.getText().equals(""))board+=A5.getText();else board+="0";
+		if(!A6.getText().equals(""))board+=A6.getText();else board+="0";
+		if(!A7.getText().equals(""))board+=A7.getText();else board+="0";
+		if(!A8.getText().equals(""))board+=A8.getText();else board+="0";
+		if(!A9.getText().equals(""))board+=A9.getText();else board+="0";
+
+		if(!B1.getText().equals(""))board+=B1.getText();else board+="0";
+		if(!B2.getText().equals(""))board+=B2.getText();else board+="0";
+		if(!B3.getText().equals(""))board+=B3.getText();else board+="0";
+		if(!B4.getText().equals(""))board+=B4.getText();else board+="0";
+		if(!B5.getText().equals(""))board+=B5.getText();else board+="0";
+		if(!B6.getText().equals(""))board+=B6.getText();else board+="0";
+		if(!B7.getText().equals(""))board+=B7.getText();else board+="0";
+		if(!B8.getText().equals(""))board+=B8.getText();else board+="0";
+		if(!B9.getText().equals(""))board+=B9.getText();else board+="0";
+
+		if(!C1.getText().equals(""))board+=C1.getText();else board+="0";
+		if(!C2.getText().equals(""))board+=C2.getText();else board+="0";
+		if(!C3.getText().equals(""))board+=C3.getText();else board+="0";
+		if(!C4.getText().equals(""))board+=C4.getText();else board+="0";
+		if(!C5.getText().equals(""))board+=C5.getText();else board+="0";
+		if(!C6.getText().equals(""))board+=C6.getText();else board+="0";
+		if(!C7.getText().equals(""))board+=C7.getText();else board+="0";
+		if(!C8.getText().equals(""))board+=C8.getText();else board+="0";
+		if(!C9.getText().equals(""))board+=C9.getText();else board+="0";
+
+		if(!D1.getText().equals(""))board+=D1.getText();else board+="0";
+		if(!D2.getText().equals(""))board+=D2.getText();else board+="0";
+		if(!D3.getText().equals(""))board+=D3.getText();else board+="0";
+		if(!D4.getText().equals(""))board+=D4.getText();else board+="0";
+		if(!D5.getText().equals(""))board+=D5.getText();else board+="0";
+		if(!D6.getText().equals(""))board+=D6.getText();else board+="0";
+		if(!D7.getText().equals(""))board+=D7.getText();else board+="0";
+		if(!D8.getText().equals(""))board+=D8.getText();else board+="0";
+		if(!D9.getText().equals(""))board+=D9.getText();else board+="0";
+
+		if(!E1.getText().equals(""))board+=E1.getText();else board+="0";
+		if(!E2.getText().equals(""))board+=E2.getText();else board+="0";
+		if(!E3.getText().equals(""))board+=E3.getText();else board+="0";
+		if(!E4.getText().equals(""))board+=E4.getText();else board+="0";
+		if(!E5.getText().equals(""))board+=E5.getText();else board+="0";
+		if(!E6.getText().equals(""))board+=E6.getText();else board+="0";
+		if(!E7.getText().equals(""))board+=E7.getText();else board+="0";
+		if(!E8.getText().equals(""))board+=E8.getText();else board+="0";
+		if(!E9.getText().equals(""))board+=E9.getText();else board+="0";
+
+		if(!F1.getText().equals(""))board+=F1.getText();else board+="0";
+		if(!F2.getText().equals(""))board+=F2.getText();else board+="0";
+		if(!F3.getText().equals(""))board+=F3.getText();else board+="0";
+		if(!F4.getText().equals(""))board+=F4.getText();else board+="0";
+		if(!F5.getText().equals(""))board+=F5.getText();else board+="0";
+		if(!F6.getText().equals(""))board+=F6.getText();else board+="0";
+		if(!F7.getText().equals(""))board+=F7.getText();else board+="0";
+		if(!F8.getText().equals(""))board+=F8.getText();else board+="0";
+		if(!F9.getText().equals(""))board+=F9.getText();else board+="0";
+
+		if(!G1.getText().equals(""))board+=G1.getText();else board+="0";
+		if(!G2.getText().equals(""))board+=G2.getText();else board+="0";
+		if(!G3.getText().equals(""))board+=G3.getText();else board+="0";
+		if(!G4.getText().equals(""))board+=G4.getText();else board+="0";
+		if(!G5.getText().equals(""))board+=G5.getText();else board+="0";
+		if(!G6.getText().equals(""))board+=G6.getText();else board+="0";
+		if(!G7.getText().equals(""))board+=G7.getText();else board+="0";
+		if(!G8.getText().equals(""))board+=G8.getText();else board+="0";
+		if(!G9.getText().equals(""))board+=G9.getText();else board+="0";
+
+		if(!H1.getText().equals(""))board+=H1.getText();else board+="0";
+		if(!H2.getText().equals(""))board+=H2.getText();else board+="0";
+		if(!H3.getText().equals(""))board+=H3.getText();else board+="0";
+		if(!H4.getText().equals(""))board+=H4.getText();else board+="0";
+		if(!H5.getText().equals(""))board+=H5.getText();else board+="0";
+		if(!H6.getText().equals(""))board+=H6.getText();else board+="0";
+		if(!H7.getText().equals(""))board+=H7.getText();else board+="0";
+		if(!H8.getText().equals(""))board+=H8.getText();else board+="0";
+		if(!H9.getText().equals(""))board+=H9.getText();else board+="0";
+
+		if(!I1.getText().equals(""))board+=I1.getText();else board+="0";
+		if(!I2.getText().equals(""))board+=I2.getText();else board+="0";
+		if(!I3.getText().equals(""))board+=I3.getText();else board+="0";
+		if(!I4.getText().equals(""))board+=I4.getText();else board+="0";
+		if(!I5.getText().equals(""))board+=I5.getText();else board+="0";
+		if(!I6.getText().equals(""))board+=I6.getText();else board+="0";
+		if(!I7.getText().equals(""))board+=I7.getText();else board+="0";
+		if(!I8.getText().equals(""))board+=I8.getText();else board+="0";
+		if(!I9.getText().equals(""))board+=I9.getText();else board+="0";
+		
+		for(int i = board.length(); i<81; i++)
+			board+="0";
+		
+		for(int i = 0; i<81; i++)
+			if(Character.getNumericValue(board.charAt(i))>9)
+				board = board.substring(0,i)+"0"+board.substring(i+1);
+		
+		b.inputBoard(board);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
