@@ -1336,12 +1336,12 @@ public class gui {
 
 		JSeparator separator_4 = new JSeparator();
 		separator_4.setForeground(Color.DARK_GRAY);
-		separator_4.setBounds(482, 189, 152, 2);
+		separator_4.setBounds(482, 182, 152, 2);
 		frame.getContentPane().add(separator_4);
 
 		separator_5 = new JSeparator();
 		separator_5.setForeground(Color.DARK_GRAY);
-		separator_5.setBounds(482, 323, 152, 2);
+		separator_5.setBounds(482, 266, 152, 2);
 		frame.getContentPane().add(separator_5);
 
 		JLabel lblEnteringTheSudoku = new JLabel("Entering the Sudoku");
@@ -1352,13 +1352,13 @@ public class gui {
 
 		JLabel lblUsingTheSolver = new JLabel("Using the Solver");
 		lblUsingTheSolver.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblUsingTheSolver.setBounds(482, 195, 152, 16);
+		lblUsingTheSolver.setBounds(482, 189, 152, 16);
 		frame.getContentPane().add(lblUsingTheSolver);
 
 		lblTextConsole = new JLabel("Text Console");
 		lblTextConsole.setToolTipText("<html><p width=\"250\">This shows a text representation of the moves the computer is making. If multiple moves appear at only one click of the \"Take Step\" button, it just means several moves didn't actually accomplish anything on the board.</p></html>");
 		lblTextConsole.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblTextConsole.setBounds(482, 329, 152, 16);
+		lblTextConsole.setBounds(482, 272, 152, 16);
 		frame.getContentPane().add(lblTextConsole);
 
 		final JCheckBox cbEnterByRow = new JCheckBox("Enter by row");
@@ -1419,34 +1419,6 @@ public class gui {
 		cbEnterByCube.setBounds(478, 82, 156, 23);
 		frame.getContentPane().add(cbEnterByCube);
 
-		final JCheckBox cbSolve = new JCheckBox("Just solve it already!");
-		final JCheckBox cbTakeSteps = new JCheckBox("Show me the steps!");
-		cbSolve.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showSteps = false;
-				cbTakeSteps.setSelected(false);
-				bSolve.setEnabled(true);
-				bTakeStep.setEnabled(false);
-				bPreviousStep.setEnabled(false);
-			}
-		});
-		cbSolve.setFocusable(false);
-		cbSolve.setBounds(478, 217, 156, 23);
-		frame.getContentPane().add(cbSolve);
-
-		cbTakeSteps.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showSteps = true;
-				cbSolve.setSelected(false);
-				bSolve.setEnabled(false);
-				bTakeStep.setEnabled(true);
-				if(numberOfStepsToGoBack!=0)bPreviousStep.setEnabled(true);
-			}
-		});
-		cbTakeSteps.setSelected(true);
-		cbTakeSteps.setFocusable(false);
-		cbTakeSteps.setBounds(478, 267, 156, 23);
-		frame.getContentPane().add(cbTakeSteps);
 		bTakeStep.setToolTipText("<html><p width=\"250\">Will take exactly one step on the sudoku puzzle. Whether this is actually placing a number or just removing several possible numbers via inference, only one step is taken.</p></html>");
 		bTakeStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1454,12 +1426,15 @@ public class gui {
 					firstStep = false;
 					inputBoard();
 				}
-				
+				showSteps = true;
+
 				b.logMove();
 				b.makeBackup();
 
 				while(!b.changed() && takeStep())
 					b.clearLog();
+
+				highlightChanges();
 
 				updateBoard();
 				if(numberOfStepsToGoBack!=3){
@@ -1467,12 +1442,15 @@ public class gui {
 					bPreviousStep.setEnabled(true);
 				}
 
-				if(b.gameDone())bTakeStep.setEnabled(false);
+				if(b.gameDone()){
+					console.append("***COMPLETED PUZZLE");
+					bTakeStep.setEnabled(false);
+				}
 			}
 		});
 
 		bTakeStep.setMargin(new Insets(0,0,0,0));
-		bTakeStep.setBounds(488, 292, 91, 23);
+		bTakeStep.setBounds(488, 235, 91, 23);
 		bTakeStep.setFocusable(false);
 		frame.getContentPane().add(bTakeStep);
 		bPreviousStep.setToolTipText("<html><p width=\"250\">This will revert the previous step, to a maximum of three steps.</p></html>");
@@ -1487,7 +1465,7 @@ public class gui {
 
 		bPreviousStep.setMargin(new Insets(0,0,0,0));
 		bPreviousStep.setEnabled(false);
-		bPreviousStep.setBounds(583, 292, 41, 23);
+		bPreviousStep.setBounds(583, 235, 41, 23);
 		bPreviousStep.setFocusable(false);
 		frame.getContentPane().add(bPreviousStep);
 
@@ -1495,12 +1473,14 @@ public class gui {
 		bClearBoard.setToolTipText("<html><p width=\"250\">This button will completely reset the board.</p></html>");
 		bClearBoard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				unHighlight();
 				b = new guiBoard();
+				bTakeStep.setEnabled(true);
 				firstStep = true;
 				resetGui();
 			}
 		});
-		bClearBoard.setBounds(488, 134, 132, 20);
+		bClearBoard.setBounds(488, 131, 132, 20);
 		bClearBoard.setFocusable(false);
 		frame.getContentPane().add(bClearBoard);
 
@@ -1508,12 +1488,13 @@ public class gui {
 		bSolve.setToolTipText("<html><p width=\"250\">Will solve the puzzle instantly, without showing any of the steps. These steps will still print in the console.</p></html>");
 		bSolve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				unHighlight();
+				showSteps = false;
 				takeStep();
 				updateBoard();
 			}
 		});
-		bSolve.setBounds(488, 244, 136, 20);
-		bSolve.setEnabled(false);
+		bSolve.setBounds(488, 211, 136, 20);
 		bSolve.setFocusable(false);
 		frame.getContentPane().add(bSolve);
 
@@ -1566,7 +1547,7 @@ public class gui {
 			}
 		});
 		bSave.setFocusable(false);
-		bSave.setBounds(488, 161, 64, 20);
+		bSave.setBounds(488, 154, 64, 20);
 		frame.getContentPane().add(bSave);
 
 		bLoad = new JButton("Load");
@@ -1585,7 +1566,7 @@ public class gui {
 			}
 		});
 		bLoad.setFocusable(false);
-		bLoad.setBounds(556, 161, 64, 20);
+		bLoad.setBounds(556, 154, 64, 20);
 		frame.getContentPane().add(bLoad);
 
 		scrollBar = new JScrollPane(console);
@@ -2608,7 +2589,7 @@ public class gui {
 		I8.setFont(new Font("Tahoma", Font.BOLD, 18));
 		I9.setFont(new Font("Tahoma", Font.BOLD, 18));
 	}
-	
+
 	public void inputBoard(){
 		String board = "";
 
@@ -2701,32 +2682,250 @@ public class gui {
 		if(!I7.getText().equals(""))board+=I7.getText();else board+="0";
 		if(!I8.getText().equals(""))board+=I8.getText();else board+="0";
 		if(!I9.getText().equals(""))board+=I9.getText();else board+="0";
-		
+
 		for(int i = board.length(); i<81; i++)
 			board+="0";
-		
+
 		for(int i = 0; i<81; i++)
 			if(Character.getNumericValue(board.charAt(i))>9)
 				board = board.substring(0,i)+"0"+board.substring(i+1);
-		
+
 		b.inputBoard(board);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	public void unHighlight(){
+		A1.setBackground(Color.WHITE);
+		A2.setBackground(Color.WHITE);
+		A3.setBackground(Color.WHITE);
+		A4.setBackground(Color.WHITE);
+		A5.setBackground(Color.WHITE);
+		A6.setBackground(Color.WHITE);
+		A7.setBackground(Color.WHITE);
+		A8.setBackground(Color.WHITE);
+		A9.setBackground(Color.WHITE);
+
+		B1.setBackground(Color.WHITE);
+		B2.setBackground(Color.WHITE);
+		B3.setBackground(Color.WHITE);
+		B4.setBackground(Color.WHITE);
+		B5.setBackground(Color.WHITE);
+		B6.setBackground(Color.WHITE);
+		B7.setBackground(Color.WHITE);
+		B8.setBackground(Color.WHITE);
+		B9.setBackground(Color.WHITE);
+		
+		C1.setBackground(Color.WHITE);
+		C2.setBackground(Color.WHITE);
+		C3.setBackground(Color.WHITE);
+		C4.setBackground(Color.WHITE);
+		C5.setBackground(Color.WHITE);
+		C6.setBackground(Color.WHITE);
+		C7.setBackground(Color.WHITE);
+		C8.setBackground(Color.WHITE);
+		C9.setBackground(Color.WHITE);
+
+		D1.setBackground(Color.WHITE);
+		D2.setBackground(Color.WHITE);
+		D3.setBackground(Color.WHITE);
+		D4.setBackground(Color.WHITE);
+		D5.setBackground(Color.WHITE);
+		D6.setBackground(Color.WHITE);
+		D7.setBackground(Color.WHITE);
+		D8.setBackground(Color.WHITE);
+		D9.setBackground(Color.WHITE);
+
+		E1.setBackground(Color.WHITE);
+		E2.setBackground(Color.WHITE);
+		E3.setBackground(Color.WHITE);
+		E4.setBackground(Color.WHITE);
+		E5.setBackground(Color.WHITE);
+		E6.setBackground(Color.WHITE);
+		E7.setBackground(Color.WHITE);
+		E8.setBackground(Color.WHITE);
+		E9.setBackground(Color.WHITE);
+
+		F1.setBackground(Color.WHITE);
+		F2.setBackground(Color.WHITE);
+		F3.setBackground(Color.WHITE);
+		F4.setBackground(Color.WHITE);
+		F5.setBackground(Color.WHITE);
+		F6.setBackground(Color.WHITE);
+		F7.setBackground(Color.WHITE);
+		F8.setBackground(Color.WHITE);
+		F9.setBackground(Color.WHITE);
+
+		G1.setBackground(Color.WHITE);
+		G2.setBackground(Color.WHITE);
+		G3.setBackground(Color.WHITE);
+		G4.setBackground(Color.WHITE);
+		G5.setBackground(Color.WHITE);
+		G6.setBackground(Color.WHITE);
+		G7.setBackground(Color.WHITE);
+		G8.setBackground(Color.WHITE);
+		G9.setBackground(Color.WHITE);
+
+		H1.setBackground(Color.WHITE);
+		H2.setBackground(Color.WHITE);
+		H3.setBackground(Color.WHITE);
+		H4.setBackground(Color.WHITE);
+		H5.setBackground(Color.WHITE);
+		H6.setBackground(Color.WHITE);
+		H7.setBackground(Color.WHITE);
+		H8.setBackground(Color.WHITE);
+		H9.setBackground(Color.WHITE);
+
+		I1.setBackground(Color.WHITE);
+		I2.setBackground(Color.WHITE);
+		I3.setBackground(Color.WHITE);
+		I4.setBackground(Color.WHITE);
+		I5.setBackground(Color.WHITE);
+		I6.setBackground(Color.WHITE);
+		I7.setBackground(Color.WHITE);
+		I8.setBackground(Color.WHITE);
+		I9.setBackground(Color.WHITE);
+	}
+
+	public void highlightChanges(){
+		unHighlight();
+		int[][] changes = b.getChangedIndecies();
+
+		for(int i = 0; i<changes.length; i++)
+			switch(changes[i][0]){
+			case 0:
+				switch(changes[i][1]){
+				case 0:A1.setBackground(Color.YELLOW);break;
+				case 1:A2.setBackground(Color.YELLOW);break;
+				case 2:A3.setBackground(Color.YELLOW);break;
+				case 3:A4.setBackground(Color.YELLOW);break;
+				case 4:A5.setBackground(Color.YELLOW);break;
+				case 5:A6.setBackground(Color.YELLOW);break;
+				case 6:A7.setBackground(Color.YELLOW);break;
+				case 7:A8.setBackground(Color.YELLOW);break;
+				case 8:A9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			case 1:
+				switch(changes[i][1]){
+				case 0:B1.setBackground(Color.YELLOW);break;
+				case 1:B2.setBackground(Color.YELLOW);break;
+				case 2:B3.setBackground(Color.YELLOW);break;
+				case 3:B4.setBackground(Color.YELLOW);break;
+				case 4:B5.setBackground(Color.YELLOW);break;
+				case 5:B6.setBackground(Color.YELLOW);break;
+				case 6:B7.setBackground(Color.YELLOW);break;
+				case 7:B8.setBackground(Color.YELLOW);break;
+				case 8:B9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			case 2:
+				switch(changes[i][1]){
+				case 0:C1.setBackground(Color.YELLOW);break;
+				case 1:C2.setBackground(Color.YELLOW);break;
+				case 2:C3.setBackground(Color.YELLOW);break;
+				case 3:C4.setBackground(Color.YELLOW);break;
+				case 4:C5.setBackground(Color.YELLOW);break;
+				case 5:C6.setBackground(Color.YELLOW);break;
+				case 6:C7.setBackground(Color.YELLOW);break;
+				case 7:C8.setBackground(Color.YELLOW);break;
+				case 8:C9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			case 3:
+				switch(changes[i][1]){
+				case 0:D1.setBackground(Color.YELLOW);break;
+				case 1:D2.setBackground(Color.YELLOW);break;
+				case 2:D3.setBackground(Color.YELLOW);break;
+				case 3:D4.setBackground(Color.YELLOW);break;
+				case 4:D5.setBackground(Color.YELLOW);break;
+				case 5:D6.setBackground(Color.YELLOW);break;
+				case 6:D7.setBackground(Color.YELLOW);break;
+				case 7:D8.setBackground(Color.YELLOW);break;
+				case 8:D9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			case 4:
+				switch(changes[i][1]){
+				case 0:E1.setBackground(Color.YELLOW);break;
+				case 1:E2.setBackground(Color.YELLOW);break;
+				case 2:E3.setBackground(Color.YELLOW);break;
+				case 3:E4.setBackground(Color.YELLOW);break;
+				case 4:E5.setBackground(Color.YELLOW);break;
+				case 5:E6.setBackground(Color.YELLOW);break;
+				case 6:E7.setBackground(Color.YELLOW);break;
+				case 7:E8.setBackground(Color.YELLOW);break;
+				case 8:E9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			case 5:
+				switch(changes[i][1]){
+				case 0:F1.setBackground(Color.YELLOW);break;
+				case 1:F2.setBackground(Color.YELLOW);break;
+				case 2:F3.setBackground(Color.YELLOW);break;
+				case 3:F4.setBackground(Color.YELLOW);break;
+				case 4:F5.setBackground(Color.YELLOW);break;
+				case 5:F6.setBackground(Color.YELLOW);break;
+				case 6:F7.setBackground(Color.YELLOW);break;
+				case 7:F8.setBackground(Color.YELLOW);break;
+				case 8:F9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			case 6:
+				switch(changes[i][1]){
+				case 0:G1.setBackground(Color.YELLOW);break;
+				case 1:G2.setBackground(Color.YELLOW);break;
+				case 2:G3.setBackground(Color.YELLOW);break;
+				case 3:G4.setBackground(Color.YELLOW);break;
+				case 4:G5.setBackground(Color.YELLOW);break;
+				case 5:G6.setBackground(Color.YELLOW);break;
+				case 6:G7.setBackground(Color.YELLOW);break;
+				case 7:G8.setBackground(Color.YELLOW);break;
+				case 8:G9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			case 7:
+				switch(changes[i][1]){
+				case 0:H1.setBackground(Color.YELLOW);break;
+				case 1:H2.setBackground(Color.YELLOW);break;
+				case 2:H3.setBackground(Color.YELLOW);break;
+				case 3:H4.setBackground(Color.YELLOW);break;
+				case 4:H5.setBackground(Color.YELLOW);break;
+				case 5:H6.setBackground(Color.YELLOW);break;
+				case 6:H7.setBackground(Color.YELLOW);break;
+				case 7:H8.setBackground(Color.YELLOW);break;
+				case 8:H9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			case 8:
+				switch(changes[i][1]){
+				case 0:I1.setBackground(Color.YELLOW);break;
+				case 1:I2.setBackground(Color.YELLOW);break;
+				case 2:I3.setBackground(Color.YELLOW);break;
+				case 3:I4.setBackground(Color.YELLOW);break;
+				case 4:I5.setBackground(Color.YELLOW);break;
+				case 5:I6.setBackground(Color.YELLOW);break;
+				case 6:I7.setBackground(Color.YELLOW);break;
+				case 7:I8.setBackground(Color.YELLOW);break;
+				case 8:I9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

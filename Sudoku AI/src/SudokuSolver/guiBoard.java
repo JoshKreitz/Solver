@@ -36,6 +36,21 @@ public class guiBoard {
 				if(board[r][c]!=backup[r][c] || !able[r][c].equals(ableBackup[r][c]))return true;
 		return false;
 	}
+	
+	public int[][] getChangedIndecies(){
+		String changes = "";
+		for(int r = 0; r<9; r++)
+			for(int c = 0; c<9; c++)
+				if(board[r][c]!=backup[r][c] || !able[r][c].equals(ableBackup[r][c]))changes += ""+r+c;
+		int[][] temp = new int[changes.length()/2][2];
+		int index = 0;
+		for(int i = 0; i<changes.length(); i+=2){
+			temp[index][0] = Character.valueOf(changes.charAt(i));
+			temp[index][1] = Character.valueOf(changes.charAt(i+1));
+			index++;
+		}
+		return temp;
+	}
 
 	public boolean isEligible(int r, int c, int t){
 		return able[r][c].contains(""+t);
