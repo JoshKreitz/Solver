@@ -45,8 +45,8 @@ public class guiBoard {
 		int[][] temp = new int[changes.length()/2][2];
 		int index = 0;
 		for(int i = 0; i<changes.length(); i+=2){
-			temp[index][0] = Character.valueOf(changes.charAt(i));
-			temp[index][1] = Character.valueOf(changes.charAt(i+1));
+			temp[index][0] = Integer.parseInt(""+changes.charAt(i));
+			temp[index][1] = Integer.parseInt(""+changes.charAt(i+1));
 			index++;
 		}
 		return temp;
