@@ -34,6 +34,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class gui {
 
@@ -1422,17 +1424,18 @@ public class gui {
 		bTakeStep.setToolTipText("<html><p width=\"250\">Will take exactly one step on the sudoku puzzle. Whether this is actually placing a number or just removing several possible numbers via inference, only one step is taken.</p></html>");
 		bTakeStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				showSteps = true;
 				if(firstStep){
 					firstStep = false;
 					inputBoard();
 				}
-				showSteps = true;
 
 				b.logMove();
 				b.makeBackup();
 
-				while(!b.changed() && takeStep())
+				while(!b.changed() && takeStep()){
 					b.clearLog();
+				}
 
 				highlightChanges();
 
@@ -1457,6 +1460,8 @@ public class gui {
 		bPreviousStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				b.goBackAStep();
+				unHighlight();
+				bTakeStep.setEnabled(true);
 				numberOfStepsToGoBack--;
 				if(numberOfStepsToGoBack == 0)bPreviousStep.setEnabled(false);
 				updateBoard();
@@ -1508,6 +1513,7 @@ public class gui {
 		txtPasteRowBy.setToolTipText("<html><p width=\"250\">Paste a super long string here, representing a sudoku puzzle. Use zeros to indicate blank spaces on the board.</p></html>");
 		txtPasteRowBy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				bTakeStep.setEnabled(true);
 				b = new guiBoard();
 				firstStep = true;
 				if(!txtPasteRowBy.getText().equals(""))txtText = txtPasteRowBy.getText();
@@ -1558,6 +1564,7 @@ public class gui {
 					Scanner in = new Scanner(new FileReader("src/SudokuSolver/res/savefile.txt"));
 					b = new guiBoard();
 					firstStep = true;
+					unHighlight();
 					b.inputBoard(in.nextLine());
 					console.setText("");
 					updateBoard();
@@ -2593,95 +2600,95 @@ public class gui {
 	public void inputBoard(){
 		String board = "";
 
-		if(!A1.getText().equals(""))board+=A1.getText();else board+="0";
-		if(!A2.getText().equals(""))board+=A2.getText();else board+="0";
-		if(!A3.getText().equals(""))board+=A3.getText();else board+="0";
-		if(!A4.getText().equals(""))board+=A4.getText();else board+="0";
-		if(!A5.getText().equals(""))board+=A5.getText();else board+="0";
-		if(!A6.getText().equals(""))board+=A6.getText();else board+="0";
-		if(!A7.getText().equals(""))board+=A7.getText();else board+="0";
-		if(!A8.getText().equals(""))board+=A8.getText();else board+="0";
-		if(!A9.getText().equals(""))board+=A9.getText();else board+="0";
+		if(A1.getText().length()==1)board+=A1.getText();else board+="0";
+		if(A2.getText().length()==1)board+=A2.getText();else board+="0";
+		if(A3.getText().length()==1)board+=A3.getText();else board+="0";
+		if(A4.getText().length()==1)board+=A4.getText();else board+="0";
+		if(A5.getText().length()==1)board+=A5.getText();else board+="0";
+		if(A6.getText().length()==1)board+=A6.getText();else board+="0";
+		if(A7.getText().length()==1)board+=A7.getText();else board+="0";
+		if(A8.getText().length()==1)board+=A8.getText();else board+="0";
+		if(A9.getText().length()==1)board+=A9.getText();else board+="0";
 
-		if(!B1.getText().equals(""))board+=B1.getText();else board+="0";
-		if(!B2.getText().equals(""))board+=B2.getText();else board+="0";
-		if(!B3.getText().equals(""))board+=B3.getText();else board+="0";
-		if(!B4.getText().equals(""))board+=B4.getText();else board+="0";
-		if(!B5.getText().equals(""))board+=B5.getText();else board+="0";
-		if(!B6.getText().equals(""))board+=B6.getText();else board+="0";
-		if(!B7.getText().equals(""))board+=B7.getText();else board+="0";
-		if(!B8.getText().equals(""))board+=B8.getText();else board+="0";
-		if(!B9.getText().equals(""))board+=B9.getText();else board+="0";
+		if(B1.getText().length()==1)board+=B1.getText();else board+="0";
+		if(B2.getText().length()==1)board+=B2.getText();else board+="0";
+		if(B3.getText().length()==1)board+=B3.getText();else board+="0";
+		if(B4.getText().length()==1)board+=B4.getText();else board+="0";
+		if(B5.getText().length()==1)board+=B5.getText();else board+="0";
+		if(B6.getText().length()==1)board+=B6.getText();else board+="0";
+		if(B7.getText().length()==1)board+=B7.getText();else board+="0";
+		if(B8.getText().length()==1)board+=B8.getText();else board+="0";
+		if(B9.getText().length()==1)board+=B9.getText();else board+="0";
 
-		if(!C1.getText().equals(""))board+=C1.getText();else board+="0";
-		if(!C2.getText().equals(""))board+=C2.getText();else board+="0";
-		if(!C3.getText().equals(""))board+=C3.getText();else board+="0";
-		if(!C4.getText().equals(""))board+=C4.getText();else board+="0";
-		if(!C5.getText().equals(""))board+=C5.getText();else board+="0";
-		if(!C6.getText().equals(""))board+=C6.getText();else board+="0";
-		if(!C7.getText().equals(""))board+=C7.getText();else board+="0";
-		if(!C8.getText().equals(""))board+=C8.getText();else board+="0";
-		if(!C9.getText().equals(""))board+=C9.getText();else board+="0";
+		if(C1.getText().length()==1)board+=C1.getText();else board+="0";
+		if(C2.getText().length()==1)board+=C2.getText();else board+="0";
+		if(C3.getText().length()==1)board+=C3.getText();else board+="0";
+		if(C4.getText().length()==1)board+=C4.getText();else board+="0";
+		if(C5.getText().length()==1)board+=C5.getText();else board+="0";
+		if(C6.getText().length()==1)board+=C6.getText();else board+="0";
+		if(C7.getText().length()==1)board+=C7.getText();else board+="0";
+		if(C8.getText().length()==1)board+=C8.getText();else board+="0";
+		if(C9.getText().length()==1)board+=C9.getText();else board+="0";
 
-		if(!D1.getText().equals(""))board+=D1.getText();else board+="0";
-		if(!D2.getText().equals(""))board+=D2.getText();else board+="0";
-		if(!D3.getText().equals(""))board+=D3.getText();else board+="0";
-		if(!D4.getText().equals(""))board+=D4.getText();else board+="0";
-		if(!D5.getText().equals(""))board+=D5.getText();else board+="0";
-		if(!D6.getText().equals(""))board+=D6.getText();else board+="0";
-		if(!D7.getText().equals(""))board+=D7.getText();else board+="0";
-		if(!D8.getText().equals(""))board+=D8.getText();else board+="0";
-		if(!D9.getText().equals(""))board+=D9.getText();else board+="0";
+		if(D1.getText().length()==1)board+=D1.getText();else board+="0";
+		if(D2.getText().length()==1)board+=D2.getText();else board+="0";
+		if(D3.getText().length()==1)board+=D3.getText();else board+="0";
+		if(D4.getText().length()==1)board+=D4.getText();else board+="0";
+		if(D5.getText().length()==1)board+=D5.getText();else board+="0";
+		if(D6.getText().length()==1)board+=D6.getText();else board+="0";
+		if(D7.getText().length()==1)board+=D7.getText();else board+="0";
+		if(D8.getText().length()==1)board+=D8.getText();else board+="0";
+		if(D9.getText().length()==1)board+=D9.getText();else board+="0";
 
-		if(!E1.getText().equals(""))board+=E1.getText();else board+="0";
-		if(!E2.getText().equals(""))board+=E2.getText();else board+="0";
-		if(!E3.getText().equals(""))board+=E3.getText();else board+="0";
-		if(!E4.getText().equals(""))board+=E4.getText();else board+="0";
-		if(!E5.getText().equals(""))board+=E5.getText();else board+="0";
-		if(!E6.getText().equals(""))board+=E6.getText();else board+="0";
-		if(!E7.getText().equals(""))board+=E7.getText();else board+="0";
-		if(!E8.getText().equals(""))board+=E8.getText();else board+="0";
-		if(!E9.getText().equals(""))board+=E9.getText();else board+="0";
+		if(E1.getText().length()==1)board+=E1.getText();else board+="0";
+		if(E2.getText().length()==1)board+=E2.getText();else board+="0";
+		if(E3.getText().length()==1)board+=E3.getText();else board+="0";
+		if(E4.getText().length()==1)board+=E4.getText();else board+="0";
+		if(E5.getText().length()==1)board+=E5.getText();else board+="0";
+		if(E6.getText().length()==1)board+=E6.getText();else board+="0";
+		if(E7.getText().length()==1)board+=E7.getText();else board+="0";
+		if(E8.getText().length()==1)board+=E8.getText();else board+="0";
+		if(E9.getText().length()==1)board+=E9.getText();else board+="0";
 
-		if(!F1.getText().equals(""))board+=F1.getText();else board+="0";
-		if(!F2.getText().equals(""))board+=F2.getText();else board+="0";
-		if(!F3.getText().equals(""))board+=F3.getText();else board+="0";
-		if(!F4.getText().equals(""))board+=F4.getText();else board+="0";
-		if(!F5.getText().equals(""))board+=F5.getText();else board+="0";
-		if(!F6.getText().equals(""))board+=F6.getText();else board+="0";
-		if(!F7.getText().equals(""))board+=F7.getText();else board+="0";
-		if(!F8.getText().equals(""))board+=F8.getText();else board+="0";
-		if(!F9.getText().equals(""))board+=F9.getText();else board+="0";
+		if(F1.getText().length()==1)board+=F1.getText();else board+="0";
+		if(F2.getText().length()==1)board+=F2.getText();else board+="0";
+		if(F3.getText().length()==1)board+=F3.getText();else board+="0";
+		if(F4.getText().length()==1)board+=F4.getText();else board+="0";
+		if(F5.getText().length()==1)board+=F5.getText();else board+="0";
+		if(F6.getText().length()==1)board+=F6.getText();else board+="0";
+		if(F7.getText().length()==1)board+=F7.getText();else board+="0";
+		if(F8.getText().length()==1)board+=F8.getText();else board+="0";
+		if(F9.getText().length()==1)board+=F9.getText();else board+="0";
 
-		if(!G1.getText().equals(""))board+=G1.getText();else board+="0";
-		if(!G2.getText().equals(""))board+=G2.getText();else board+="0";
-		if(!G3.getText().equals(""))board+=G3.getText();else board+="0";
-		if(!G4.getText().equals(""))board+=G4.getText();else board+="0";
-		if(!G5.getText().equals(""))board+=G5.getText();else board+="0";
-		if(!G6.getText().equals(""))board+=G6.getText();else board+="0";
-		if(!G7.getText().equals(""))board+=G7.getText();else board+="0";
-		if(!G8.getText().equals(""))board+=G8.getText();else board+="0";
-		if(!G9.getText().equals(""))board+=G9.getText();else board+="0";
+		if(G1.getText().length()==1)board+=G1.getText();else board+="0";
+		if(G2.getText().length()==1)board+=G2.getText();else board+="0";
+		if(G3.getText().length()==1)board+=G3.getText();else board+="0";
+		if(G4.getText().length()==1)board+=G4.getText();else board+="0";
+		if(G5.getText().length()==1)board+=G5.getText();else board+="0";
+		if(G6.getText().length()==1)board+=G6.getText();else board+="0";
+		if(G7.getText().length()==1)board+=G7.getText();else board+="0";
+		if(G8.getText().length()==1)board+=G8.getText();else board+="0";
+		if(G9.getText().length()==1)board+=G9.getText();else board+="0";
 
-		if(!H1.getText().equals(""))board+=H1.getText();else board+="0";
-		if(!H2.getText().equals(""))board+=H2.getText();else board+="0";
-		if(!H3.getText().equals(""))board+=H3.getText();else board+="0";
-		if(!H4.getText().equals(""))board+=H4.getText();else board+="0";
-		if(!H5.getText().equals(""))board+=H5.getText();else board+="0";
-		if(!H6.getText().equals(""))board+=H6.getText();else board+="0";
-		if(!H7.getText().equals(""))board+=H7.getText();else board+="0";
-		if(!H8.getText().equals(""))board+=H8.getText();else board+="0";
-		if(!H9.getText().equals(""))board+=H9.getText();else board+="0";
+		if(H1.getText().length()==1)board+=H1.getText();else board+="0";
+		if(H2.getText().length()==1)board+=H2.getText();else board+="0";
+		if(H3.getText().length()==1)board+=H3.getText();else board+="0";
+		if(H4.getText().length()==1)board+=H4.getText();else board+="0";
+		if(H5.getText().length()==1)board+=H5.getText();else board+="0";
+		if(H6.getText().length()==1)board+=H6.getText();else board+="0";
+		if(H7.getText().length()==1)board+=H7.getText();else board+="0";
+		if(H8.getText().length()==1)board+=H8.getText();else board+="0";
+		if(H9.getText().length()==1)board+=H9.getText();else board+="0";
 
-		if(!I1.getText().equals(""))board+=I1.getText();else board+="0";
-		if(!I2.getText().equals(""))board+=I2.getText();else board+="0";
-		if(!I3.getText().equals(""))board+=I3.getText();else board+="0";
-		if(!I4.getText().equals(""))board+=I4.getText();else board+="0";
-		if(!I5.getText().equals(""))board+=I5.getText();else board+="0";
-		if(!I6.getText().equals(""))board+=I6.getText();else board+="0";
-		if(!I7.getText().equals(""))board+=I7.getText();else board+="0";
-		if(!I8.getText().equals(""))board+=I8.getText();else board+="0";
-		if(!I9.getText().equals(""))board+=I9.getText();else board+="0";
+		if(I1.getText().length()==1)board+=I1.getText();else board+="0";
+		if(I2.getText().length()==1)board+=I2.getText();else board+="0";
+		if(I3.getText().length()==1)board+=I3.getText();else board+="0";
+		if(I4.getText().length()==1)board+=I4.getText();else board+="0";
+		if(I5.getText().length()==1)board+=I5.getText();else board+="0";
+		if(I6.getText().length()==1)board+=I6.getText();else board+="0";
+		if(I7.getText().length()==1)board+=I7.getText();else board+="0";
+		if(I8.getText().length()==1)board+=I8.getText();else board+="0";
+		if(I9.getText().length()==1)board+=I9.getText();else board+="0";
 
 		for(int i = board.length(); i<81; i++)
 			board+="0";
