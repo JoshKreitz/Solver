@@ -34,8 +34,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
 public class gui {
 
@@ -129,7 +127,7 @@ public class gui {
 	private JScrollPane scrollBar;
 	private JLabel lblTextConsole;
 	private static JTextArea console;
-	private JTextField txtPasteRowBy;
+	private JTextField enterPuzzle;
 	private JButton bClearBoard;
 	private JButton bSolve;
 	private JButton bTakeStep = new JButton("Take Step");
@@ -139,12 +137,13 @@ public class gui {
 
 	//TODO variables
 	private boolean enterByRow = true, enterByCol = false, enterByCube = false;
-	private boolean showSteps = true;
+	private static boolean showSteps = true;
 	private String txtText = "Paste row by row here";
-	boolean firstStep = true;
+	private static String consoleText = "";
 
 	private guiBoard b = new guiBoard();
 	int numberOfStepsToGoBack = 0;
+	static int step = 0;
 
 	/**
 	 * Launch the application.
@@ -1425,26 +1424,25 @@ public class gui {
 		bTakeStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showSteps = true;
-				if(firstStep){
-					firstStep = false;
+				if(step == 0){
 					inputBoard();
 				}
-
 				b.logMove();
 				b.makeBackup();
 
 				while(!b.changed() && takeStep()){
 					b.clearLog();
 				}
-
+				
+				step++;
+				console.append(step+". "+consoleText);
 				highlightChanges();
-
 				updateBoard();
+				
 				if(numberOfStepsToGoBack!=3){
 					numberOfStepsToGoBack++;
 					bPreviousStep.setEnabled(true);
 				}
-
 				if(b.gameDone()){
 					console.append("***COMPLETED PUZZLE");
 					bTakeStep.setEnabled(false);
@@ -1461,6 +1459,7 @@ public class gui {
 			public void actionPerformed(ActionEvent e) {
 				b.goBackAStep();
 				unHighlight();
+				step--;
 				bTakeStep.setEnabled(true);
 				numberOfStepsToGoBack--;
 				if(numberOfStepsToGoBack == 0)bPreviousStep.setEnabled(false);
@@ -1480,8 +1479,8 @@ public class gui {
 			public void actionPerformed(ActionEvent e) {
 				unHighlight();
 				b = new guiBoard();
+				step = 0;
 				bTakeStep.setEnabled(true);
-				firstStep = true;
 				resetGui();
 			}
 		});
@@ -1509,35 +1508,35 @@ public class gui {
 		console.setBounds(482, 350, 152, 135);
 		frame.getContentPane().add(console);
 
-		txtPasteRowBy = new JTextField();
-		txtPasteRowBy.setToolTipText("<html><p width=\"250\">Paste a super long string here, representing a sudoku puzzle. Use zeros to indicate blank spaces on the board.</p></html>");
-		txtPasteRowBy.addActionListener(new ActionListener() {
+		enterPuzzle = new JTextField();
+		enterPuzzle.setToolTipText("<html><p width=\"250\">Paste a super long string here, representing a sudoku puzzle. Use zeros to indicate blank spaces on the board.</p></html>");
+		enterPuzzle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				bTakeStep.setEnabled(true);
 				b = new guiBoard();
-				firstStep = true;
-				if(!txtPasteRowBy.getText().equals(""))txtText = txtPasteRowBy.getText();
-				txtPasteRowBy.setText(txtText);
+				step = 0;
+				if(!enterPuzzle.getText().equals(""))txtText = enterPuzzle.getText();
+				enterPuzzle.setText(txtText);
 				b.inputBoard(txtText);
 				console.setText("");
 				updateBoard();
 			}
 		});
-		txtPasteRowBy.addFocusListener(new FocusAdapter() {
+		enterPuzzle.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				txtPasteRowBy.setText("");
+				enterPuzzle.setText("");
 			}
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(txtPasteRowBy.getText().equals(""))txtPasteRowBy.setText(txtText);
+				if(enterPuzzle.getText().equals(""))enterPuzzle.setText(txtText);
 			}
 		});
-		txtPasteRowBy.setText(txtText);
-		txtPasteRowBy.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		txtPasteRowBy.setBounds(482, 110, 152, 16);
-		frame.getContentPane().add(txtPasteRowBy);
-		txtPasteRowBy.setColumns(10);
+		enterPuzzle.setText(txtText);
+		enterPuzzle.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		enterPuzzle.setBounds(482, 110, 152, 16);
+		frame.getContentPane().add(enterPuzzle);
+		enterPuzzle.setColumns(10);
 
 		bSave = new JButton("Save");
 		bSave.setToolTipText("<html><p width=\"250\">This button will save the current board. Only one puzzle may be saved at a time.</p></html>");
@@ -1563,7 +1562,7 @@ public class gui {
 				try {
 					Scanner in = new Scanner(new FileReader("src/SudokuSolver/res/savefile.txt"));
 					b = new guiBoard();
-					firstStep = true;
+					step = 0;
 					unHighlight();
 					b.inputBoard(in.nextLine());
 					console.setText("");
@@ -1577,7 +1576,7 @@ public class gui {
 		frame.getContentPane().add(bLoad);
 
 		scrollBar = new JScrollPane(console);
-		scrollBar.setBounds(482, 350, 152, 135);
+		scrollBar.setBounds(482, 295, 152, 190);
 		scrollBar.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED );
 		frame.getContentPane().add(scrollBar);
 
@@ -1968,7 +1967,7 @@ public class gui {
 						if(temp.length()==1){
 							int temp2 = Integer.parseInt(temp);
 							b.set(r,c,temp2);
-							console.append("ABLE ELIMINATION PLACED A "+temp+" AT PLACE ("+r+","+c+")\n");
+							append("ABLE ELIMINATION PLACED A "+temp+" AT PLACE ("+(r+1)+","+(c+1)+")\n");
 							if(showSteps)return true;
 						}
 					}
@@ -1980,7 +1979,7 @@ public class gui {
 						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
 							b.removeFromRowExcept(rc, c1, c2, able[c1]);
 							b.addInference(rc,c1,Integer.parseInt(able[c1]));
-							console.append("MADE AN EXTENDED ROW INFERENCE AT ROW "+rc+" WITH NUMBERS "+able[c1]+"\n");
+							append("MADE AN EXTENDED ROW INFERENCE AT ROW "+(rc+1)+" WITH NUMBERS "+able[c1]+"\n");
 							if(showSteps)return true;
 						}
 				able = b.getColAble(rc);
@@ -1989,7 +1988,7 @@ public class gui {
 						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
 							b.removeFromColExcept(rc, c1, c2, able[c1]);
 							b.addInference(rc,c1,Integer.parseInt(able[c1]));
-							console.append("MADE AN EXTENDED COL INFERENCE AT COL "+rc+" WITH NUMBERS "+able[c1]+"\n");
+							append("MADE AN EXTENDED COL INFERENCE AT COL "+(rc+1)+" WITH NUMBERS "+able[c1]+"\n");
 							if(showSteps)return true;
 						}
 			}
@@ -2011,7 +2010,7 @@ public class gui {
 						if(numberIsGood && len == 2){
 							int indecies = Integer.parseInt(eligibleIndecies);
 							b.set(indecies/10, indecies%10, test);
-							console.append("POSITIONAL ELIMINATION PLACED A "+test+" AT PLACE ("+(indecies/10)+","+(indecies%10)+")\n");
+							append("POSITIONAL ELIMINATION PLACED A "+test+" AT PLACE ("+((indecies/10)+1)+","+((indecies%10)+1)+")\n");
 							if(showSteps)return true;
 						}
 						else if(numberIsGood && len == 4){
@@ -2100,7 +2099,7 @@ public class gui {
 								}
 								b.addInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers));
 								b.removeFromRowExcept(rc,c1,c2,c3,threeTargetNumbers);
-								console.append("MADE A HIDDEN TRIPLE INFERENCE AT ROW "+rc+" AND COLS "+c1+", "+c2+", and "+c3+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
+								append("MADE A HIDDEN TRIPLE INFERENCE AT ROW "+(rc+1)+" AND COLS "+(c1+1)+", "+(c2+1)+", and "+(c3+1)+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
 								if(showSteps)return true;
 							}
 						}
@@ -2139,7 +2138,7 @@ public class gui {
 								}
 								b.addInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers));
 								b.removeFromRowExcept(rc,r1,r2,r3,threeTargetNumbers);
-								console.append("MADE A HIDDEN TRIPLE INFERENCE AT COL "+rc+" AND ROWS "+r1+", "+r2+", and "+r3+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
+								append("MADE A HIDDEN TRIPLE INFERENCE AT COL "+(rc+1)+" AND ROWS "+(r1+1)+", "+(r2+1)+", and "+(r3+1)+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
 								if(showSteps)return true;
 							}
 						}
@@ -2153,7 +2152,11 @@ public class gui {
 	}
 
 	public static void append(String x){
-		console.append(x);
+		if(!showSteps){
+			step++;
+			console.append(step+". "+x);
+		}
+		else consoleText = x;
 	}
 
 	//TODO fix this

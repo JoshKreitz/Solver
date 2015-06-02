@@ -189,7 +189,7 @@ public class guiBoard {
 	}
 
 	public void removeFromRowExceptCube(int r, int c, int t){
-		gui.append("MADE A ROW INFERENCE OF A "+t+" AT ROW "+r+"\n");
+		gui.append("MADE A ROW INFERENCE OF A "+t+" AT ROW "+(r+1)+"\n");
 		int cube = 0;
 		if(r<=2 && c<=2)cube = 1;
 		else if(r<=2 && c>=3 && c<=5)cube = 2;
@@ -248,7 +248,7 @@ public class guiBoard {
 	}
 
 	public void removeFromColExceptCube(int r, int c, int t){
-		gui.append("MADE A COL INFERENCE OF A "+t+" AT COL "+c+"\n");
+		gui.append("MADE A COL INFERENCE OF A "+t+" AT COL "+(c+1)+"\n");
 		int cube = 0;
 		if(r<=2 && c<=2)cube = 1;
 		else if(r<=2 && c>=3 && c<=5)cube = 2;
@@ -350,7 +350,7 @@ public class guiBoard {
 							if(temp != char1 && temp != char2)
 								able[r2][c2] = able[r2][c2].replaceAll(""+temp,"");
 						}
-						gui.append("MADE A RESTRICTION INFERENCE WITH THE NUMBERS "+char1+","+char2+" AT ("+r1+","+c1+")("+r2+","+c2+")\n");
+						gui.append("MADE A RESTRICTION INFERENCE WITH THE NUMBERS "+char1+","+char2+" AT ("+(r1+1)+","+(c1+1)+")("+(r2+1)+","+(c2+1)+")\n");
 					}
 				}
 			}
@@ -535,7 +535,7 @@ public class guiBoard {
 			for(int c1 = c; c1<c+3; c1++)
 				able[r1][c1] = able[r1][c1].replaceAll(""+num, "");
 		}
-		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT ROW "+targetRow+" AND CUBE "+cube+"\n");
+		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT ROW "+(targetRow+1)+" AND CUBE "+cube+"\n");
 	}
 
 	public void removeFromCubeExceptCol(String rc, int num){
@@ -597,7 +597,7 @@ public class guiBoard {
 			for(int r1 = r; r1<r+3; r1++)
 				able[r1][c1] = able[r1][c1].replaceAll(""+num, "");
 		}
-		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT COL "+targetCol+" AND CUBE "+cube+"\n");
+		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT COL "+(targetCol+1)+" AND CUBE "+cube+"\n");
 	}
 
 	public void addInference(int r, int c, int num){
@@ -646,7 +646,7 @@ public class guiBoard {
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++){
 				if(board[r][c]!=0)temp[r][c] = ""+board[r][c];
-				else temp[r][c] = able[r][c];
+				else temp[r][c] = " "+able[r][c]+" ";
 			}
 		return temp;
 	}
