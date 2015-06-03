@@ -35,8 +35,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class gui {
+//TODO check to see that the board is valid, make beginning numbers a different colour
 
+public class gui {
 	private JFrame frame;
 	private JTextField A1;
 	private JTextField A2;
@@ -1518,6 +1519,7 @@ public class gui {
 				if(!enterPuzzle.getText().equals(""))txtText = enterPuzzle.getText();
 				enterPuzzle.setText(txtText);
 				b.inputBoard(txtText);
+				changeColour();
 				console.setText("");
 				updateBoard();
 			}
@@ -1544,6 +1546,7 @@ public class gui {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					PrintWriter out = new PrintWriter("src/SudokuSolver/res/savefile.txt");
+					//System.out.println()
 					out.println(b.getBoardString());
 					out.close();
 				} catch(FileNotFoundException e1){ System.out.println("FILE NOT FOUND!"); }
@@ -2146,7 +2149,8 @@ public class gui {
 
 			}
 		} while(!showSteps && !b.gameDone() && b.changed());
-		console.append("***WASN'T ABLE TO COMPLETE THE SUDOKU USING LOGIC!\n");
+		if(b.gameDone())console.append("***COMPLETED PUZZLE");
+		else console.append("***WASN'T ABLE TO COMPLETE THE SUDOKU USING LOGIC!\n");
 		return false;
 		//TODO bruteforce
 	}
@@ -2916,6 +2920,132 @@ public class gui {
 				case 6:I7.setBackground(Color.YELLOW);break;
 				case 7:I8.setBackground(Color.YELLOW);break;
 				case 8:I9.setBackground(Color.YELLOW);break;
+				}
+				break;
+			}
+	}
+	
+	public void changeColour(){
+		unHighlight();
+		int[][] indecies = b.getIndecies();
+		
+		for(int i = 0; i<indecies.length; i++)
+			switch(indecies[i][0]){
+			case 0:
+				switch(indecies[i][1]){
+				case 0:A1.setForeground(Color.BLUE);break;
+				case 1:A2.setForeground(Color.BLUE);break;
+				case 2:A3.setForeground(Color.BLUE);break;
+				case 3:A4.setForeground(Color.BLUE);break;
+				case 4:A5.setForeground(Color.BLUE);break;
+				case 5:A6.setForeground(Color.BLUE);break;
+				case 6:A7.setForeground(Color.BLUE);break;
+				case 7:A8.setForeground(Color.BLUE);break;
+				case 8:A9.setForeground(Color.BLUE);break;
+				}
+				break;
+			case 1:
+				switch(indecies[i][1]){
+				case 0:B1.setForeground(Color.BLUE);break;
+				case 1:B2.setForeground(Color.BLUE);break;
+				case 2:B3.setForeground(Color.BLUE);break;
+				case 3:B4.setForeground(Color.BLUE);break;
+				case 4:B5.setForeground(Color.BLUE);break;
+				case 5:B6.setForeground(Color.BLUE);break;
+				case 6:B7.setForeground(Color.BLUE);break;
+				case 7:B8.setForeground(Color.BLUE);break;
+				case 8:B9.setForeground(Color.BLUE);break;
+				}
+				break;
+			case 2:
+				switch(indecies[i][1]){
+				case 0:C1.setForeground(Color.BLUE);break;
+				case 1:C2.setForeground(Color.BLUE);break;
+				case 2:C3.setForeground(Color.BLUE);break;
+				case 3:C4.setForeground(Color.BLUE);break;
+				case 4:C5.setForeground(Color.BLUE);break;
+				case 5:C6.setForeground(Color.BLUE);break;
+				case 6:C7.setForeground(Color.BLUE);break;
+				case 7:C8.setForeground(Color.BLUE);break;
+				case 8:C9.setForeground(Color.BLUE);break;
+				}
+				break;
+			case 3:
+				switch(indecies[i][1]){
+				case 0:D1.setForeground(Color.BLUE);break;
+				case 1:D2.setForeground(Color.BLUE);break;
+				case 2:D3.setForeground(Color.BLUE);break;
+				case 3:D4.setForeground(Color.BLUE);break;
+				case 4:D5.setForeground(Color.BLUE);break;
+				case 5:D6.setForeground(Color.BLUE);break;
+				case 6:D7.setForeground(Color.BLUE);break;
+				case 7:D8.setForeground(Color.BLUE);break;
+				case 8:D9.setForeground(Color.BLUE);break;
+				}
+				break;
+			case 4:
+				switch(indecies[i][1]){
+				case 0:E1.setForeground(Color.BLUE);break;
+				case 1:E2.setForeground(Color.BLUE);break;
+				case 2:E3.setForeground(Color.BLUE);break;
+				case 3:E4.setForeground(Color.BLUE);break;
+				case 4:E5.setForeground(Color.BLUE);break;
+				case 5:E6.setForeground(Color.BLUE);break;
+				case 6:E7.setForeground(Color.BLUE);break;
+				case 7:E8.setForeground(Color.BLUE);break;
+				case 8:E9.setForeground(Color.BLUE);break;
+				}
+				break;
+			case 5:
+				switch(indecies[i][1]){
+				case 0:F1.setForeground(Color.BLUE);break;
+				case 1:F2.setForeground(Color.BLUE);break;
+				case 2:F3.setForeground(Color.BLUE);break;
+				case 3:F4.setForeground(Color.BLUE);break;
+				case 4:F5.setForeground(Color.BLUE);break;
+				case 5:F6.setForeground(Color.BLUE);break;
+				case 6:F7.setForeground(Color.BLUE);break;
+				case 7:F8.setForeground(Color.BLUE);break;
+				case 8:F9.setForeground(Color.BLUE);break;
+				}
+				break;
+			case 6:
+				switch(indecies[i][1]){
+				case 0:G1.setForeground(Color.BLUE);break;
+				case 1:G2.setForeground(Color.BLUE);break;
+				case 2:G3.setForeground(Color.BLUE);break;
+				case 3:G4.setForeground(Color.BLUE);break;
+				case 4:G5.setForeground(Color.BLUE);break;
+				case 5:G6.setForeground(Color.BLUE);break;
+				case 6:G7.setForeground(Color.BLUE);break;
+				case 7:G8.setForeground(Color.BLUE);break;
+				case 8:G9.setForeground(Color.BLUE);break;
+				}
+				break;
+			case 7:
+				switch(indecies[i][1]){
+				case 0:H1.setForeground(Color.BLUE);break;
+				case 1:H2.setForeground(Color.BLUE);break;
+				case 2:H3.setForeground(Color.BLUE);break;
+				case 3:H4.setForeground(Color.BLUE);break;
+				case 4:H5.setForeground(Color.BLUE);break;
+				case 5:H6.setForeground(Color.BLUE);break;
+				case 6:H7.setForeground(Color.BLUE);break;
+				case 7:H8.setForeground(Color.BLUE);break;
+				case 8:H9.setForeground(Color.BLUE);break;
+				}
+				break;
+			case 8:
+				switch(indecies[i][1]){
+				case 0:I1.setForeground(Color.BLUE);break;
+				case 1:I2.setForeground(Color.BLUE);break;
+				case 2:I3.setForeground(Color.BLUE);break;
+				case 3:I4.setForeground(Color.BLUE);break;
+				case 4:I5.setForeground(Color.BLUE);break;
+				case 5:I6.setForeground(Color.BLUE);break;
+				case 6:I7.setForeground(Color.BLUE);break;
+				case 7:I8.setForeground(Color.BLUE);break;
+				case 8:I9.setForeground(Color.BLUE);break;
 				}
 				break;
 			}

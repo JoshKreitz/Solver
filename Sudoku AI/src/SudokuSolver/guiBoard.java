@@ -10,6 +10,8 @@ public class guiBoard {
 	String[] madeInferences = new String[200];
 	int madeInferencesIndex = 0;
 
+	private int[][] indeciesOfPlacedNumbers;
+
 	public guiBoard(){
 		board = new int[9][9];
 		able = new String[9][9];
@@ -21,7 +23,7 @@ public class guiBoard {
 	public int get(int r, int c){
 		return board[r][c];
 	}
-	
+
 	public void makeBackup(){
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++){
@@ -36,7 +38,7 @@ public class guiBoard {
 				if(board[r][c]!=backup[r][c] || !able[r][c].equals(ableBackup[r][c]))return true;
 		return false;
 	}
-	
+
 	public int[][] getChangedIndecies(){
 		String changes = "";
 		for(int r = 0; r<9; r++)
@@ -65,18 +67,31 @@ public class guiBoard {
 
 	public void inputBoard(String temp){
 		try{
-		int index = 0;
-		for(int r = 0; r<9; r++)
-			for(int c = 0; c<9; c++){
-				board[r][c] = Character.getNumericValue(temp.charAt(index));
-				if(board[r][c]!=0){
-					able[r][c] = "";
-					remove(r,c,board[r][c]);
+			int index = 0;
+			String tempIndecies = "";
+			for(int r = 0; r<9; r++)
+				for(int c = 0; c<9; c++){
+					board[r][c] = Character.getNumericValue(temp.charAt(index));
+					if(board[r][c]!=0){
+						able[r][c] = "";
+						remove(r,c,board[r][c]);
+						tempIndecies += ""+r+c;
+					}
+					index++;
 				}
+			indeciesOfPlacedNumbers = new int[tempIndecies.length()/2][2];
+			index = 0;
+			for(int i = 0; i<tempIndecies.length(); i+=2){
+				indeciesOfPlacedNumbers[index][0] = Character.valueOf(tempIndecies.charAt(i));
+				indeciesOfPlacedNumbers[index][1] = Character.valueOf(tempIndecies.charAt(i+1));
 				index++;
 			}
 		}
 		catch(StringIndexOutOfBoundsException e){ gui.append("The string you entered isn't long enough to fill the board completely!"); }
+	}
+	
+	public int[][] getIndecies(){
+		return indeciesOfPlacedNumbers;
 	}
 
 	public void remove(int r, int c, int t){
@@ -678,7 +693,7 @@ public class guiBoard {
 			move++;
 		}
 	}
-	
+
 	public void goBackAStep(){
 		move--;
 		for(int r = 0; r<9; r++)
@@ -687,7 +702,7 @@ public class guiBoard {
 				able[r][c] = previousAbles[move][r][c];
 			}
 	}
-	
+
 	public String getBoardString(){
 		String temp = "";
 		for(int r = 0; r<9; r++)
