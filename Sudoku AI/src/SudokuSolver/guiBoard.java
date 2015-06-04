@@ -10,6 +10,8 @@ public class guiBoard {
 	String[] madeInferences = new String[200];
 	int madeInferencesIndex = 0;
 
+	private int[][] indeciesOfPlacedNumbers;
+
 	public guiBoard(){
 		board = new int[9][9];
 		able = new String[9][9];
@@ -21,7 +23,7 @@ public class guiBoard {
 	public int get(int r, int c){
 		return board[r][c];
 	}
-	
+
 	public void makeBackup(){
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++){
@@ -36,7 +38,7 @@ public class guiBoard {
 				if(board[r][c]!=backup[r][c] || !able[r][c].equals(ableBackup[r][c]))return true;
 		return false;
 	}
-	
+
 	public int[][] getChangedIndecies(){
 		String changes = "";
 		for(int r = 0; r<9; r++)
@@ -65,18 +67,31 @@ public class guiBoard {
 
 	public void inputBoard(String temp){
 		try{
-		int index = 0;
-		for(int r = 0; r<9; r++)
-			for(int c = 0; c<9; c++){
-				board[r][c] = Character.getNumericValue(temp.charAt(index));
-				if(board[r][c]!=0){
-					able[r][c] = "";
-					remove(r,c,board[r][c]);
+			int index = 0;
+			String tempIndecies = "";
+			for(int r = 0; r<9; r++)
+				for(int c = 0; c<9; c++){
+					board[r][c] = Character.getNumericValue(temp.charAt(index));
+					if(board[r][c]!=0){
+						able[r][c] = "";
+						remove(r,c,board[r][c]);
+						tempIndecies += ""+r+c;
+					}
+					index++;
 				}
+			indeciesOfPlacedNumbers = new int[tempIndecies.length()/2][2];
+			index = 0;
+			for(int i = 0; i<tempIndecies.length(); i+=2){
+				indeciesOfPlacedNumbers[index][0] = Character.valueOf(tempIndecies.charAt(i));
+				indeciesOfPlacedNumbers[index][1] = Character.valueOf(tempIndecies.charAt(i+1));
 				index++;
 			}
 		}
 		catch(StringIndexOutOfBoundsException e){ gui.append("The string you entered isn't long enough to fill the board completely!"); }
+	}
+	
+	public int[][] getIndecies(){
+		return indeciesOfPlacedNumbers;
 	}
 
 	public void remove(int r, int c, int t){
@@ -189,7 +204,7 @@ public class guiBoard {
 	}
 
 	public void removeFromRowExceptCube(int r, int c, int t){
-		gui.append("MADE A ROW INFERENCE OF A "+t+" AT ROW "+r+"\n");
+		gui.append("MADE A ROW INFERENCE OF A "+t+" AT ROW "+(r+1)+"\n");
 		int cube = 0;
 		if(r<=2 && c<=2)cube = 1;
 		else if(r<=2 && c>=3 && c<=5)cube = 2;
@@ -248,7 +263,7 @@ public class guiBoard {
 	}
 
 	public void removeFromColExceptCube(int r, int c, int t){
-		gui.append("MADE A COL INFERENCE OF A "+t+" AT COL "+c+"\n");
+		gui.append("MADE A COL INFERENCE OF A "+t+" AT COL "+(c+1)+"\n");
 		int cube = 0;
 		if(r<=2 && c<=2)cube = 1;
 		else if(r<=2 && c>=3 && c<=5)cube = 2;
@@ -350,7 +365,7 @@ public class guiBoard {
 							if(temp != char1 && temp != char2)
 								able[r2][c2] = able[r2][c2].replaceAll(""+temp,"");
 						}
-						gui.append("MADE A RESTRICTION INFERENCE WITH THE NUMBERS "+char1+","+char2+" AT ("+r1+","+c1+")("+r2+","+c2+")\n");
+						gui.append("MADE A RESTRICTION INFERENCE WITH THE NUMBERS "+char1+","+char2+" AT ("+(r1+1)+","+(c1+1)+")("+(r2+1)+","+(c2+1)+")\n");
 					}
 				}
 			}
@@ -535,7 +550,7 @@ public class guiBoard {
 			for(int c1 = c; c1<c+3; c1++)
 				able[r1][c1] = able[r1][c1].replaceAll(""+num, "");
 		}
-		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT ROW "+targetRow+" AND CUBE "+cube+"\n");
+		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT ROW "+(targetRow+1)+" AND CUBE "+cube+"\n");
 	}
 
 	public void removeFromCubeExceptCol(String rc, int num){
@@ -597,7 +612,7 @@ public class guiBoard {
 			for(int r1 = r; r1<r+3; r1++)
 				able[r1][c1] = able[r1][c1].replaceAll(""+num, "");
 		}
-		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT COL "+targetCol+" AND CUBE "+cube+"\n");
+		gui.append("MADE A CUBE INFERENCE OF A "+num+" AT COL "+(targetCol+1)+" AND CUBE "+cube+"\n");
 	}
 
 	public void addInference(int r, int c, int num){
@@ -646,7 +661,7 @@ public class guiBoard {
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++){
 				if(board[r][c]!=0)temp[r][c] = ""+board[r][c];
-				else temp[r][c] = able[r][c];
+				else temp[r][c] = " "+able[r][c]+" ";
 			}
 		return temp;
 	}
@@ -678,7 +693,7 @@ public class guiBoard {
 			move++;
 		}
 	}
-	
+
 	public void goBackAStep(){
 		move--;
 		for(int r = 0; r<9; r++)
@@ -687,7 +702,7 @@ public class guiBoard {
 				able[r][c] = previousAbles[move][r][c];
 			}
 	}
-	
+
 	public String getBoardString(){
 		String temp = "";
 		for(int r = 0; r<9; r++)
