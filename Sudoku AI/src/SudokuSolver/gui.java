@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -148,6 +150,23 @@ public class gui {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(
+					UIManager.getSystemLookAndFeelClassName());
+		} 
+		catch (UnsupportedLookAndFeelException e) {
+			System.out.println("UNSUPPORTED L&F! gui@ln160");
+		}
+		catch (ClassNotFoundException e) {
+			System.out.println("UNSUPPORTED L&F! gui@ln163");
+		}
+		catch (InstantiationException e) {
+			System.out.println("UNSUPPORTED L&F! gui@ln166");
+		}
+		catch (IllegalAccessException e) {
+			System.out.println("UNSUPPORTED L&F! gui@ln169");
+		}
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -1453,7 +1472,7 @@ public class gui {
 		});
 
 		bTakeStep.setMargin(new Insets(0,0,0,0));
-		bTakeStep.setBounds(488, 235, 91, 23);
+		bTakeStep.setBounds(488, 234, 91, 23);
 		bTakeStep.setFocusable(false);
 		frame.getContentPane().add(bTakeStep);
 		bPreviousStep.setToolTipText("<html><p width=\"250\">This will revert the previous step, to a maximum of three steps.</p></html>");
@@ -1471,7 +1490,7 @@ public class gui {
 
 		bPreviousStep.setMargin(new Insets(0,0,0,0));
 		bPreviousStep.setEnabled(false);
-		bPreviousStep.setBounds(583, 235, 41, 23);
+		bPreviousStep.setBounds(583, 234, 41, 23);
 		bPreviousStep.setFocusable(false);
 		frame.getContentPane().add(bPreviousStep);
 
@@ -1508,7 +1527,6 @@ public class gui {
 		bSolve.setFocusable(false);
 		frame.getContentPane().add(bSolve);
 
-		//TODO fix the console outputs and change to letter-number format
 		console = new JTextArea();
 		console.setEditable(false);
 		console.setBounds(482, 350, 152, 135);
@@ -3155,12 +3173,12 @@ public class gui {
 		I8.setForeground(Color.BLACK);
 		I9.setForeground(Color.BLACK);
 	}
-	
+
 	public boolean checkValidity(){
 		int[][] invalidIndecies = b.checkValidity();
-		
+
 		if(invalidIndecies == null)return true;
-		
+
 		unColour();
 		for(int i = 0; i<invalidIndecies.length; i++){
 			switch(invalidIndecies[i][0]){
