@@ -33,9 +33,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
-
-//TODO check to see that the board is valid, make beginning numbers a different colour
 
 public class gui {
 	private JFrame frame;
@@ -136,7 +135,6 @@ public class gui {
 	private JButton bSave;
 	private JButton bLoad;
 
-	//TODO variables
 	private boolean enterByRow = true, enterByCol = false, enterByCube = false;
 	private static boolean showSteps = true;
 	private String txtText = "Paste row by row here";
@@ -189,8 +187,8 @@ public class gui {
 		A1.setColumns(10);
 		A1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("A1");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("A1");
 			}
 		});
 
@@ -203,8 +201,8 @@ public class gui {
 		frame.getContentPane().add(A2);
 		A2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("A2");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("A2");
 			}
 		});
 
@@ -217,8 +215,8 @@ public class gui {
 		frame.getContentPane().add(A3);
 		A3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("A3");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("A3");
 			}
 		});
 
@@ -231,8 +229,8 @@ public class gui {
 		frame.getContentPane().add(A4);
 		A4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("A4");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("A4");
 			}
 		});
 
@@ -245,8 +243,8 @@ public class gui {
 		frame.getContentPane().add(A5);
 		A5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("A5");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("A5");
 			}
 		});
 
@@ -259,8 +257,8 @@ public class gui {
 		frame.getContentPane().add(A6);
 		A6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("A6");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("A6");
 			}
 		});
 
@@ -273,8 +271,8 @@ public class gui {
 		frame.getContentPane().add(A7);
 		A7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("A7");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("A7");
 			}
 		});
 
@@ -287,8 +285,8 @@ public class gui {
 		frame.getContentPane().add(A8);
 		A8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("A8");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("A8");
 			}
 		});
 
@@ -301,8 +299,8 @@ public class gui {
 		frame.getContentPane().add(A9);
 		A9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("A9");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("A9");
 			}
 		});
 
@@ -315,8 +313,8 @@ public class gui {
 		frame.getContentPane().add(B1);
 		B1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("B1");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("B1");
 			}
 		});
 
@@ -329,8 +327,8 @@ public class gui {
 		frame.getContentPane().add(B2);
 		B2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("B2");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("B2");
 			}
 		});
 
@@ -343,8 +341,8 @@ public class gui {
 		frame.getContentPane().add(B3);
 		B3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("B3");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("B3");
 			}
 		});
 
@@ -357,8 +355,8 @@ public class gui {
 		frame.getContentPane().add(B4);
 		B4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("B4");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("B4");
 			}
 		});
 
@@ -371,8 +369,8 @@ public class gui {
 		frame.getContentPane().add(B5);
 		B5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("B5");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("B5");
 			}
 		});
 
@@ -385,8 +383,8 @@ public class gui {
 		frame.getContentPane().add(B6);
 		B6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("B6");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("B6");
 			}
 		});
 
@@ -399,8 +397,8 @@ public class gui {
 		frame.getContentPane().add(B7);
 		B7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("B7");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("B7");
 			}
 		});
 
@@ -413,8 +411,8 @@ public class gui {
 		frame.getContentPane().add(B8);
 		B8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("B8");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("B8");
 			}
 		});
 
@@ -427,8 +425,8 @@ public class gui {
 		frame.getContentPane().add(B9);
 		B9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("B9");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("B9");
 			}
 		});
 
@@ -441,8 +439,8 @@ public class gui {
 		frame.getContentPane().add(C1);
 		C1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("C1");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("C1");
 			}
 		});
 
@@ -455,8 +453,8 @@ public class gui {
 		frame.getContentPane().add(C2);
 		C2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("C2");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("C2");
 			}
 		});
 
@@ -469,8 +467,8 @@ public class gui {
 		frame.getContentPane().add(C3);
 		C3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("C3");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("C3");
 			}
 		});
 
@@ -483,8 +481,8 @@ public class gui {
 		frame.getContentPane().add(C4);
 		C4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("C4");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("C4");
 			}
 		});
 
@@ -497,8 +495,8 @@ public class gui {
 		frame.getContentPane().add(C5);
 		C5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("C5");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("C5");
 			}
 		});
 
@@ -511,8 +509,8 @@ public class gui {
 		frame.getContentPane().add(C6);
 		C6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("C6");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("C6");
 			}
 		});
 
@@ -525,8 +523,8 @@ public class gui {
 		frame.getContentPane().add(C7);
 		C7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("C7");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("C7");
 			}
 		});
 
@@ -539,8 +537,8 @@ public class gui {
 		frame.getContentPane().add(C8);
 		C8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("C8");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("C8");
 			}
 		});
 
@@ -553,8 +551,8 @@ public class gui {
 		frame.getContentPane().add(C9);
 		C9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("C9");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("C9");
 			}
 		});
 
@@ -567,8 +565,8 @@ public class gui {
 		frame.getContentPane().add(D1);
 		D1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("D1");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("D1");
 			}
 		});
 
@@ -581,8 +579,8 @@ public class gui {
 		frame.getContentPane().add(D2);
 		D2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("D2");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("D2");
 			}
 		});
 
@@ -595,8 +593,8 @@ public class gui {
 		frame.getContentPane().add(D3);
 		D3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("D3");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("D3");
 			}
 		});
 
@@ -609,8 +607,8 @@ public class gui {
 		frame.getContentPane().add(D4);
 		D4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("D4");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("D4");
 			}
 		});
 
@@ -623,8 +621,8 @@ public class gui {
 		frame.getContentPane().add(D5);
 		D5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("D5");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("D5");
 			}
 		});
 
@@ -637,8 +635,8 @@ public class gui {
 		frame.getContentPane().add(D6);
 		D6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("D6");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("D6");
 			}
 		});
 
@@ -651,8 +649,8 @@ public class gui {
 		frame.getContentPane().add(D7);
 		D7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("D7");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("D7");
 			}
 		});
 
@@ -665,8 +663,8 @@ public class gui {
 		frame.getContentPane().add(D8);
 		D8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("D8");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("D8");
 			}
 		});
 
@@ -679,8 +677,8 @@ public class gui {
 		frame.getContentPane().add(D9);
 		D9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("D9");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("D9");
 			}
 		});
 
@@ -693,8 +691,8 @@ public class gui {
 		frame.getContentPane().add(E1);
 		E1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("E1");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("E1");
 			}
 		});
 
@@ -707,8 +705,8 @@ public class gui {
 		frame.getContentPane().add(E2);
 		E2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("E2");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("E2");
 			}
 		});
 
@@ -721,8 +719,8 @@ public class gui {
 		frame.getContentPane().add(E3);
 		E3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("E3");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("E3");
 			}
 		});
 
@@ -735,8 +733,8 @@ public class gui {
 		frame.getContentPane().add(E4);
 		E4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("E4");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("E4");
 			}
 		});
 
@@ -749,8 +747,8 @@ public class gui {
 		frame.getContentPane().add(E5);
 		E5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("E5");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("E5");
 			}
 		});
 
@@ -763,8 +761,8 @@ public class gui {
 		frame.getContentPane().add(E6);
 		E6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("E6");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("E6");
 			}
 		});
 
@@ -777,8 +775,8 @@ public class gui {
 		frame.getContentPane().add(E7);
 		E7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("E7");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("E7");
 			}
 		});
 
@@ -791,8 +789,8 @@ public class gui {
 		frame.getContentPane().add(E8);
 		E8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("E8");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("E8");
 			}
 		});
 
@@ -805,8 +803,8 @@ public class gui {
 		frame.getContentPane().add(E9);
 		E9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("E9");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("E9");
 			}
 		});
 
@@ -819,8 +817,8 @@ public class gui {
 		frame.getContentPane().add(F1);
 		F1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("F1");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("F1");
 			}
 		});
 
@@ -833,8 +831,8 @@ public class gui {
 		frame.getContentPane().add(F2);
 		F2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("F2");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("F2");
 			}
 		});
 
@@ -847,8 +845,8 @@ public class gui {
 		frame.getContentPane().add(F3);
 		F3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("F3");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("F3");
 			}
 		});
 
@@ -861,8 +859,8 @@ public class gui {
 		frame.getContentPane().add(F4);
 		F4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("F4");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("F4");
 			}
 		});
 
@@ -875,8 +873,8 @@ public class gui {
 		frame.getContentPane().add(F5);
 		F5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("F5");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("F5");
 			}
 		});
 
@@ -889,8 +887,8 @@ public class gui {
 		frame.getContentPane().add(F6);
 		F6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("F6");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("F6");
 			}
 		});
 
@@ -903,8 +901,8 @@ public class gui {
 		frame.getContentPane().add(F7);
 		F7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("F7");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("F7");
 			}
 		});
 
@@ -917,8 +915,8 @@ public class gui {
 		frame.getContentPane().add(F8);
 		F8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("F8");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("F8");
 			}
 		});
 
@@ -931,8 +929,8 @@ public class gui {
 		frame.getContentPane().add(F9);
 		F9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("F9");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("F9");
 			}
 		});
 
@@ -945,8 +943,8 @@ public class gui {
 		frame.getContentPane().add(G1);
 		G1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("G1");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("G1");
 			}
 		});
 
@@ -959,8 +957,8 @@ public class gui {
 		frame.getContentPane().add(G2);
 		G2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("G2");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("G2");
 			}
 		});
 
@@ -973,8 +971,8 @@ public class gui {
 		frame.getContentPane().add(G3);
 		G3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("G3");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("G3");
 			}
 		});
 
@@ -987,8 +985,8 @@ public class gui {
 		frame.getContentPane().add(G4);
 		G4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("G4");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("G4");
 			}
 		});
 
@@ -1001,8 +999,8 @@ public class gui {
 		frame.getContentPane().add(G5);
 		G5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("G5");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("G5");
 			}
 		});
 
@@ -1015,8 +1013,8 @@ public class gui {
 		frame.getContentPane().add(G6);
 		G6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("G6");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("G6");
 			}
 		});
 
@@ -1029,8 +1027,8 @@ public class gui {
 		frame.getContentPane().add(G7);
 		G7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("G7");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("G7");
 			}
 		});
 
@@ -1043,8 +1041,8 @@ public class gui {
 		frame.getContentPane().add(G8);
 		G8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("G8");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("G8");
 			}
 		});
 
@@ -1057,8 +1055,8 @@ public class gui {
 		frame.getContentPane().add(G9);
 		G9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("G9");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("G9");
 			}
 		});
 
@@ -1071,8 +1069,8 @@ public class gui {
 		frame.getContentPane().add(H1);
 		H1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("H1");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("H1");
 			}
 		});
 
@@ -1085,8 +1083,8 @@ public class gui {
 		frame.getContentPane().add(H2);
 		H2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("H2");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("H2");
 			}
 		});
 
@@ -1099,8 +1097,8 @@ public class gui {
 		frame.getContentPane().add(H3);
 		H3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("H3");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("H3");
 			}
 		});
 
@@ -1113,8 +1111,8 @@ public class gui {
 		frame.getContentPane().add(H4);
 		H4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("H4");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("H4");
 			}
 		});
 
@@ -1127,8 +1125,8 @@ public class gui {
 		frame.getContentPane().add(H5);
 		H5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("H5");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("H5");
 			}
 		});
 
@@ -1141,8 +1139,8 @@ public class gui {
 		frame.getContentPane().add(H6);
 		H6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("H6");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("H6");
 			}
 		});
 
@@ -1155,8 +1153,8 @@ public class gui {
 		frame.getContentPane().add(H7);
 		H7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("H7");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("H7");
 			}
 		});
 
@@ -1169,8 +1167,8 @@ public class gui {
 		frame.getContentPane().add(H8);
 		H8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("H8");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("H8");
 			}
 		});
 
@@ -1183,8 +1181,8 @@ public class gui {
 		frame.getContentPane().add(H9);
 		H9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("H9");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("H9");
 			}
 		});
 
@@ -1197,8 +1195,8 @@ public class gui {
 		frame.getContentPane().add(I1);
 		I1.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("I1");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("I1");
 			}
 		});
 
@@ -1211,8 +1209,8 @@ public class gui {
 		frame.getContentPane().add(I2);
 		I2.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("I2");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("I2");
 			}
 		});
 
@@ -1225,8 +1223,8 @@ public class gui {
 		frame.getContentPane().add(I3);
 		I3.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("I3");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("I3");
 			}
 		});
 
@@ -1239,8 +1237,8 @@ public class gui {
 		frame.getContentPane().add(I4);
 		I4.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("I4");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("I4");
 			}
 		});
 
@@ -1253,8 +1251,8 @@ public class gui {
 		frame.getContentPane().add(I5);
 		I5.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("I5");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("I5");
 			}
 		});
 
@@ -1267,8 +1265,8 @@ public class gui {
 		frame.getContentPane().add(I6);
 		I6.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("I6");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("I6");
 			}
 		});
 
@@ -1281,8 +1279,8 @@ public class gui {
 		frame.getContentPane().add(I7);
 		I7.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("I7");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("I7");
 			}
 		});
 
@@ -1295,8 +1293,8 @@ public class gui {
 		frame.getContentPane().add(I8);
 		I8.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("I8");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("I8");
 			}
 		});
 
@@ -1309,8 +1307,8 @@ public class gui {
 		frame.getContentPane().add(I9);
 		I9.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode()!=8)nextFocus("I9");
+			public void keyTyped(KeyEvent e) {
+				nextFocus("I9");
 			}
 		});
 
@@ -1427,6 +1425,8 @@ public class gui {
 				showSteps = true;
 				if(step == 0){
 					inputBoard();
+					changeColour();
+					if(!checkValidity())return;
 				}
 				b.logMove();
 				b.makeBackup();
@@ -1434,18 +1434,19 @@ public class gui {
 				while(!b.changed() && takeStep()){
 					b.clearLog();
 				}
-				
+
 				step++;
 				console.append(step+". "+consoleText);
 				highlightChanges();
 				updateBoard();
-				
+
 				if(numberOfStepsToGoBack!=3){
 					numberOfStepsToGoBack++;
 					bPreviousStep.setEnabled(true);
 				}
 				if(b.gameDone()){
-					console.append("***COMPLETED PUZZLE");
+					unHighlight();
+					console.append("***COMPLETED PUZZLE\n");
 					bTakeStep.setEnabled(false);
 				}
 			}
@@ -1479,8 +1480,10 @@ public class gui {
 		bClearBoard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				unHighlight();
+				unColour();
 				b = new guiBoard();
 				step = 0;
+				numberOfStepsToGoBack = 0;
 				bTakeStep.setEnabled(true);
 				resetGui();
 			}
@@ -1495,6 +1498,8 @@ public class gui {
 			public void actionPerformed(ActionEvent e) {
 				unHighlight();
 				showSteps = false;
+				bTakeStep.setEnabled(false);
+				bPreviousStep.setEnabled(false);
 				takeStep();
 				updateBoard();
 			}
@@ -1519,8 +1524,11 @@ public class gui {
 				if(!enterPuzzle.getText().equals(""))txtText = enterPuzzle.getText();
 				enterPuzzle.setText(txtText);
 				b.inputBoard(txtText);
+				unColour();
+				numberOfStepsToGoBack = 0;
 				changeColour();
 				console.setText("");
+				checkValidity();
 				updateBoard();
 			}
 		});
@@ -1546,12 +1554,11 @@ public class gui {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					PrintWriter out = new PrintWriter("src/SudokuSolver/res/savefile.txt");
-					//System.out.println()
 					out.println(b.getBoardString());
 					out.close();
 				} catch(FileNotFoundException e1){ System.out.println("FILE NOT FOUND!"); }
 
-				console.append("This puzzle's string: "+b.getBoardString());
+				console.append("This puzzle's string: "+b.getBoardString()+"\n");
 			}
 		});
 		bSave.setFocusable(false);
@@ -1566,12 +1573,18 @@ public class gui {
 					Scanner in = new Scanner(new FileReader("src/SudokuSolver/res/savefile.txt"));
 					b = new guiBoard();
 					step = 0;
+					bTakeStep.setEnabled(true);
+					numberOfStepsToGoBack = 0;
 					unHighlight();
+					unColour();
 					b.inputBoard(in.nextLine());
+					changeColour();
 					console.setText("");
+					checkValidity();
 					updateBoard();
 					in.close();
-				} catch(IOException e2){ System.out.println("HIT IOEXCEPTION AT LINE 1476"); }
+				} catch(IOException e2){ System.out.println("HIT IOEXCEPTION AT LINE 1576"); }
+				catch(NoSuchElementException e3){console.append("No puzzle saved!\n");}
 			}
 		});
 		bLoad.setFocusable(false);
@@ -2149,7 +2162,7 @@ public class gui {
 
 			}
 		} while(!showSteps && !b.gameDone() && b.changed());
-		if(b.gameDone())console.append("***COMPLETED PUZZLE");
+		if(b.gameDone())console.append("***COMPLETED PUZZLE\n");
 		else console.append("***WASN'T ABLE TO COMPLETE THE SUDOKU USING LOGIC!\n");
 		return false;
 		//TODO bruteforce
@@ -2163,7 +2176,6 @@ public class gui {
 		else consoleText = x;
 	}
 
-	//TODO fix this
 	public void updateBoard(){
 		String[][] board = b.getBoardWithoutZeros();
 		A1.setText(board[0][0]);
@@ -2705,6 +2717,7 @@ public class gui {
 				board = board.substring(0,i)+"0"+board.substring(i+1);
 
 		b.inputBoard(board);
+		changeColour();
 	}
 
 	public void unHighlight(){
@@ -2727,7 +2740,7 @@ public class gui {
 		B7.setBackground(Color.WHITE);
 		B8.setBackground(Color.WHITE);
 		B9.setBackground(Color.WHITE);
-		
+
 		C1.setBackground(Color.WHITE);
 		C2.setBackground(Color.WHITE);
 		C3.setBackground(Color.WHITE);
@@ -2924,11 +2937,11 @@ public class gui {
 				break;
 			}
 	}
-	
+
 	public void changeColour(){
 		unHighlight();
 		int[][] indecies = b.getIndecies();
-		
+
 		for(int i = 0; i<indecies.length; i++)
 			switch(indecies[i][0]){
 			case 0:
@@ -3049,6 +3062,229 @@ public class gui {
 				}
 				break;
 			}
+	}
+
+	public void unColour(){
+		A1.setForeground(Color.BLACK);
+		A2.setForeground(Color.BLACK);
+		A3.setForeground(Color.BLACK);
+		A4.setForeground(Color.BLACK);
+		A5.setForeground(Color.BLACK);
+		A6.setForeground(Color.BLACK);
+		A7.setForeground(Color.BLACK);
+		A8.setForeground(Color.BLACK);
+		A9.setForeground(Color.BLACK);
+
+		B1.setForeground(Color.BLACK);
+		B2.setForeground(Color.BLACK);
+		B3.setForeground(Color.BLACK);
+		B4.setForeground(Color.BLACK);
+		B5.setForeground(Color.BLACK);
+		B6.setForeground(Color.BLACK);
+		B7.setForeground(Color.BLACK);
+		B8.setForeground(Color.BLACK);
+		B9.setForeground(Color.BLACK);
+
+		C1.setForeground(Color.BLACK);
+		C2.setForeground(Color.BLACK);
+		C3.setForeground(Color.BLACK);
+		C4.setForeground(Color.BLACK);
+		C5.setForeground(Color.BLACK);
+		C6.setForeground(Color.BLACK);
+		C7.setForeground(Color.BLACK);
+		C8.setForeground(Color.BLACK);
+		C9.setForeground(Color.BLACK);
+
+		D1.setForeground(Color.BLACK);
+		D2.setForeground(Color.BLACK);
+		D3.setForeground(Color.BLACK);
+		D4.setForeground(Color.BLACK);
+		D5.setForeground(Color.BLACK);
+		D6.setForeground(Color.BLACK);
+		D7.setForeground(Color.BLACK);
+		D8.setForeground(Color.BLACK);
+		D9.setForeground(Color.BLACK);
+
+		E1.setForeground(Color.BLACK);
+		E2.setForeground(Color.BLACK);
+		E3.setForeground(Color.BLACK);
+		E4.setForeground(Color.BLACK);
+		E5.setForeground(Color.BLACK);
+		E6.setForeground(Color.BLACK);
+		E7.setForeground(Color.BLACK);
+		E8.setForeground(Color.BLACK);
+		E9.setForeground(Color.BLACK);
+
+		F1.setForeground(Color.BLACK);
+		F2.setForeground(Color.BLACK);
+		F3.setForeground(Color.BLACK);
+		F4.setForeground(Color.BLACK);
+		F5.setForeground(Color.BLACK);
+		F6.setForeground(Color.BLACK);
+		F7.setForeground(Color.BLACK);
+		F8.setForeground(Color.BLACK);
+		F9.setForeground(Color.BLACK);
+
+		G1.setForeground(Color.BLACK);
+		G2.setForeground(Color.BLACK);
+		G3.setForeground(Color.BLACK);
+		G4.setForeground(Color.BLACK);
+		G5.setForeground(Color.BLACK);
+		G6.setForeground(Color.BLACK);
+		G7.setForeground(Color.BLACK);
+		G8.setForeground(Color.BLACK);
+		G9.setForeground(Color.BLACK);
+
+		H1.setForeground(Color.BLACK);
+		H2.setForeground(Color.BLACK);
+		H3.setForeground(Color.BLACK);
+		H4.setForeground(Color.BLACK);
+		H5.setForeground(Color.BLACK);
+		H6.setForeground(Color.BLACK);
+		H7.setForeground(Color.BLACK);
+		H8.setForeground(Color.BLACK);
+		H9.setForeground(Color.BLACK);
+
+		I1.setForeground(Color.BLACK);
+		I2.setForeground(Color.BLACK);
+		I3.setForeground(Color.BLACK);
+		I4.setForeground(Color.BLACK);
+		I5.setForeground(Color.BLACK);
+		I6.setForeground(Color.BLACK);
+		I7.setForeground(Color.BLACK);
+		I8.setForeground(Color.BLACK);
+		I9.setForeground(Color.BLACK);
+	}
+	
+	public boolean checkValidity(){
+		int[][] invalidIndecies = b.checkValidity();
+		
+		if(invalidIndecies == null)return true;
+		
+		unColour();
+		for(int i = 0; i<invalidIndecies.length; i++){
+			switch(invalidIndecies[i][0]){
+			case 0:
+				switch(invalidIndecies[i][1]){
+				case 0:A1.setBackground(Color.RED);break;
+				case 1:A2.setBackground(Color.RED);break;
+				case 2:A3.setBackground(Color.RED);break;
+				case 3:A4.setBackground(Color.RED);break;
+				case 4:A5.setBackground(Color.RED);break;
+				case 5:A6.setBackground(Color.RED);break;
+				case 6:A7.setBackground(Color.RED);break;
+				case 7:A8.setBackground(Color.RED);break;
+				case 8:A9.setBackground(Color.RED);break;
+				}
+				break;
+			case 1:
+				switch(invalidIndecies[i][1]){
+				case 0:B1.setBackground(Color.RED);break;
+				case 1:B2.setBackground(Color.RED);break;
+				case 2:B3.setBackground(Color.RED);break;
+				case 3:B4.setBackground(Color.RED);break;
+				case 4:B5.setBackground(Color.RED);break;
+				case 5:B6.setBackground(Color.RED);break;
+				case 6:B7.setBackground(Color.RED);break;
+				case 7:B8.setBackground(Color.RED);break;
+				case 8:B9.setBackground(Color.RED);break;
+				}
+				break;
+			case 2:
+				switch(invalidIndecies[i][1]){
+				case 0:C1.setBackground(Color.RED);break;
+				case 1:C2.setBackground(Color.RED);break;
+				case 2:C3.setBackground(Color.RED);break;
+				case 3:C4.setBackground(Color.RED);break;
+				case 4:C5.setBackground(Color.RED);break;
+				case 5:C6.setBackground(Color.RED);break;
+				case 6:C7.setBackground(Color.RED);break;
+				case 7:C8.setBackground(Color.RED);break;
+				case 8:C9.setBackground(Color.RED);break;
+				}
+				break;
+			case 3:
+				switch(invalidIndecies[i][1]){
+				case 0:D1.setBackground(Color.RED);break;
+				case 1:D2.setBackground(Color.RED);break;
+				case 2:D3.setBackground(Color.RED);break;
+				case 3:D4.setBackground(Color.RED);break;
+				case 4:D5.setBackground(Color.RED);break;
+				case 5:D6.setBackground(Color.RED);break;
+				case 6:D7.setBackground(Color.RED);break;
+				case 7:D8.setBackground(Color.RED);break;
+				case 8:D9.setBackground(Color.RED);break;
+				}
+				break;
+			case 4:
+				switch(invalidIndecies[i][1]){
+				case 0:E1.setBackground(Color.RED);break;
+				case 1:E2.setBackground(Color.RED);break;
+				case 2:E3.setBackground(Color.RED);break;
+				case 3:E4.setBackground(Color.RED);break;
+				case 4:E5.setBackground(Color.RED);break;
+				case 5:E6.setBackground(Color.RED);break;
+				case 6:E7.setBackground(Color.RED);break;
+				case 7:E8.setBackground(Color.RED);break;
+				case 8:E9.setBackground(Color.RED);break;
+				}
+				break;
+			case 5:
+				switch(invalidIndecies[i][1]){
+				case 0:F1.setBackground(Color.RED);break;
+				case 1:F2.setBackground(Color.RED);break;
+				case 2:F3.setBackground(Color.RED);break;
+				case 3:F4.setBackground(Color.RED);break;
+				case 4:F5.setBackground(Color.RED);break;
+				case 5:F6.setBackground(Color.RED);break;
+				case 6:F7.setBackground(Color.RED);break;
+				case 7:F8.setBackground(Color.RED);break;
+				case 8:F9.setBackground(Color.RED);break;
+				}
+				break;
+			case 6:
+				switch(invalidIndecies[i][1]){
+				case 0:G1.setBackground(Color.RED);break;
+				case 1:G2.setBackground(Color.RED);break;
+				case 2:G3.setBackground(Color.RED);break;
+				case 3:G4.setBackground(Color.RED);break;
+				case 4:G5.setBackground(Color.RED);break;
+				case 5:G6.setBackground(Color.RED);break;
+				case 6:G7.setBackground(Color.RED);break;
+				case 7:G8.setBackground(Color.RED);break;
+				case 8:G9.setBackground(Color.RED);break;
+				}
+				break;
+			case 7:
+				switch(invalidIndecies[i][1]){
+				case 0:H1.setBackground(Color.RED);break;
+				case 1:H2.setBackground(Color.RED);break;
+				case 2:H3.setBackground(Color.RED);break;
+				case 3:H4.setBackground(Color.RED);break;
+				case 4:H5.setBackground(Color.RED);break;
+				case 5:H6.setBackground(Color.RED);break;
+				case 6:H7.setBackground(Color.RED);break;
+				case 7:H8.setBackground(Color.RED);break;
+				case 8:H9.setBackground(Color.RED);break;
+				}
+				break;
+			case 8:
+				switch(invalidIndecies[i][1]){
+				case 0:I1.setBackground(Color.RED);break;
+				case 1:I2.setBackground(Color.RED);break;
+				case 2:I3.setBackground(Color.RED);break;
+				case 3:I4.setBackground(Color.RED);break;
+				case 4:I5.setBackground(Color.RED);break;
+				case 5:I6.setBackground(Color.RED);break;
+				case 6:I7.setBackground(Color.RED);break;
+				case 7:I8.setBackground(Color.RED);break;
+				case 8:I9.setBackground(Color.RED);break;
+				}
+				break;
+			}
+		}
+		console.append("There's an error on the board!\n");
+		return false;
 	}
 }
 

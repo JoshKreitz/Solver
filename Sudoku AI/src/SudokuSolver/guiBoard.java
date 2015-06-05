@@ -1,5 +1,19 @@
 package SudokuSolver;
 
+//000007390200900001006010000900005010400000007030400002000020500600004009017500000
+//5192436215
+//058600000900003000024000000703060050500010004010040906000000420000800009000009370
+//500000000000008207140000056800460000900020008000037005610000032208700000000000009
+//020000670000090008000006019605020080000805000070030501580600000200040000039000050
+//830000400002100009000080070093004000000896000000300950020040000600007300001000082
+//000020470070000036500080000007500009051000640900004200000030001790000060032090000
+//000982001040000098000000000000695030090000020080723000000000000620000010700834000
+
+//not yet passed
+//000100047094600000000080900040005008900060002700200030003010000000006120520009000
+
+//hardest in the world gg 800000000003600000070090200050007000000045700000100030001000068008500010090000400
+
 public class guiBoard {
 	public int[][] board;
 	private int[][] backup = new int[9][9];
@@ -82,14 +96,14 @@ public class guiBoard {
 			indeciesOfPlacedNumbers = new int[tempIndecies.length()/2][2];
 			index = 0;
 			for(int i = 0; i<tempIndecies.length(); i+=2){
-				indeciesOfPlacedNumbers[index][0] = Character.valueOf(tempIndecies.charAt(i));
-				indeciesOfPlacedNumbers[index][1] = Character.valueOf(tempIndecies.charAt(i+1));
+				indeciesOfPlacedNumbers[index][0] = Integer.parseInt(""+tempIndecies.charAt(i));
+				indeciesOfPlacedNumbers[index][1] = Integer.parseInt(""+tempIndecies.charAt(i+1));
 				index++;
 			}
 		}
-		catch(StringIndexOutOfBoundsException e){ gui.append("The string you entered isn't long enough to fill the board completely!"); }
+		catch(StringIndexOutOfBoundsException e){ gui.append("The string you entered isn't long enough to fill the board completely!\n"); }
 	}
-	
+
 	public int[][] getIndecies(){
 		return indeciesOfPlacedNumbers;
 	}
@@ -712,4 +726,79 @@ public class guiBoard {
 				else temp += 0;
 		return temp;
 	}
+
+	public int[][] checkValidity(){
+		String indecies = "";
+		for(int rc = 0; rc<9; rc++){
+			for(int c = 0; c<9; c++){
+				boolean foundAnother = false;
+				if(board[rc][c]!=0){
+					for(int c1 = c+1; c1<9; c1++)
+						if(board[rc][c] == board[rc][c1]){
+							foundAnother = true;
+							indecies += ""+rc+c1;
+						}
+					if(foundAnother)indecies += ""+rc+c;
+				}
+			}
+
+			for(int r = 0; r<9; r++){
+				boolean foundAnother = false;
+				if(board[r][rc]!=0){
+					for(int r1 = r+1; r1<9; r1++)
+						if(board[r][rc] == board[r1][rc]){
+							foundAnother = true;
+							indecies += ""+r1+rc;
+						}
+					if(foundAnother)indecies += ""+r+rc;
+				}
+			}
+		}
+
+		for(int rowRotor = 0; rowRotor<3; rowRotor++)
+			for(int colRotor = 0; colRotor<3; colRotor++)
+				for(int r = rowRotor*3; r<rowRotor*3+3; r++)
+					for(int c = colRotor*3; c<colRotor*3+3; c++){
+						boolean foundAnother = false;
+						if(board[r][c]!=0){
+							for(int r1 = r+1; r1<rowRotor*3+3; r1++)
+								for(int c1 = c+1; c1<colRotor*3+3; c1++)
+									if(board[r][c] == board[r1][c1]){
+										foundAnother = true;
+										indecies += ""+r1+c1;
+									}
+							if(foundAnother)indecies += ""+r+c;
+						}
+					}
+		if(indecies.length()==0)return null;
+		
+		int[][] invalidIndecies = new int[indecies.length()/2][2];
+		int index = 0;
+		for(int i = 0; i<indecies.length(); i+=2){
+			invalidIndecies[index][0] = Integer.parseInt(""+indecies.charAt(i));
+			invalidIndecies[index][1] = Integer.parseInt(""+indecies.charAt(i+1));
+			index++;
+		}
+		return invalidIndecies;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
