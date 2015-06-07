@@ -675,7 +675,8 @@ public class guiBoard {
 		for(int r = 0; r<9; r++)
 			for(int c = 0; c<9; c++){
 				if(board[r][c]!=0)temp[r][c] = ""+board[r][c];
-				else temp[r][c] = " "+able[r][c]+" ";
+				else if(able[r][c].length()==1)temp[r][c] = " "+able[r][c]+" ";
+				else temp[r][c] = able[r][c];
 			}
 		return temp;
 	}

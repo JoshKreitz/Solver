@@ -1496,6 +1496,11 @@ public class gui {
 		bSolve.setToolTipText("<html><p width=\"250\">Will solve the puzzle instantly, without showing any of the steps. These steps will still print in the console.</p></html>");
 		bSolve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(step == 0){
+					inputBoard();
+					changeColour();
+					if(!checkValidity())return;
+				}
 				unHighlight();
 				showSteps = false;
 				bTakeStep.setEnabled(false);
