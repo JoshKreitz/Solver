@@ -1,5 +1,4 @@
 //2/31/2015
-//this is a test!
 package SudokuSolver;
 
 import java.awt.EventQueue;
@@ -1572,7 +1571,7 @@ public class gui {
 		});
 		enterPuzzle.setText(txtText);
 		enterPuzzle.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		enterPuzzle.setBounds(482, 110, 152, 16);
+		enterPuzzle.setBounds(482, 107, 152, 19);
 		frame.getContentPane().add(enterPuzzle);
 		enterPuzzle.setColumns(10);
 
