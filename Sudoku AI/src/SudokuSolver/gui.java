@@ -41,102 +41,20 @@ import java.util.Scanner;
 
 public class gui {
 	private JFrame frame;
-	private JTextField A1;
-	private JTextField A2;
-	private JTextField A3;
-	private JTextField B1;
-	private JTextField B2;
-	private JTextField B3;
-	private JTextField C1;
-	private JTextField C2;
-	private JTextField C3;
-	private JTextField A4;
-	private JTextField A5;
-	private JTextField A6;
-	private JTextField B4;
-	private JTextField B5;
-	private JTextField B6;
-	private JTextField C4;
-	private JTextField C5;
-	private JTextField C6;
-	private JTextField A7;
-	private JTextField A8;
-	private JTextField A9;
-	private JTextField B7;
-	private JTextField B8;
-	private JTextField B9;
-	private JTextField C7;
-	private JTextField C8;
-	private JTextField C9;
-	private JTextField D1;
-	private JTextField D2;
-	private JTextField D3;
-	private JTextField E1;
-	private JTextField E2;
-	private JTextField E3;
-	private JTextField F1;
-	private JTextField F2;
-	private JTextField F3;
-	private JTextField D4;
-	private JTextField D5;
-	private JTextField D6;
-	private JTextField E4;
-	private JTextField E5;
-	private JTextField E6;
-	private JTextField F4;
-	private JTextField F5;
-	private JTextField F6;
-	private JTextField D7;
-	private JTextField D8;
-	private JTextField D9;
-	private JTextField E7;
-	private JTextField E8;
-	private JTextField E9;
-	private JTextField F7;
-	private JTextField F8;
-	private JTextField F9;
-	private JTextField G1;
-	private JTextField G2;
-	private JTextField G3;
-	private JTextField H1;
-	private JTextField H2;
-	private JTextField H3;
-	private JTextField I1;
-	private JTextField I2;
-	private JTextField I3;
-	private JTextField G4;
-	private JTextField G5;
-	private JTextField G6;
-	private JTextField H4;
-	private JTextField H5;
-	private JTextField H6;
-	private JTextField I4;
-	private JTextField I5;
-	private JTextField I6;
-	private JTextField G7;
-	private JTextField G8;
-	private JTextField G9;
-	private JTextField H7;
-	private JTextField H8;
-	private JTextField H9;
-	private JTextField I7;
-	private JTextField I8;
-	private JTextField I9;
-	private JSeparator separator;
-	private JSeparator separator_1;
-	private JSeparator separator_2;
-	private JSeparator separator_3;
-	private JSeparator separator_5;
+	private JTextField A1,A2,A3,A4,A5,A6,A7,A8,A9;
+	private JTextField B1,B2,B3,B4,B5,B6,B7,B8,B9;
+	private JTextField C1,C2,C3,C4,C5,C6,C7,C8,C9;
+	private JTextField D1,D2,D3,D4,D5,D6,D7,D8,D9;
+	private JTextField E1,E2,E3,E4,E5,E6,E7,E8,E9;
+	private JTextField F1,F2,F3,F4,F5,F6,F7,F8,F9;
+	private JTextField G1,G2,G3,G4,G5,G6,G7,G8,G9;
+	private JTextField H1,H2,H3,H4,H5,H6,H7,H8,H9;
+	private JTextField I1,I2,I3,I4,I5,I6,I7,I8,I9;
+	private JSeparator separator,separator_1,separator_2,separator_3,separator_4,separator_5;
 	private JScrollPane scrollBar;
-	private JLabel lblTextConsole;
 	private static JTextArea console;
 	private JTextField enterPuzzle;
-	private JButton bClearBoard;
-	private JButton bSolve;
-	private JButton bTakeStep = new JButton("Take Step");
-	private JButton bPreviousStep = new JButton("<<");
-	private JButton bSave;
-	private JButton bLoad;
+	private JButton bClearBoard,bSolve,bTakeStep,bPreviousStep,bSave,bChangeLAF,bLoad;
 
 	private boolean enterByRow = true, enterByCol = false, enterByCube = false;
 	private static boolean showSteps = true;
@@ -147,14 +65,9 @@ public class gui {
 	int numberOfStepsToGoBack = 0;
 	static int step = 0;
 	boolean Metal = false;
-	private JButton bChangeLAF;
-
-	/**
-	 * Launch the application.
-	 */
+	
 	public static void main(String[] args) {
 		try {
-			// Set System L&F
 			UIManager.setLookAndFeel(
 					UIManager.getSystemLookAndFeelClassName());
 		} 
@@ -182,16 +95,10 @@ public class gui {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public gui() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Josh's Sudoku Solver");
@@ -1356,7 +1263,7 @@ public class gui {
 		separator_3.setBounds(10, 330, 462, 2);
 		frame.getContentPane().add(separator_3);
 
-		JSeparator separator_4 = new JSeparator();
+		separator_4 = new JSeparator();
 		separator_4.setForeground(Color.DARK_GRAY);
 		separator_4.setBounds(482, 182, 152, 2);
 		frame.getContentPane().add(separator_4);
@@ -1377,7 +1284,7 @@ public class gui {
 		lblUsingTheSolver.setBounds(482, 189, 152, 16);
 		frame.getContentPane().add(lblUsingTheSolver);
 
-		lblTextConsole = new JLabel("Text Console");
+		JLabel lblTextConsole = new JLabel("Text Console");
 		lblTextConsole.setToolTipText("<html><p width=\"250\">This shows a text representation of the moves the computer is making. If multiple moves appear at only one click of the \"Take Step\" button, it just means several moves didn't actually accomplish anything on the board.</p></html>");
 		lblTextConsole.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblTextConsole.setBounds(482, 272, 152, 16);
@@ -1441,6 +1348,7 @@ public class gui {
 		cbEnterByCube.setBounds(478, 82, 156, 23);
 		frame.getContentPane().add(cbEnterByCube);
 
+		bTakeStep = new JButton("Take Step");
 		bTakeStep.setToolTipText("<html><p width=\"250\">Will take exactly one step on the sudoku puzzle. Whether this is actually placing a number or just removing several possible numbers via inference, only one step is taken.</p></html>");
 		bTakeStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1478,6 +1386,8 @@ public class gui {
 		bTakeStep.setBounds(488, 235, 91, 23);
 		bTakeStep.setFocusable(false);
 		frame.getContentPane().add(bTakeStep);
+		
+		bPreviousStep = new JButton("<<");
 		bPreviousStep.setToolTipText("<html><p width=\"250\">This will revert the previous step, to a maximum of three steps.</p></html>");
 		bPreviousStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1664,6 +1574,211 @@ public class gui {
 		} catch (IOException e1) { System.out.println("COULDNT LOCATE IMAGE FILE AT LINE 1493!"); }
 	}
 
+	private boolean takeStep(){
+		do{
+			if(!showSteps)b.makeBackup();
+
+			//if only one number possible
+			for(int r = 0; r<9; r++)
+				for(int c = 0; c<9; c++)
+					if(b.get(r,c)==0){
+						String temp = b.getAble(r,c);
+						if(temp.length()==1){
+							int temp2 = Integer.parseInt(temp);
+							b.set(r,c,temp2);
+							append("ABLE ELIMINATION PLACED A "+temp+" AT PLACE ("+(r+1)+","+(c+1)+")\n");
+							if(showSteps)return true;
+						}
+					}
+			//if two numbers are only possible in a space and a different space in the same row
+			for(int rc = 0; rc<9; rc++){
+				String[] able = b.getRowAble(rc);
+				for(int c1 = 0; c1<9; c1++)
+					for(int c2 = c1+1; c2<9; c2++)
+						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
+							b.removeFromRowExcept(rc, c1, c2, able[c1]);
+							b.addInference(rc,c1,Integer.parseInt(able[c1]));
+							append("MADE AN EXTENDED ROW INFERENCE AT ROW "+(rc+1)+" WITH NUMBERS "+able[c1]+"\n");
+							if(showSteps)return true;
+						}
+				able = b.getColAble(rc);
+				for(int c1 = 0; c1<9; c1++)
+					for(int c2 = c1+1; c2<9; c2++)
+						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
+							b.removeFromColExcept(rc, c1, c2, able[c1]);
+							b.addInference(rc,c1,Integer.parseInt(able[c1]));
+							append("MADE AN EXTENDED COL INFERENCE AT COL "+(rc+1)+" WITH NUMBERS "+able[c1]+"\n");
+							if(showSteps)return true;
+						}
+			}
+
+			//tests a number at every spot in a cube, to see if it can only go in one spot.
+			//also deals with row/col inferences
+			for(int test = 1; test<=9; test++)
+				for(int rowRotor = 0; rowRotor<3; rowRotor++)
+					for(int colRotor = 0; colRotor<3; colRotor++){
+						String eligibleIndecies = "";
+						boolean numberIsGood = true;
+						for(int r = rowRotor*3; numberIsGood && r<rowRotor*3+3; r++)
+							for(int c = colRotor*3; numberIsGood && c<colRotor*3+3; c++)
+								if(b.isEligible(r,c,test)){
+									eligibleIndecies += "" + r + c;
+									if(eligibleIndecies.length()>6)numberIsGood = false;
+								}
+						int len = eligibleIndecies.length();
+						if(numberIsGood && len == 2){
+							int indecies = Integer.parseInt(eligibleIndecies);
+							b.set(indecies/10, indecies%10, test);
+							append("POSITIONAL ELIMINATION PLACED A "+test+" AT PLACE ("+((indecies/10)+1)+","+((indecies%10)+1)+")\n");
+							if(showSteps)return true;
+						}
+						else if(numberIsGood && len == 4){
+							b.log(rowRotor*3,colRotor*3,test,eligibleIndecies);
+							if(b.twoInLine(eligibleIndecies,test) && showSteps)return true;
+						}
+						else if(numberIsGood && len == 6){
+							if(b.threeInLine(eligibleIndecies,test) && showSteps)return true;
+						}
+					}
+
+			//if only eligible in two places in the same row, and both in the same cube, remove from rest of cube
+			for(int test = 1; test<=9; test++){
+				for(int r = 0; r<9; r++){
+					String[] rowAble = b.getRowAble(r);
+					String eligibleIndecies = "";
+					for(int c = 0; c<9; c++)
+						if(rowAble[c].contains(""+test))
+							eligibleIndecies += ""+r+c;
+					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+						if(showSteps)return true;
+					}
+					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+						if(showSteps)return true;
+					}
+				}
+
+				for(int c = 0; c<9; c++){
+					String[] colAble = b.getColAble(c);
+					String eligibleIndecies = "";
+					for(int r = 0; r<9; r++)
+						if(colAble[r].contains(""+test))
+							eligibleIndecies += ""+r+c;
+					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+						if(showSteps)return true;
+					}
+					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
+						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
+						b.addInference(eligibleIndecies.substring(0,2),test);
+						if(showSteps)return true;
+					}
+				}
+			}
+
+			//does the inference stuffs
+			b.logCheck();
+
+			//looks for and finds hidden triples
+			for(int rc = 0; rc<9; rc++){
+				String[] rowAble = b.getRowAble(rc);
+				String threeTargetNumbers = "";
+				if(rowAble.length>3)
+					for(int c1 = 0; c1<9; c1++){
+						if(rowAble[c1].length()>3 || rowAble[c1].length()<2)continue;
+						threeTargetNumbers = rowAble[c1];
+						for(int c2 = c1+1; c2<9; c2++){
+							if(rowAble[c2].length()>3 || rowAble[c2].length()<2)continue;
+							boolean good = true;
+							String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
+							for(int charIndex = 0; charIndex<rowAble[c2].length(); charIndex++){
+								if(threeTargetNumbers.contains(""+rowAble[c2].charAt(charIndex)))continue;
+								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c2].charAt(charIndex);
+								else{ good = false; break; }
+							}
+							if(!good){
+								threeTargetNumbers = threeTargetNumbersBeforeLoop2;
+								continue;
+							}
+							for(int c3 = c2+1; c3<9; c3++){
+								if(rowAble[c3].length()>3 || rowAble[c3].length()<2)continue;
+								String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
+								for(int charIndex = 0; charIndex<rowAble[c3].length(); charIndex++){
+									if(threeTargetNumbers.contains(""+rowAble[c3].charAt(charIndex)))continue;
+									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c3].charAt(charIndex);
+									else{ good = false; break; }
+								}
+								if(!good || !b.isEligibleInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers))){
+									threeTargetNumbers = threeTargetNumbersBeforeLoop3;
+									continue;
+								}
+								b.addInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers));
+								b.removeFromRowExcept(rc,c1,c2,c3,threeTargetNumbers);
+								append("MADE A HIDDEN TRIPLE INFERENCE AT ROW "+(rc+1)+" AND COLS "+(c1+1)+", "+(c2+1)+", and "+(c3+1)+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
+								if(showSteps)return true;
+							}
+						}
+					}
+
+				String[] colAble = b.getColAble(rc);
+				threeTargetNumbers = "";
+				if(colAble.length>3)
+					for(int r1 = 0; r1<9; r1++){
+						if(rowAble[r1].length()>3 || rowAble[r1].length()<2)continue;
+						threeTargetNumbers = rowAble[r1];
+						for(int r2 = r1+1; r2<9; r2++){
+							if(rowAble[r2].length()>3 || rowAble[r2].length()<2)continue;
+							boolean good = true;
+							String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
+							for(int charIndex = 0; charIndex<rowAble[r2].length(); charIndex++){
+								if(threeTargetNumbers.contains(""+rowAble[r2].charAt(charIndex)))continue;
+								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r2].charAt(charIndex);
+								else{ good = false; break; }
+							}
+							if(!good){
+								threeTargetNumbers = threeTargetNumbersBeforeLoop2;
+								continue;
+							}
+							for(int r3 = r2+1; r3<9; r3++){
+								if(rowAble[r3].length()>3 || rowAble[r3].length()<2)continue;
+								String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
+								for(int charIndex = 0; charIndex<rowAble[r3].length(); charIndex++){
+									if(threeTargetNumbers.contains(""+rowAble[r3].charAt(charIndex)))continue;
+									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r3].charAt(charIndex);
+									else{ good = false; break; }
+								}
+								if(!good || !b.isEligibleInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers))){
+									threeTargetNumbers = threeTargetNumbersBeforeLoop3;
+									continue;
+								}
+								b.addInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers));
+								b.removeFromRowExcept(rc,r1,r2,r3,threeTargetNumbers);
+								append("MADE A HIDDEN TRIPLE INFERENCE AT COL "+(rc+1)+" AND ROWS "+(r1+1)+", "+(r2+1)+", and "+(r3+1)+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
+								if(showSteps)return true;
+							}
+						}
+					}
+
+			}
+		} while(!showSteps && !b.gameDone() && b.changed());
+		if(b.gameDone())console.append("***COMPLETED PUZZLE\n");
+		else console.append("***WASN'T ABLE TO COMPLETE THE SUDOKU USING LOGIC!\n");
+		return false;
+		//TODO bruteforce
+	}
+
+	public static void append(String x){
+		if(!showSteps){
+			step++;
+			console.append(step+". "+x);
+		}
+		else consoleText = x;
+	}
+	
 	private void nextFocus(String token){
 		char letter = token.charAt(0);
 		char number = token.charAt(1);
@@ -2032,211 +2147,6 @@ public class gui {
 			}
 		}
 		else console.append("Enter a valid input method!\n");
-	}
-
-	private boolean takeStep(){
-		do{
-			if(!showSteps)b.makeBackup();
-
-			//if only one number possible
-			for(int r = 0; r<9; r++)
-				for(int c = 0; c<9; c++)
-					if(b.get(r,c)==0){
-						String temp = b.getAble(r,c);
-						if(temp.length()==1){
-							int temp2 = Integer.parseInt(temp);
-							b.set(r,c,temp2);
-							append("ABLE ELIMINATION PLACED A "+temp+" AT PLACE ("+(r+1)+","+(c+1)+")\n");
-							if(showSteps)return true;
-						}
-					}
-			//if two numbers are only possible in a space and a different space in the same row
-			for(int rc = 0; rc<9; rc++){
-				String[] able = b.getRowAble(rc);
-				for(int c1 = 0; c1<9; c1++)
-					for(int c2 = c1+1; c2<9; c2++)
-						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
-							b.removeFromRowExcept(rc, c1, c2, able[c1]);
-							b.addInference(rc,c1,Integer.parseInt(able[c1]));
-							append("MADE AN EXTENDED ROW INFERENCE AT ROW "+(rc+1)+" WITH NUMBERS "+able[c1]+"\n");
-							if(showSteps)return true;
-						}
-				able = b.getColAble(rc);
-				for(int c1 = 0; c1<9; c1++)
-					for(int c2 = c1+1; c2<9; c2++)
-						if(able[c1].length()==2 && able[c1].equals(able[c2]) && b.notInSameCube(c1,c2) && b.isEligibleInference(rc,c1,Integer.parseInt(able[c1]))){
-							b.removeFromColExcept(rc, c1, c2, able[c1]);
-							b.addInference(rc,c1,Integer.parseInt(able[c1]));
-							append("MADE AN EXTENDED COL INFERENCE AT COL "+(rc+1)+" WITH NUMBERS "+able[c1]+"\n");
-							if(showSteps)return true;
-						}
-			}
-
-			//tests a number at every spot in a cube, to see if it can only go in one spot.
-			//also deals with row/col inferences
-			for(int test = 1; test<=9; test++)
-				for(int rowRotor = 0; rowRotor<3; rowRotor++)
-					for(int colRotor = 0; colRotor<3; colRotor++){
-						String eligibleIndecies = "";
-						boolean numberIsGood = true;
-						for(int r = rowRotor*3; numberIsGood && r<rowRotor*3+3; r++)
-							for(int c = colRotor*3; numberIsGood && c<colRotor*3+3; c++)
-								if(b.isEligible(r,c,test)){
-									eligibleIndecies += "" + r + c;
-									if(eligibleIndecies.length()>6)numberIsGood = false;
-								}
-						int len = eligibleIndecies.length();
-						if(numberIsGood && len == 2){
-							int indecies = Integer.parseInt(eligibleIndecies);
-							b.set(indecies/10, indecies%10, test);
-							append("POSITIONAL ELIMINATION PLACED A "+test+" AT PLACE ("+((indecies/10)+1)+","+((indecies%10)+1)+")\n");
-							if(showSteps)return true;
-						}
-						else if(numberIsGood && len == 4){
-							b.log(rowRotor*3,colRotor*3,test,eligibleIndecies);
-							if(b.twoInLine(eligibleIndecies,test) && showSteps)return true;
-						}
-						else if(numberIsGood && len == 6){
-							if(b.threeInLine(eligibleIndecies,test) && showSteps)return true;
-						}
-					}
-
-			//if only eligible in two places in the same row, and both in the same cube, remove from rest of cube
-			for(int test = 1; test<=9; test++){
-				for(int r = 0; r<9; r++){
-					String[] rowAble = b.getRowAble(r);
-					String eligibleIndecies = "";
-					for(int c = 0; c<9; c++)
-						if(rowAble[c].contains(""+test))
-							eligibleIndecies += ""+r+c;
-					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
-						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
-						b.addInference(eligibleIndecies.substring(0,2),test);
-						if(showSteps)return true;
-					}
-					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
-						b.removeFromCubeExceptRow(eligibleIndecies.substring(0,2),test);
-						b.addInference(eligibleIndecies.substring(0,2),test);
-						if(showSteps)return true;
-					}
-				}
-
-				for(int c = 0; c<9; c++){
-					String[] colAble = b.getColAble(c);
-					String eligibleIndecies = "";
-					for(int r = 0; r<9; r++)
-						if(colAble[r].contains(""+test))
-							eligibleIndecies += ""+r+c;
-					if(eligibleIndecies.length()==4 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
-						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
-						b.addInference(eligibleIndecies.substring(0,2),test);
-						if(showSteps)return true;
-					}
-					else if(eligibleIndecies.length()==6 && b.inTheSameCube(eligibleIndecies.substring(0,2),eligibleIndecies.substring(2,4),eligibleIndecies.substring(4)) && b.isEligibleInference(eligibleIndecies.substring(0,2),test)){
-						b.removeFromCubeExceptCol(eligibleIndecies.substring(0,2),test);
-						b.addInference(eligibleIndecies.substring(0,2),test);
-						if(showSteps)return true;
-					}
-				}
-			}
-
-			//does the inference stuffs
-			b.logCheck();
-
-			//looks for and finds hidden triples
-			for(int rc = 0; rc<9; rc++){
-				String[] rowAble = b.getRowAble(rc);
-				String threeTargetNumbers = "";
-				if(rowAble.length>3)
-					for(int c1 = 0; c1<9; c1++){
-						if(rowAble[c1].length()>3 || rowAble[c1].length()<2)continue;
-						threeTargetNumbers = rowAble[c1];
-						for(int c2 = c1+1; c2<9; c2++){
-							if(rowAble[c2].length()>3 || rowAble[c2].length()<2)continue;
-							boolean good = true;
-							String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
-							for(int charIndex = 0; charIndex<rowAble[c2].length(); charIndex++){
-								if(threeTargetNumbers.contains(""+rowAble[c2].charAt(charIndex)))continue;
-								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c2].charAt(charIndex);
-								else{ good = false; break; }
-							}
-							if(!good){
-								threeTargetNumbers = threeTargetNumbersBeforeLoop2;
-								continue;
-							}
-							for(int c3 = c2+1; c3<9; c3++){
-								if(rowAble[c3].length()>3 || rowAble[c3].length()<2)continue;
-								String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
-								for(int charIndex = 0; charIndex<rowAble[c3].length(); charIndex++){
-									if(threeTargetNumbers.contains(""+rowAble[c3].charAt(charIndex)))continue;
-									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[c3].charAt(charIndex);
-									else{ good = false; break; }
-								}
-								if(!good || !b.isEligibleInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers))){
-									threeTargetNumbers = threeTargetNumbersBeforeLoop3;
-									continue;
-								}
-								b.addInference(""+c1+c2+c3+"HIDDENROWTRIPLE", Integer.parseInt(threeTargetNumbers));
-								b.removeFromRowExcept(rc,c1,c2,c3,threeTargetNumbers);
-								append("MADE A HIDDEN TRIPLE INFERENCE AT ROW "+(rc+1)+" AND COLS "+(c1+1)+", "+(c2+1)+", and "+(c3+1)+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
-								if(showSteps)return true;
-							}
-						}
-					}
-
-				String[] colAble = b.getColAble(rc);
-				threeTargetNumbers = "";
-				if(colAble.length>3)
-					for(int r1 = 0; r1<9; r1++){
-						if(rowAble[r1].length()>3 || rowAble[r1].length()<2)continue;
-						threeTargetNumbers = rowAble[r1];
-						for(int r2 = r1+1; r2<9; r2++){
-							if(rowAble[r2].length()>3 || rowAble[r2].length()<2)continue;
-							boolean good = true;
-							String threeTargetNumbersBeforeLoop2 = threeTargetNumbers;
-							for(int charIndex = 0; charIndex<rowAble[r2].length(); charIndex++){
-								if(threeTargetNumbers.contains(""+rowAble[r2].charAt(charIndex)))continue;
-								if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r2].charAt(charIndex);
-								else{ good = false; break; }
-							}
-							if(!good){
-								threeTargetNumbers = threeTargetNumbersBeforeLoop2;
-								continue;
-							}
-							for(int r3 = r2+1; r3<9; r3++){
-								if(rowAble[r3].length()>3 || rowAble[r3].length()<2)continue;
-								String threeTargetNumbersBeforeLoop3 = threeTargetNumbersBeforeLoop2;
-								for(int charIndex = 0; charIndex<rowAble[r3].length(); charIndex++){
-									if(threeTargetNumbers.contains(""+rowAble[r3].charAt(charIndex)))continue;
-									if(threeTargetNumbers.length() == 2)threeTargetNumbers += rowAble[r3].charAt(charIndex);
-									else{ good = false; break; }
-								}
-								if(!good || !b.isEligibleInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers))){
-									threeTargetNumbers = threeTargetNumbersBeforeLoop3;
-									continue;
-								}
-								b.addInference(""+r1+r2+r3+"HIDDENCOLTRIPLE", Integer.parseInt(threeTargetNumbers));
-								b.removeFromRowExcept(rc,r1,r2,r3,threeTargetNumbers);
-								append("MADE A HIDDEN TRIPLE INFERENCE AT COL "+(rc+1)+" AND ROWS "+(r1+1)+", "+(r2+1)+", and "+(r3+1)+" WITH THE NUMBERS "+threeTargetNumbers+"\n");
-								if(showSteps)return true;
-							}
-						}
-					}
-
-			}
-		} while(!showSteps && !b.gameDone() && b.changed());
-		if(b.gameDone())console.append("***COMPLETED PUZZLE\n");
-		else console.append("***WASN'T ABLE TO COMPLETE THE SUDOKU USING LOGIC!\n");
-		return false;
-		//TODO bruteforce
-	}
-
-	public static void append(String x){
-		if(!showSteps){
-			step++;
-			console.append(step+". "+x);
-		}
-		else consoleText = x;
 	}
 
 	public void updateBoard(){
@@ -3350,21 +3260,3 @@ public class gui {
 		return false;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
