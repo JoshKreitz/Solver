@@ -11,6 +11,9 @@ import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -143,11 +146,30 @@ public class gui {
 	private guiBoard b = new guiBoard();
 	int numberOfStepsToGoBack = 0;
 	static int step = 0;
+	boolean Metal = false;
+	private JButton bChangeLAF;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		try {
+			// Set System L&F
+			UIManager.setLookAndFeel(
+					UIManager.getSystemLookAndFeelClassName());
+		} 
+		catch (UnsupportedLookAndFeelException e1) {
+			System.out.println("COULDNT FIND L&F AT LINE 160  :UnsupportedLookAndFeelException");
+		}
+		catch (ClassNotFoundException e2) {
+			System.out.println("COULDNT FIND L&F AT LINE 160  :ClassNotFoundException");
+		}
+		catch (InstantiationException e3) {
+			System.out.println("COULDNT FIND L&F AT LINE 160  :InstantiationException");
+		}
+		catch (IllegalAccessException e4) {
+			System.out.println("COULDNT FIND L&F AT LINE 160  :IllegalAccessException");
+		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -1595,6 +1617,42 @@ public class gui {
 		bLoad.setFocusable(false);
 		bLoad.setBounds(556, 154, 64, 20);
 		frame.getContentPane().add(bLoad);
+		
+		bChangeLAF = new JButton("");
+		bChangeLAF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					if(Metal){
+						Metal = false;
+						UIManager.setLookAndFeel(
+								UIManager.getSystemLookAndFeelClassName());
+						SwingUtilities.updateComponentTreeUI(frame);
+					}
+					else {
+						Metal = true;
+						UIManager.setLookAndFeel(
+								UIManager.getCrossPlatformLookAndFeelClassName());
+						SwingUtilities.updateComponentTreeUI(frame);
+					}
+				}
+				catch (UnsupportedLookAndFeelException e1) {
+					System.out.println("COULDNT FIND L&F AT LINE 1630  :UnsupportedLookAndFeelException");
+				}
+				catch (ClassNotFoundException e2) {
+					System.out.println("COULDNT FIND L&F AT LINE 1630  :ClassNotFoundException");
+				}
+				catch (InstantiationException e3) {
+					System.out.println("COULDNT FIND L&F AT LINE 1630  :InstantiationException");
+				}
+				catch (IllegalAccessException e4) {
+					System.out.println("COULDNT FIND L&F AT LINE 1630  :IllegalAccessException");
+				}
+			}
+		});
+		bChangeLAF.setToolTipText("Change between the \"Metal\" Look and Feel!");
+		bChangeLAF.setBounds(629, 0, 15, 15);
+		bChangeLAF.setFocusable(false);
+		frame.getContentPane().add(bChangeLAF);
 
 		scrollBar = new JScrollPane(console);
 		scrollBar.setBounds(482, 295, 152, 190);
@@ -3160,12 +3218,12 @@ public class gui {
 		I8.setForeground(Color.BLACK);
 		I9.setForeground(Color.BLACK);
 	}
-	
+
 	public boolean checkValidity(){
 		int[][] invalidIndecies = b.checkValidity();
-		
+
 		if(invalidIndecies == null)return true;
-		
+
 		unColour();
 		for(int i = 0; i<invalidIndecies.length; i++){
 			switch(invalidIndecies[i][0]){
