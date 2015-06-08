@@ -1382,7 +1382,6 @@ public class gui {
 			}
 		});
 
-		bTakeStep.setMargin(new Insets(0,0,0,0));
 		bTakeStep.setBounds(488, 235, 91, 23);
 		bTakeStep.setFocusable(false);
 		frame.getContentPane().add(bTakeStep);
@@ -1496,6 +1495,7 @@ public class gui {
 					out.close();
 				} catch(FileNotFoundException e1){ console.append("Save file not found for some reason...\n"); }
 				console.append("This puzzle's string: "+b.getBoardString()+"\n");
+				console.append("Created save file at "+home+"\\SudokuSolverSaveFile.txt\n");
 			}
 		});
 		bSave.setFocusable(false);
@@ -1521,8 +1521,7 @@ public class gui {
 					checkValidity();
 					updateBoard();
 					in.close();
-				} catch(IOException e2){ console.append("Couldn't find the load file for some reason!\n"); }
-				catch(NoSuchElementException e3){console.append("No puzzle saved!\n");}
+				} catch(FileNotFoundException e2){ console.append("Couldn't find/access the load file for some reason!\n"); }
 			}
 		});
 		bLoad.setFocusable(false);
