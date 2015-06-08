@@ -3,8 +3,8 @@ package SudokuSolver;
 
 import java.awt.EventQueue;
 import java.awt.Insets;
+import java.awt.Toolkit;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -1485,16 +1485,16 @@ public class gui {
 		frame.getContentPane().add(enterPuzzle);
 		enterPuzzle.setColumns(10);
 
+		final String home = System.getProperty("user.home");
 		bSave = new JButton("Save");
 		bSave.setToolTipText("<html><p width=\"250\">This button will save the current board. Only one puzzle may be saved at a time.</p></html>");
 		bSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					PrintWriter out = new PrintWriter("src/SudokuSolver/res/savefile.txt");
-					out.println(b.getBoardString());
+					PrintWriter out = new PrintWriter(new File(home,"SudokuSolverSaveFile.txt"));
+					out.write(b.getBoardString());
 					out.close();
-				} catch(FileNotFoundException e1){ System.out.println("FILE NOT FOUND!"); }
-
+				} catch(FileNotFoundException e1){ console.append("Save file not found for some reason...\n"); }
 				console.append("This puzzle's string: "+b.getBoardString()+"\n");
 			}
 		});
@@ -1507,7 +1507,8 @@ public class gui {
 		bLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Scanner in = new Scanner(new FileReader("src/SudokuSolver/res/savefile.txt"));
+					Scanner in = new Scanner(new FileReader(new File(home,"SudokuSolverSaveFile.txt")));
+					//BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/res/SudokuSolverSaveFile.txt")));
 					b = new guiBoard();
 					step = 0;
 					bTakeStep.setEnabled(true);
@@ -1520,7 +1521,7 @@ public class gui {
 					checkValidity();
 					updateBoard();
 					in.close();
-				} catch(IOException e2){ System.out.println("HIT IOEXCEPTION AT LINE 1576"); }
+				} catch(IOException e2){ console.append("Couldn't find the load file for some reason!\n"); }
 				catch(NoSuchElementException e3){console.append("No puzzle saved!\n");}
 			}
 		});
@@ -1569,9 +1570,11 @@ public class gui {
 		scrollBar.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED );
 		frame.getContentPane().add(scrollBar);
 
-		try {
-			frame.setIconImage(ImageIO.read(new File("src/SudokuSolver/res/icon.png")));
-		} catch (IOException e1) { System.out.println("COULDNT LOCATE IMAGE FILE AT LINE 1493!"); }
+		//try {
+		//	frame.setIconImage(ImageIO.read(new File("src/SudokuSolver/res/icon.png")));
+		//} catch (IOException e1) { System.out.println("COULDNT LOCATE IMAGE FILE AT LINE 1493!"); }frame.setIconImage(new Image(getClass().getClassLoader().getResource("src/SudokuSolver/res/icon.png")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass()
+				.getClassLoader().getResource("SudokuSolver/res/icon.png")));
 	}
 
 	private boolean takeStep(){
